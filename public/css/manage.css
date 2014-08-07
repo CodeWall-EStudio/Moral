@@ -1,0 +1,175 @@
+body,ul,p{
+	padding:0;
+	margin:0;
+}
+li{
+	list-style-type:none;
+}
+.nav-tabs>li{
+	margin-bottom:0;
+}
+
+
+.dropdown-menu{
+	max-height:320px;
+	overflow-y:auto;
+}
+.model-body{
+	padding:20px;
+}
+.model-footer{
+	text-align:right;
+	padding:10px;
+}
+
+.content{
+	background:#eff7f9;
+	min-height:500px;
+	height:100%;
+}
+
+.content-tit{
+	background:url(imgs/tit.png) no-repeat;
+	height:56px;
+	width:315px;
+	margin:245px 120px;
+	float:left;
+}
+
+.login-area{
+	float:right;
+	width:400px;
+	height:300px;
+	margin:200px 0;
+	padding-right:100px;
+}
+#teacher li,#student li{
+	padding:10px;
+}
+#teacher .btn-login,#student .btn-login{
+	width:90%;
+	margin:0 5%;
+}
+#teacher .ico-username,#student .ico-username{
+	background:url(imgs/username.png) no-repeat center #fff;
+}
+#teacher .ico-pwd,#student .ico-pwd{
+	background:url(imgs/pwd.png) no-repeat center #fff;	
+}
+
+.header{
+	background:url(imgs/logo.png) no-repeat;
+	height:64px;
+	overflow:hidden;
+}
+
+.footer{
+	width:100%;
+/*	position:fixed;
+	bottom:0;*/
+	height:30px;
+	padding:10px 30px;
+	text-align:right;
+}
+
+.header-blue{
+	background:url(imgs/logo1.png) no-repeat left top #1262b7;
+	height:90px;
+}
+.header-blue .userinfo{
+	position:absolute;
+	right:20px;
+	top:20px;
+	color:#fff;
+}
+.header-blue .userinfo a{
+	color:#fff;
+	margin-left:10px;
+}
+
+
+.top-nav{
+	padding-top:48px;
+	padding-left:20px;
+}
+.top-nav a{
+	background:#0b559f;
+	color:#fff;
+}
+.top-nav .dropdown-menu {
+	width:280px;
+}
+.top-nav .dropdown-menu a{
+	background:#fff;
+	color:#000;
+	display:inline-block;
+}
+.top-nav .dropdown-menu a.act{
+	padding:3px;
+}
+.top-nav>li.active>a{
+	background-color:#04386d;
+	color:#fff;
+	border:1px solid #04386d;
+}
+.top-nav>li>a:hover,.top-nav>li.active>a:hover{
+	background-color:#1a5189;
+	color:#fff;
+	border:1px solid #1a5189;
+}
+
+
+/**/
+.content-header{
+	padding:10px;
+	height:58px;
+	line-height:38px;
+	background:#fff;
+}
+.content-header .grade-dom{
+	float:left;
+	margin-right:12px;
+}
+.content-header .grade-list{
+	border:1px solid #ddd;
+	background:#f8f8f8;
+}
+.content-header .grade-list li{
+	float:left;
+	cursor:pointer;
+	padding:0 12px;
+	border-right:1px solid #ddd
+}
+.content-header .grade-list li.active{
+	color:#1262b7;
+}
+.content-header .grade-list li:last-child{
+	border-right:none;
+}
+.grade-zone{
+	float:left;
+}
+
+
+
+.select-month li{
+	display:inline-block;
+	width:30px;
+	height:30px;
+	font-size:24px;
+	line-height:30px;
+	text-align:center;
+	margin:2px 10px;
+	background:#1262b7;
+	color:#fff;
+	border-radis:2px;
+	cursor:pointer;
+}
+.select-month li.active{
+	background:#04386d;
+}
+.select-month li.disabled{
+	background:#ddd;
+	color:#000;
+	cursor:default;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html ng-app="teacherLogin">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="author" content="Xzone" />
+  <meta http-equiv = "X-UA-Compatible" content = "IE=edge,chrome=1" />
+  <title>德育系统</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/main.css" />  
+ </head>
+
+ <body>
+ 	<div class="header"></div>
+ 	<div class="content">
+ 		<div class="content-tit"></div>
+ 		<div class="login-area">
+			<ul id="loginTab" class="nav nav-tabs" role="tablist">
+			  <li><a href="#teacher" role="tab" data-toggle="tab">教师登录</a></li>
+			  <li><a href="#student" role="tab" data-toggle="tab">学生/家长登录</a></li>
+			</ul>
+			<div id="loginTabContent" class="tab-content">
+				<div id="student" class="tab-pane fade" ng-controller="LoginSSOController">
+					<ul>
+						<li>
+							<div class="input-group input-group-lg">
+							  <span class="input-group-addon ico-username"></span>
+							  <input type="text" class="form-control" placeholder="输入学生中文姓名">
+							</div>						
+						</li>
+						<li>
+							<div class="input-group input-group-lg">
+							  <span class="input-group-addon ico-pwd"></span>
+							  <input type="text" class="form-control" placeholder="输入登录ID码">
+							</div>							
+						</li>
+						<li>
+							<input type="submit" value="登录" class="btn btn-primary btn-lg btn-login"  />
+						</li>
+					</ul>
+				</div>
+			</div>
+ 		</div>
+ 	</div>
+ 	<div class="footer">
+ 		版权所有
+ 	</div>
+
+ 	<!-- build:lib -->
+ 	<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
+ 	<script src="js/lib/angular/angular_1.2.6.js"></script>
+ 	<script src="js/lib/underscore/underscore.min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
+	<!-- endbuild -->
+
+	<!-- build:teacherlogin -->
+	<script src="js/constants/constants.js"></script>
+	<script src="js/service/UtilsService.js"></script>
+	<script src="js/service/teacherLoginService.js"></script>
+	<script src="js/controllers/LoginSSOController.js"></script>
+	<script src="js/teacherlogin.js"></script>
+	<!-- endbuild -->
+	
+ </body>
+ </html>

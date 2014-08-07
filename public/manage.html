@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html ng-app="manage">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="author" content="Xzone" />
+  <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>德育系统</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/manage.css" />  
+ </head>
+
+<body>
+ 	<div class="header-blue">
+ 		<ul class="nav nav-tabs top-nav">
+ 			<li class="active" ng-controller="mgradelistController">
+ 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">2014-2013年度第一学期<span class="caret"></span></a>
+ 				<ul class="dropdown-menu" role="menu">
+ 					<li>
+ 						<a ng-click="showGrade()">2014-2013年度第一学期</a>
+ 						<a class="act" ng-click="setActiveGrade()">激活</a> 
+ 						<a class="act" ng-click="closeGrade()">关闭</a>
+ 					</li>
+ 					<li>
+ 						<a ng-click="showGrade()">2014-2013年度第一学期</a>
+ 						<a class="act" ng-click="setActiveGrade()">激活</a> 
+ 						<a class="act" ng-click="closeGrade()">关闭</a> 						
+ 					</li>
+ 					<li><a data-type="create" ng-click="createGrade($event)">添加</a></li>
+ 				</ul> 				
+ 			</li>
+ 			<li><a href="#">学生信息管理</a></li>
+ 			<li><a href="#">班主任管理</a></li>
+ 			<li><a href="#">指标管理</a></li>
+ 		</ul>
+ 		<div class="userinfo">
+ 			<span>姓名</span>
+ 			<a href="#">管理</a>
+ 			<a href="#">退出</a>
+ 		</div>
+ 	</div>
+
+ 	<div class="content">
+
+ 	</div>	
+
+ 	<div class="modal fade" id="gradePanelModal" ng-controller="GradePanelController">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{panelTitle}}</h4>
+                </div>
+                <div class="model-body">
+                	<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="gradeNameInput" class="col-sm-3 control-label">学期名称：</label>
+							<div class="col-sm-9">
+								<input type="email" class="form-control" id="gradeNameInput" placeholder="请输入学期名称">
+							</div>
+						</div>
+						<div class="form-group">
+							<label  class="col-sm-3 control-label">月份信息：</label>
+							<div class="col-sm-9">
+								<ul class="select-month" >
+									<li ng-repeat="month in monthlist" data-value="{{month}}" ng-click="monthSelect($event)">{{month}}</li>
+								</ul>
+							</div>
+						</div>
+						<div class="form-group">
+							<label  class="col-sm-3 control-label">开发评价日期：</label>
+							<label class="col-sm-3 control-label">
+								每月1日至 
+							</label>
+							<div class="col-sm-2">
+								<select class="form-control input-sm" id="endResDate">
+									<option ng-repeat="date in daylist" value="{{$index+1}}">
+										{{date}}
+									</option>
+								</select>
+							</div>
+						</div>												
+                	</form>
+                </div>
+                <div class="model-footer">
+                    <button type="button" class="btn btn-primary" ng-click="handleConfirmBtnClick()">{{confirmBtnTitle}}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{cancelBtnTitle}}</button>                	
+                </div>
+            </div>
+        </div>
+ 	</div>
+
+ 	<!-- build:lib -->
+ 	<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
+ 	<script src="js/lib/angular/angular_1.2.6.js"></script>
+ 	<script src="js/lib/underscore/underscore.min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
+	<!-- endbuild -->
+
+	<!-- build:manage -->
+	<script src="js/constants/constants.js"></script>
+	<script src="js/service/UtilsService.js"></script>
+	<script src="js/service/mgradeService.js"></script>
+	<script src="js/controllers/gradelistController.js"></script>
+	<script src="js/controllers/creategradeController.js"></script>
+	<script src="js/manage.js"></script>
+	<!-- endbuild -->
+
+
+</body>
+</html>
