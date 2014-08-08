@@ -1,8 +1,8 @@
-angular.module('dy.services.user', [
+angular.module('dy.services.quota', [
         'dy.constants',
         'dy.services.utils'	
 	])
-	.service('userService', [
+	.service('quotaService', [
 		'$rootScope','$location','$http','Util',function(Root,location,Http,Util){
 
 			var cgi = {
@@ -11,13 +11,13 @@ angular.module('dy.services.user', [
 				onegrade : ''     //一个学期的信息
 			};
 
-			function getUserList(param,success,error){
+			function getQuotaList(param,success,error){
 
 			};
 
 
 			return {
-				getUserList : getUserList
+				getQuotaList : getQuotaList
 			}
 
 		}
