@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html ng-app="teacher">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="author" content="Xzone" />
+  <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>德育系统-老师</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/main.css" />  
+ </head>
+<body>
+ 	<div class="header-blue" ng-controller="indexnavController">
+ 		<ul class="nav nav-tabs top-nav">
+ 			<li ng-class="{hide:User.auth === 0,active:getMode() === 'result'}"><a ng-click="switchMode('result')">评价统计</a></li>
+ 			<li ng-class="{active:getMode() === 'record'}"><a ng-click="switchMode('record')">评价</a></li> 			
+ 		</ul>
+ 		<div class="userinfo">
+ 			<span>{{User.nick}}</span>
+ 			<a ng-click="quitLogin()">退出</a>
+ 		</div>
+ 	</div>
+
+ 	<div class="content">
+ 		<div ng-controller="mgradelistController">
+	 		<div class="content-header">
+	 			<div class="grade-zone">
+		 			<div class="grade-dom dropdown" >
+		 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-model="nowTerm">{{nowTerm.name}} <span class="caret"></span></a>
+		 				<ul class="dropdown-menu" role="menu">
+		 					<li ng-repeat="item in termList"><a ng-click="selectTerm(item.id)">{{item.name}}</a></li>
+		 				</ul>
+		 			</div>
+		 			<div class="grade-dom dropdown">
+		 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-model="nowGrade">{{nowGrade.name}} <span class="caret"></span></a>
+		 				<ul class="dropdown-menu" role="menu">
+		 					<li ng-repeat="item in gradeList"><a ng-click="selectGrade(item.id)">{{item.name}}</a></li>
+		 				</ul>
+		 			</div>
+		 			<div class="grade-dom dropdown">
+		 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-model="nowClass">{{nowClass.name}} <span class="caret"></span></a>
+		 				<ul class="dropdown-menu" role="menu">
+		 					<li ng-repeat="item in classList"><a ng-click="selectGrade(item.id)">{{item.name}}</a></li>
+		 				</ul>
+		 			</div>		 				 			
+		 			<ul class="nav grade-dom grade-list">
+		 				<li class="active" >本学期</li>
+		 				<li ng-repeat="item in nowTerm.month" ng-click="selectMonth(item)">{{item}}</li>
+		 			</ul>
+	 			</div> 			
+
+
+	 			<div class="search-zone">
+	 				<input type="text" value={{keyword}}  placeholder="请输入学生姓名查找" />
+	 				<button type="submit" />
+	 			</div>
+ 			</div>
+ 		</div> 
+
+ 		<div class="content-main">
+ 			<!--学生列表-->
+ 			<div class="content-list">
+ 				<table class="table table-striped table-hover" ng-controller="studentController" ng-model='userList'>
+ 					<tr>
+ 						<th>姓名<span class="uaret"></span></th>
+ 						<th>性别<span class="caret"></span></th>
+ 						<th>年级<span class="caret"></span></th>
+ 						<th>班级<span class="caret"></span></th>
+ 						<th>得分<span class="caret"></span></th>
+ 					</tr>
+ 					<tr ng-repeat="item in userList" ng-click="showStudentRecord(item.id)">
+ 						<td>{{item.name}}</td>
+ 						<td>{{item.sex}}</td>
+ 						<td>{{item.grade}}</td>
+ 						<td>{{item.class}}</td>
+ 						<td>{{item.record}}</td>
+ 					</tr>
+ 				</table>
+ 			</div>
+
+ 			<div class="content-info">
+ 				<!--年级概要-->
+ 				<dl class="content-summary" ng-class="">
+ 					<dt>1年级 4班 概要9月</dt>
+ 					<dd>
+ 						<ul>
+ 							<li>1年级 4班 最高得分: xx 98分</li>
+ 							<li>1年级 4班 最低得分: xx 98分</li>
+ 						</ul>
+ 						<ul>
+ 							<li>未参评学生数目: xxx <a>查看名单</a></li>
+ 							<li>未参评老师数目: xxx <a>查看名单</a></li>
+ 						</ul>
+ 					</dd>
+ 				</dl>
+
+ 				<div>
+	 				<dl class="content-summary">
+	 					<dt>
+	 						<div class="title">小明 1年级 3班 本学期 总分: 98 全校排名 :1 </div>
+	 						<button class="btn btn-default">返回概要</button>
+	 					</dt>
+	 				</dl> 
+
+	 				<dl class="content-score">
+	 					<dt>指标1</dt>
+	 					<dd class="score-info">
+	 						指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明
+	 					</dd>
+	 					<dd class="score-result">
+	 						<ul class="score-list">
+	 							<li>
+	 								教师
+	 								<div>5</div>
+	 							</li>
+	 							<li>
+	 								自评
+	 								<div>4</div>
+	 							</li>
+	 							<li>
+	 								家长
+	 								<div>3</div>
+	 							</li>
+	 						</ul>
+	 					</dd>
+	 				</dl>
+ 				</div> 				
+ 			</div> 			
+	 	</div>	
+ 	</div>
+
+
+ 	<!-- build:lib -->
+ 	<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
+ 	<script src="js/lib/angular/angular_1.2.6.js"></script>
+ 	<script src="js/lib/underscore/underscore.min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
+	<!-- endbuild -->
+
+	<!-- build:index -->
+	<script src="js/constants/constants.js"></script>
+	<script src="js/service/UtilsService.js"></script>
+	<script src="js/service/mgradeService.js"></script>
+	<script src="js/service/studentService.js"></script>
+	<script src="js/service/teacherService.js"></script>
+	<script src="js/service/quotaService.js"></script>
+	<script src="js/controllers/gradelistController.js"></script>
+	<script src="js/controllers/indexnavController.js"></script>
+	<script src="js/controllers/studentController.js"></script>
+	<script src="js/controllers/teacherController.js"></script>
+	<script src="js/controllers/quotaController.js"></script>
+	<script src="js/teacher.js"></script>
+	<!-- endbuild -->	
+
+ </body>
+ </html>

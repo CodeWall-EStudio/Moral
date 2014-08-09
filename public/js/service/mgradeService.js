@@ -1,8 +1,8 @@
-angular.module('dy.services.user', [
+angular.module('dy.services.mgrade', [
         'dy.constants',
         'dy.services.utils'	
 	])
-	.service('userService', [
+	.service('mGradeService', [
 		'$rootScope','$location','$http','Util',function(Root,location,Http,Util){
 
 			var cgi = {
@@ -11,14 +11,15 @@ angular.module('dy.services.user', [
 				onegrade : ''     //一个学期的信息
 			};
 
-			function getUserList(param,success,error){
+			function getGradeList(param,success,error){
 
 			};
 
 
 			return {
-				getUserList : getUserList
+				getGradeList : getGradeList
 			}
 
 		}
 	]);
+

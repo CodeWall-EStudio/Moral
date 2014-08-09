@@ -2,37 +2,41 @@ angular.module('dy.controllers.managenav',[
         'dy.constants',
         'dy.services.utils',
         'dy.services.mgrade',
-        'dy.services.user'	
+        'dy.services.student'	
 	])
 	.controller('mNavController',[
-		'$rootScope', '$scope','Util','mGradeService','userService',function(Root,Scope,Util,Mgrade,User){
+		'$rootScope', '$scope','$location','Util','mGradeService','studentService',function(Root,Scope,$location,Util,Mgrade,User){
 			console.log('load managenavcontroller');
+
+			var nowUser = {};
+
+			Root.User = {
+				nick : '测试用户',
+				name : 'testuser',
+				auth : 15
+			}
 
 			function hideAll(){
 				$('.content-controller').hide();
 				$('.content-header').hide();
 			}
 
-			Scope.studentShow = function(){
-				hideAll();
-				$('.user-controller').show();
-				$('.user-header').show();
-				console.log(1);
+			Root.getMode = function(){
+				return $location.search()['mode'];
 			}
 
-			Scope.teacherShow = function(){
-				hideAll();
-				$('.teacher-controller').show();
-				$('.teacher-header').show();
-				console.log(2);
+			Root.switchMode = function(mode){
+                if(mode !== Root.getMode()){
+                    $location.search('mode', mode);
+                }
+			}					
+
+			Scope.authManage = function(){
+
 			}
 
-			Scope.quotaShow = function(){
-				hideAll();
-				$('.quota-controller').show();
-				$('.quota-header').show();
-				console.log(3);
-			}						
+			Scope.quitManage = function(){
 
+			}
 		}
 	]);

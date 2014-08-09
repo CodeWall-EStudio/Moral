@@ -202,7 +202,7 @@ li{
 
 
 .content-main{
-	padding-left:350px;
+	padding-left:480px;
 	position:relative;
 	background:#fff;
 }
@@ -224,7 +224,7 @@ li{
 	top:0;
 	left:0;
 	padding:0 10px;
-	width:330px;
+	width:450px;
 }
 
 .user-action{
@@ -234,7 +234,6 @@ li{
 }
 
 
-
-#userZone .div-form,.teacher-header,.quota-header,.teacher-controller,.quota-controller{
+.hide{
 	display:none;
 }
