@@ -5,11 +5,8 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('../middleware/auth');
-var login = require('../middleware/login');
-var logout = require('../middleware/logout');
 
-
-router.all('*', auth());
+router.all('*', auth('', 'teacher'));
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -18,9 +15,12 @@ router.get('/', function (req, res) {
 });
 
 /* login handle */
-router.get('/login', login);
+router.get('/login', auth('in', 'teacher'));
 
 /* logout handle */
-router.get('/logout', logout);
+router.get('/logout', auth('out', 'teacher'));
+
+/* validate handle */
+router.get('/validate', auth('check', 'teacher'));
 
 module.exports = router;

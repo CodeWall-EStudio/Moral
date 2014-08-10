@@ -32,11 +32,11 @@ routerTeacher.all('*', teacher);
 app.use('/teacher', routerTeacher);
 
 // 初始化路由处理
-// 处理老师请求
-var student = require('./routes/student');
+// 处理学生请求
+/*var student = require('./routes/student');
 var routerStudent = express.Router();
 routerStudent.all('*', student);
-app.use('/student', routerStudent);
+app.use('/student', routerStudent);*/
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
