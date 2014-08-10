@@ -33,7 +33,7 @@
  			<li  ng-class="{active:getMode()==='quota'}" ng-click="switchMode('quota')"><a ng-click="quotaShow()">指标管理</a></li>
  		</ul>
  		<div class="userinfo">
- 			<span>{{User.nick}}</span>
+ 			<span>{{User.name}}</span>
  			<a ng-class="{hide:User.auth===0}" ng-click="authManage()">授权管理</a>
  			<a ng-click="quitManage()">退出</a>
  		</div>
@@ -199,7 +199,7 @@
 	 						<td>{{item.grade}}</td>
 	 						<td>{{item.class}}</td>
 	 						<td>{{item.name}}</td>
-	 						<td>{{item.nick}}</td>
+	 						<td>{{item.name}}</td>
 	 					</tr>					
 	 				</table> 				
 	 			</div> 	
@@ -226,7 +226,7 @@
 	 					<tr ng-repeat="item in quotaList track by $index" ng-click="changeQuota(item.id)">
 	 						<td>{{item.no}} {{$index}}</td>
 	 						<td>{{item.name}}</td>
-	 						<td>{{item.info}}</td>
+	 						<td>{{item.desc}}</td>
 	 					</tr>					
 	 				</table> 				
 	 			</div> 	
@@ -261,7 +261,7 @@
 								<label for="quotaInfoInput" class="col-sm-3 control-label">指标说明：</label>
 								<div class="col-sm-9">
 									<textarea class="form-control" id="quotaInfoInput" placeholder="请输入指标说明">
-										{{nowQuota.info}}
+										{{nowQuota.desc}}
 									</textarea>
 								</div>
 							</div>												

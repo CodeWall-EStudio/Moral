@@ -12,8 +12,32 @@ angular.module('dy.services.quota', [
 			};
 
 			function getQuotaList(param,success,error){
+				var quotaList = {};
 
+				for(var i = 0;i<10;i++){
+					length++;
+/*
+    order: Number,
+    name:  String,
+    score:   Number,
+    desc: String,
+    term: String
+*/					
+					quotaList[i+100] = {
+						id : i+100,
+						name : '指标'+i,
+						no : i,
+						now : 0,
+						desc : '指标说明说明说明说明说明说明说明说明说明说明'
+					};
+				}				
+				Root.quotaList = quotaList;
 			};
+
+			function getStudentQuota(param,success,error){
+
+
+			}
 
 
 			return {

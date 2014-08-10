@@ -11,17 +11,41 @@ angular.module('dy.services.student', [
 				onegrade : ''     //一个学期的信息
 			};
 
+			//拉学生列表
 			function getUserList(param,success,error){
 
 			};
 
+			//拉学生个人信息
 			function getUserInfo(param,success,error){
-				
+
+				// $http.get(BACKEND_SERVER + '/studentInfo', {responseType:'json', params:params})
+				// 	.success(function(data,status){
+
+				// 	})
+				// 	.error(function(data,status){
+
+				// 	});
+				// console.log(12345);
+				Root.User = {
+				    id: 'dsgi3252436k;l143245',
+				    name: '测试学生',
+				    number: 50,   //学生证号码
+				    grade:  1,  
+				    class: 2,
+				    pid:   30,    //没用到
+				    sex: 1
+				}
+			};
+
+			function getUser(){
+				return Root.User;
 			}
 
-
 			return {
-				getUserList : getUserList
+				getUserList : getUserList,
+				getUserInfo : getUserInfo,
+				getUser : getUser
 			}
 
 		}
