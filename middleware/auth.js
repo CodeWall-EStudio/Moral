@@ -2,8 +2,9 @@
  * Created by joey on 8/8/14.
  */
 
-var casClass = require('../lib/cas');
+var casClass = require('./cas');
 var CONSTANTS = require('../config/constants');
+var db = require('../middleware/db');
 
 // the middleware function
 module.exports = function auth(method, role) {
@@ -12,8 +13,8 @@ module.exports = function auth(method, role) {
 
         if (role === 'teacher') {
             var hostUrl = req.protocol + '://' + req.host;
-            if (CONSTANTS.port != 80 || CONSTANTS.port != 443) {
-                hostUrl += ':' + CONSTANTS.port;
+            if (CONSTANTS.PORT != 80 || CONSTANTS.PORT != 443) {
+                hostUrl += ':' + CONSTANTS.PORT;
             }
             var valUrl = hostUrl + '/' + role + '/validate';
             var cas = new casClass({
@@ -28,8 +29,6 @@ module.exports = function auth(method, role) {
                 res.redirect(hostUrl);
             } else if (method === 'check') {
                 var ticket = req.param('ticket');
-                //res.json({data:ticket});
-                //res.render('index', { title: 'Express', v: 'test'});
                 cas.validate(ticket, function(err, status, response){
                     if (err) {
 
@@ -38,32 +37,67 @@ module.exports = function auth(method, role) {
 
                     }
                     var data = JSON.parse(response);
-                    console.log(data);
                     var sess = req.session;
-                    sess.uid = data.loginName;
-                    sess.skey = data.encodeKey;
+                    sess.user = {};
+                    sess.user.id = data.loginName;
+                    sess.user.skey = data.encodeKey;
+                    sess.user.role = role;
                     res.redirect(hostUrl + '/' + role);
                 });
             } else {
                 var sess = req.session;
-                if (sess.uid) {
-                    cas.decode(sess.skey, function(err, response){
-                        sess.user = response.userInfo;
-                    });
+                if (sess.user) {
+                    if (sess.user.skey) {
+                        cas.decode(sess.user.skey, function (err, response) {
+                            if (err) {
+                            }
+                            sess.user.info = response.userInfo;
+                            next();
+                        });
+                    } else {
+                        next();
+                    }
+                } else {
+                    sess.user = {};
+                    next();
                 }
-                next();
             }
         }  else if (role === 'student') {
+            var hostUrl = req.protocol + '://' + req.host;
+            if (CONSTANTS.PORT != 80 || CONSTANTS.PORT != 443) {
+                hostUrl += ':' + CONSTANTS.PORT;
+            }
+            var studentModel = db.getStudentModel();
             if (method === 'in') {
-
+                res.render('login', {});
             } else if (method === 'out') {
 
             } else if (method === 'check') {
 
+            } else if (method === 'post') {
+                var sess = req.session;
+                studentModel.findOne({id: req.body.id}, function (err, studentEntity) {
+                    if (err) {
+                        console.error(err);
+                    }
+                    if (studentEntity) {
+                        if (req.body.number === studentEntity.number) {
+                            sess.user = studentEntity;
+                            res.redirect(hostUrl + '/' + role);
+                        } else {
+                            res.redirect(hostUrl + '/' + role);
+                        }
+                    } else {
+                        res.redirect(hostUrl + '/' + role);
+                    }
+                });
             } else {
-
+                var sess = req.session;
+                if (!sess.user) {
+                    sess.user = {};
+                }
+                next();
             }
-            next();
         }
     }
 };

@@ -5,8 +5,8 @@
     <meta name="author" content="Xzone"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title>德育系统</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
 </head>
 
 <body>
@@ -18,20 +18,20 @@
             <!--<li><a href="#teacher" role="tab" data-toggle="tab">教师登录</a></li>-->
             <li><a href="#student" role="tab" data-toggle="tab">学生/家长登录</a></li>
         </ul>
-        <div id="loginTabContent" class="tab-content">
-            <form action="/student/login" name="login" method="post">
+        <form name="login" method="post" action="/student/login">
+            <div id="loginTabContent" class="tab-content">
                 <div id="student" class="tab-pane fade active in" ng-controller="loginUinController">
                     <ul>
                         <li>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-addon ico-username"></span>
-                                <input type="text" class="form-control" placeholder="输入学生中文姓名">
+                                <input type="text" name="id" class="form-control" placeholder="输入学生中文姓名">
                             </div>
                         </li>
                         <li>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-addon ico-pwd"></span>
-                                <input type="text" class="form-control" placeholder="输入登录ID码">
+                                <input type="text" name="number" class="form-control" placeholder="输入登录ID码">
                             </div>
                         </li>
                         <li>
@@ -39,22 +39,22 @@
                         </li>
                     </ul>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 <div class="footer">
     版权所有
 </div>
 
-<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
-<script src="js/lib/angular/angular_1.2.6.js"></script>
-<script src="js/lib/bootstrap.min.js"></script>
+<script src="/js/lib/jquery/jquery-2.0.3.min.js"></script>
+<script src="/js/lib/angular/angular_1.2.6.js"></script>
+<script src="/js/lib/bootstrap.min.js"></script>
 
-<script src="js/constants/constants.js"></script>
-<script src="js/service/UtilsService.js"></script>
-<script src="js/controllers/LoginUinController.js"></script>
-<script src="js/userlogin.js"></script>
+<script src="/js/constants/constants.js"></script>
+<script src="/js/service/UtilsService.js"></script>
+<script src="/js/controllers/LoginUinController.js"></script>
+<script src="/js/userlogin.js"></script>
 
 </body>
 </html>

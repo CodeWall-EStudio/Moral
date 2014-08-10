@@ -11,6 +11,7 @@ router.all('*', auth('', 'teacher'));
 /* GET home page. */
 router.get('/', function (req, res) {
     var sess = req.session;
+    //console.log(sess.user);
     res.render('index', { title: 'Express', v: sess.views });
 });
 

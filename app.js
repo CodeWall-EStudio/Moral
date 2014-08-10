@@ -9,6 +9,9 @@ var app = express();
 
 // config setup
 var config = require('./config/' + app.get('env') + '.js');
+var CONSTANTS = require('./config/constants.js');
+CONSTANTS.ENV = app.get('env');
+
 // console.log(config.DB);
 
 // view engine setup
@@ -33,13 +36,13 @@ app.use('/teacher', routerTeacher);
 
 // 初始化路由处理
 // 处理学生请求
-/*var student = require('./routes/student');
+var student = require('./routes/student');
 var routerStudent = express.Router();
 routerStudent.all('*', student);
-app.use('/student', routerStudent);*/
+app.use('/student', routerStudent);
 
 /// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
@@ -50,7 +53,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
+    app.use(function (err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -61,7 +64,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
