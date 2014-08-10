@@ -8,14 +8,6 @@ angular.module('dy.controllers.indexnav',[
 		'$rootScope', '$scope','$location','Util','mGradeService','studentService',function(Root,Scope,$location,Util,Mgrade,Student){
 			console.log('load indexnavcontroller');
 
-			Root.User = {
-				nick : '测试用户家长',
-				name : 'testuser',
-				auth : 1,
-				type : 'teacher',
-				allrecord : 50
-			}
-
 			Root.showRecode = function(){
 
 			}
@@ -33,7 +25,7 @@ angular.module('dy.controllers.indexnav',[
 			//退出登录
 			Root.quitLogin = function(){
 
-			}				
+			}		
 
 		}
 	]).controller('termController',[//学期信息

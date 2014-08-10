@@ -6,11 +6,13 @@ angular.module('dy.controllers.student',[
 	])
 	.controller('studentController',[
 		'$rootScope', '$scope','$location','Util','mGradeService','studentService','CMD_SET_QUOTA',
-			function(Root,Scope,Location,Util,Mgrade,User,CMD_SET_QUOTA){
+			function(Root,Scope,Location,Util,Mgrade,Student,CMD_SET_QUOTA){
 			console.log('load studentcontroller');
 			//sm = list 显示学生列表
 			//sm = info 显示学生个人资料
 			//sm = recode 显示自评说明
+
+			Student.getUserInfo();
 
 			var userList = {};
 			var gradeList = [];

@@ -15,24 +15,11 @@ angular.module('dy.controllers.quota',[
 		,function(Root,Scope,Util,Mgrade,Quota,CMD_SET_QUOTA,CMD_SAVE_QUOTA){
 			console.log('load quotacontroller');
 
-			var quotaList = {};
 			var nowQuota = {};
 			var length = 0;//指标个数
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
-			for(var i = 0;i<10;i++){
-				length++;
-				quotaList[i+100] = {
-					id : i+100,
-					name : '指标'+i,
-					no : i,
-					now : 0,
-					info : '说明说明说明说明说明说明说明说明说明说明'
-				};
-			}
-
-			Scope.quotaList = quotaList;
 			Scope.nowQuota = nowQuota;
 			Scope.equaRecord = 0;
 
@@ -76,8 +63,8 @@ angular.module('dy.controllers.quota',[
 			//重置学生分数
 			Scope.resetStudentQuota = function(){
 				Scope.equaRecord = 0;
-				for(var i in Scope.quotaList){
-					Scope.quotaList[i].now = 0;
+				for(var i in Root.quotaList){
+					Root.quotaList[i].now = 0;
 				}
 			}
 
@@ -87,7 +74,7 @@ angular.module('dy.controllers.quota',[
 
 				nowRecord[id] = num;
 				console.log(id,num);
-				Scope.quotaList[id].now = num;
+				Root.quotaList[id].now = num;
 
 				//这里有问题..要修改下.
 				Scope.equaRecord = getEqua();
@@ -97,5 +84,7 @@ angular.module('dy.controllers.quota',[
 					num : num
 				});
 			}
+
+			Quota.getQuotaList();
 		}
 	]);
