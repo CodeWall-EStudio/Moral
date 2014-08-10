@@ -1,8 +1,8 @@
-angular.module('dy.services.mgrade', [
+angular.module('dy.services.teacher', [
         'dy.constants',
         'dy.services.utils'	
 	])
-	.service('mGradeService', [
+	.service('teacherService', [
 		'$rootScope','$location','$http','Util',function(Root,location,Http,Util){
 
 			var cgi = {
@@ -11,15 +11,14 @@ angular.module('dy.services.mgrade', [
 				onegrade : ''     //一个学期的信息
 			};
 
-			function getGradeList(param,success,error){
+			function getQuotaList(param,success,error){
 
 			};
 
 
 			return {
-				getGradeList : getGradeList
+				getQuotaList : getQuotaList
 			}
 
 		}
 	]);
-

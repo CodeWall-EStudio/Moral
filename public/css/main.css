@@ -109,6 +109,7 @@ li{
 	height:58px;
 	line-height:38px;
 	background:#fff;
+	border-bottom:1px solid #ddd;
 }
 .content-header .grade-dom{
 	float:left;
@@ -339,4 +340,8 @@ i.copper{
 	height:31px;
 	margin-right:10px;
 	cursor:pointer;
+}
+
+.hide{
+	display:hide;
 }
