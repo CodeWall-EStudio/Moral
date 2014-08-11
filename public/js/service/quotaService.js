@@ -11,37 +11,67 @@ angular.module('dy.services.quota', [
 				onegrade : ''     //一个学期的信息
 			};
 
-			function getQuotaList(param,success,error){
-				var quotaList = {};
+			function conventQuota(data){
+				if(!Root.quotaList){
+					Root.quotaList = {};
+				}
+				for(var i in data){
+					data[i].id = data[i]._id;
+					Root.quotaList[data[i]._id] = data[i];
+				}
+			}
 
-				for(var i = 0;i<10;i++){
-					length++;
-/*
-    order: Number,
-    name:  String,
-    score:   Number,
-    desc: String,
-    term: String
-*/					
-					quotaList[i+100] = {
-						id : i+100,
-						name : '指标'+i,
-						no : i,
-						now : 0,
-						desc : '指标说明说明说明说明说明说明说明说明说明说明'
-					};
-				}				
-				Root.quotaList = quotaList;
+			function getQuotaList(param,success,error){
+				var ts = new Date().getTime();
+				Http.get('/teacher/indicator?_='+ts,null,{responseType:'json'})
+					.success(function(data,status){
+						conventQuota(data.indicator);
+						console.log('拉指标列表成功!', data);
+						if(success) success(data, status);
+					})
+					.error(function(data,status){
+						if(error) error(data, status);
+					});				
 			};
 
 			function getStudentQuota(param,success,error){
 
+			};
+
+			function createQuota(param,success,error){
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/indicator?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                    	if(data.error === 'ok' || data.error === 0){
+                    		if(!Root.quotaList){
+                    			Root.quotaList = {};
+                    		}
+                    		//Root.quotaList.push(param.term);
+                    	}
+                        console.log('[quotaService] quota crate suc =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                        if(error) error(data, status);
+                    });				
+			};
+
+			function modifyQuota(param,success,error){
 
 			}
 
 
 			return {
-				getQuotaList : getQuotaList
+				getQuotaList : getQuotaList,
+				createQuota : createQuota,
+				modifyQuota : modifyQuota
 			}
 
 		}

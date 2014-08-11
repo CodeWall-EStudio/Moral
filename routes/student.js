@@ -24,7 +24,10 @@ module.exports = function student(method) {
                                 console.log('The raw response from Mongo was ', raw);
                                 var id = '';
                                 if (raw.ok && !raw.updatedExisting) {
-                                    id = raw.upserted[0]._id;
+                                    console.log(raw);
+                                    id = raw.upserted;
+                                    console.log(id);
+
                                 }
                                 res.json({ code: CONSTANTS.MSG_SUCC, id: id });
                             }
