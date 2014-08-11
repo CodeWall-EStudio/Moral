@@ -73,6 +73,9 @@ angular.module('dy.services.student', [
                     	console.log(data);
                     	if(data.error === 'ok' || data.code === 0){
                     		var student = JSON.parse(param.student);
+                    		student.id = data.id;
+                    		student._id = data.id;
+                    		Root.studentList[data.id] = student;
                     		//Root.quotaList.push(param.term);
                     	}
                         console.log('添加学生成功!', data);

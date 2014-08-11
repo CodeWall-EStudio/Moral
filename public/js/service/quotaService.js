@@ -53,6 +53,10 @@ angular.module('dy.services.quota', [
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
                     		}
+                    		var quota = JSON.parse(param.indicator);
+                    		quota._id = data.id;
+                    		quota.id = data.id;
+                    		Root.quotaList[data.id] = quota;
                     		//Root.quotaList.push(param.term);
                     	}
                         console.log('[quotaService] quota crate suc =', data);
