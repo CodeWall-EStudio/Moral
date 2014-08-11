@@ -23,7 +23,7 @@ module.exports = function score(method) {
                                 console.log('The raw response from Mongo was ', raw);
                                 var id = '';
                                 if (raw.ok && !raw.updatedExisting) {
-                                    id = raw.upserted[0]._id;
+                                    id = raw.upserted;
                                 }
                                 res.json({ code: CONSTANTS.MSG_SUCC, id: id });
                             }
