@@ -15,12 +15,11 @@ angular.module('dy.controllers.quota',[
 		,function(Root,Scope,Util,Mgrade,Quota,CMD_SET_QUOTA,CMD_SAVE_QUOTA){
 			console.log('load quotacontroller');
 
-			var nowQuota = {};
 			var length = 0;//指标个数
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
-			Scope.nowQuota = nowQuota;
+			Root.nowQuota = {};
 			Scope.equaRecord = 0;
 
 			function getEqua(){
@@ -35,18 +34,32 @@ angular.module('dy.controllers.quota',[
 
 			//后台变更指标
 			Scope.changeQuota = function(idx){
-				console.log(idx);
-				Scope.nowQuota = quotaList[idx];
 			}	
 
 			//后台创建指标
 			Scope.createQuota = function(){
-
 			}	
 
 			//后台保存指标
 			Scope.saveQuota = function(){
-				console.log(nowQuota);
+				console.log(Root.nowQuota);
+				var param = {
+					name : Root.nowQuota.name,
+					order : Root.nowQuota.order,
+					desc : Root.nowQuota.desc,
+					score : Root.nowQuota.score
+				}
+				if(Root.nowQuota._id){
+					Quota.createQuota({
+						term : Root.Term._id,
+						indicator : JSON.stringify(param)
+					});
+				}else{
+					Quota.createQuota({
+						term : Root.Term._id,
+						indicator : JSON.stringify(param)
+					});
+				}
 			}
 
 			//后台删除指标

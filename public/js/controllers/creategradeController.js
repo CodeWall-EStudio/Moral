@@ -8,7 +8,6 @@ angular.module('dy.controllers.gradepanel',[
 
 			var selectMonth = [];
 			var defMonthLength = 5;
-			Root.Term = {};
 
 			function checkMonth(idx){
 				var list = $('#gradePanelModal .select-month li');
@@ -29,8 +28,7 @@ angular.module('dy.controllers.gradepanel',[
 
 			Root.createGrade = function(e){
 				var target = $(e.target);
-				var type = target.attr('data-type');
-			
+				var type = target.attr('data-type');			
 				if(type === 'create'){
 					Root.$emit('create.grade.show');
 				}
@@ -39,6 +37,10 @@ angular.module('dy.controllers.gradepanel',[
 			Root.showGradePanel = function(e){
 				$("#gradePanelModal").modal('show');
 			}
+
+			Root.hideGradePanel = function(e){
+				$("#gradePanelModal").modal('hide');
+			}			
 
 			Scope.monthSelect = function(e){
 				var target = $(e.target),
@@ -71,32 +73,47 @@ angular.module('dy.controllers.gradepanel',[
 				}
 			}
 
-			/* term: {"name":"2014-2015学年度 第一学期","active": false, "year": 2014, "day": 15, "months":[{"s":9,"e":10}, {"s":10, "e":11}, {"s":11, "e":12}, {"s":12, "e":1}]}*/
 			Scope.createTerm = function(){
 				var param = {
 					name : Root.Term.name,
-					active : true,
+					active : false,
 					year : new Date().getFullYear(),
 					day : Root.Term.day,
 					months : Root.Term.months
 				}
-				Mgrade.createTerm(param);
+				Mgrade.createTerm({
+					term : JSON.stringify(param)
+				});
+				Root.hideGradePanel();
 			}
 
-			Scope.modifyTerm = function(){
-				var param = {
-					name : Root.name,
-					active : Root.Term.name,
-					year : new Date().getFullYear(),
-					day : Root.Term.day,
-					months : Root.Term.months
-				}
-				Mgrade.modifyTerm(param);
+			Root.setActiveTerm = function(id){
+				var param = Root.termList[id];
+				param.active = true;
+				Mgrade.createTerm({
+					term : JSON.stringify(param)
+				});
+			}
+
+			Root.closeTerm = function(id){
+				var param = Root.termList[id];
+				param.active = false;
+				Mgrade.createTerm({
+					term : JSON.stringify(param)
+				});
+			}			
+
+			Root.modifyTerm = function(id){
+				Root.Term = Root.termList[id];
+				Root.$emit('create.grade.show',true);
 			}
 
 			Root.$on('create.grade.show',function(e,d){
-
-				Scope.panelTitle = '新建学期';
+				if(!d){
+					Scope.panelTitle = '新建学期';
+				}else{
+					Scope.panelTitle = '修改学期';
+				}
 				Scope.confirmBtnTitle = '保存';
 				Scope.cancelBtnTitle = '取消';
 
@@ -115,7 +132,6 @@ angular.module('dy.controllers.gradepanel',[
 
 				Root.showGradePanel();
 			});
-
 
 
 		}

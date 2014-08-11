@@ -13,12 +13,13 @@
  	<div class="header-blue" ng-controller="mNavController">
  		<ul class="nav nav-tabs top-nav" >
  			<li ng-class="{active:getMode()===''}" ng-click="switchMode()">
- 				<a class="dropdown-toggle" data-toggle="dropdown">2014-2013年度第一学期<span class="caret"></span></a>
+ 				<a class="dropdown-toggle" data-toggle="dropdown" ng-model="Term.name"> {{Term.name}}<span class="caret"></span></a>
  				<ul class="dropdown-menu" role="menu">
  					<li ng-repeat="item in termList">
  						<a ng-click="showGrade(item.id)">{{item.name}}</a>
- 						<a class="act" ng-click="setActiveGrade(item.id)">激活</a> 
- 						<a class="act" ng-click="closeGrade(item.id)">关闭</a>
+ 						<a class="act" ng-click="setActiveTerm(item.id)" ng-show="item.active === false">激活</a> 
+ 						<a class="act" ng-click="closeTerm(item.id)" ng-show="item.active === true">关闭</a>
+ 						<a class="act" ng-click="modifyTerm(item.id)">编辑</a>
  					</li>
  					<li><a data-type="create" ng-click="createGrade($event)">添加</a></li>
  				</ul> 				
@@ -39,7 +40,7 @@
 			<div class="content-header user-header hide" ng-class="{hide:getMode()!=='student'}">
 				<div class="content-manager-bar">
 					<div class="col-sm-3 grade-list">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">所有年级<span class="caret"></span></a>
+						<a class="dropdown-toggle" data-toggle="dropdown">所有年级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 		 					<li ng-repeat="item in gradeList">
 		 						<a data-value="{{item.id}}" ng-click="changeGrade(item.id)">{{item.name}}</a>
@@ -48,7 +49,7 @@
 					</div>
 
 					<div class="col-sm-3 grade-list">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
+						<a class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 		 					<li ng-repeat="item in classList">
 		 						<a data-value="{{item.id}}" ng-click="changeClass(item.id)">{{item.name}}</a>
@@ -71,7 +72,7 @@
 			<div class="content-header teacher-header hide" ng-class="{hide:getMode()!=='teacher'}">
 				<div class="content-manager-bar">
 					<div class="col-sm-3 grade-list">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">所有年级<span class="caret"></span></a>
+						<a class="dropdown-toggle" data-toggle="dropdown">所有年级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 		 					<li ng-repeat="item in gradeList">
 		 						<a data-value="{{item.id}}" ng-click="changeGrade(item.id)">{{item.name}}</a>
@@ -80,7 +81,7 @@
 					</div>
 
 					<div class="col-sm-3 grade-list">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
+						<a class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 		 					<li ng-repeat="item in classList">
 		 						<a data-value="{{item.id}}" ng-click="changeClass(item.id)">{{item.name}}</a>
@@ -109,7 +110,7 @@
  			<!--学生列表-->
  			<div class="content-controller user-controller hide"  ng-class="{hide:getMode()!=='student'}" ng-controller="studentController">
 	 			<div class="content-list">
-	 				<table class="table table-striped table-hover" ng-model="userList">
+	 				<table class="table table-striped table-hover" ng-model="studentList">
 	 					<tr>
 	 						<th>姓名<span class="uaret"></span></th>
 	 						<th>CMIS_ID<span class="caret"></span></th>
@@ -117,9 +118,9 @@
 	 						<th>年级<span class="caret"></span></th>
 	 						<th>班级<span class="caret"></span></th>
 	 					</tr>
-	 					<tr ng-repeat="item in userList" ng-click="changeUser()">
+	 					<tr ng-repeat="item in studentList" ng-click="changeUser()">
 	 						<td>{{item.name}}</td>
-	 						<td>{{item.cid}}</td>
+	 						<td>{{item.id}}</td>
 	 						<td>{{item.sex}}</td>
 	 						<td>{{item.grade}}</td>
 	 						<td>{{item.class}}</td>
@@ -130,48 +131,42 @@
 	 				<form class="form-horizontal" role="form">
 		 				<div class="user-action">
 		 					<button class="btn btn-primary" ng-click="createUser()">新建</button>
-		 					<button class="btn btn-primary" ng-click="saveUser()">保存</button>
+		 					<button class="btn btn-primary" ng-click="saveStudent()">保存</button>
 		 					<button class="btn btn-primary" data-dismiss="modal">复位</button>
 		 				</div>
 		 				<div class="div-form">
 							<div class="form-group">
 								<label for="studentNameInput" class="col-sm-3 control-label">姓名：</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" id="studentNameInput" placeholder="请输入姓名" value="{{name}}">
+									<input type="text" class="form-control" id="studentNameInput" placeholder="请输入姓名" ng-model="nowStudent.name">
 								</div>
 							</div>
 							<div class="form-group">
 								<label  class="col-sm-3 control-label">CMIS_ID：</label>
 								<div class="col-sm-9">
-									{{cmis}}
+									<input type="text" class="form-control" id="studentNameCid" placeholder="请输入CMIS_ID：" ng-model="nowStudent.cid">
 								</div>
 							</div>							
 							<div class="form-group">
 								<label for="studentSexSelect" class="col-sm-3 control-label">性别：</label>
 								<div class="col-sm-9">
-									<select class="form-control input-sm" id="studentSexSelect">
-										<option>男</option>
-										<option>女</option>
+									<select class="form-control input-sm" id="studentSexSelect" ng-model="nowStudent.sex">
+										<option value="1">男</option>
+										<option value="0">女</option>
 									</select>
 								</div>
 							</div>							
 							<div class="form-group">
 								<label for="studentGradeSelect" class="col-sm-3 control-label">年级：</label>
 								<div class="col-sm-9">
-									<select class="form-control input-sm" id="studentGradeSelect">
-										<option ng-repeat="item in gradeList" value="{{item.id}}">
-											{{item.name}}
-										</option>
+									<select ng-model="SelectdGrade" class="form-control input-sm"  id="studentGradeSelect" ng-options="item.name for item in gradeList" ng-model="nowStudent.grade">
 									</select>
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="studentClassSelect" class="col-sm-3 control-label">班级：</label>
 								<div class="col-sm-9">
-									<select class="form-control input-sm" id="studentClassSelect">
-										<option ng-repeat="item in classList" value="{{item.id}}">
-											{{item.name}}
-										</option>
+									<select  ng-model="SelectdClass"  class="form-control input-sm"  id="studentClassSelect" ng-options="item.name for item in classList" ng-model="nowStudent.class">
 									</select>
 								</div>
 							</div>
@@ -230,33 +225,32 @@
 		 				<div class="user-action">
 		 					<button class="btn btn-primary" ng-click="createQuota()">新建</button>
 		 					<button class="btn btn-primary" ng-click="saveQuota()">保存</button>
-		 					<button class="btn btn-primary btn-danger" ng-click="saveQuota()">删除</button>
+		 					<button class="btn btn-primary btn-danger" ng-click="delQuota()">删除</button>
 		 					<button class="btn btn-primary" data-dismiss="modal">复位</button>
 		 				</div>	
-						<div class="div-form" ng-model="nowQuota" >
+						<div class="div-form">
 							<div class="form-group">
 								<label for="quotaNoInput" class="col-sm-3 control-label">序号：</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" id="quotaNoInput" placeholder="请输入指标序号" value="{{nowQuota.no}}">
+									<input type="text" class="form-control" id="quotaNoInput" placeholder="请输入指标序号" ng-model="nowQuota.no">
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="quotaRecordSelect" class="col-sm-3 control-label">分值：</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" id="quotaRecordInput" placeholder="请输入指标序号">
+									<input type="text" class="form-control" id="quotaRecordInput" placeholder="请输入指标分值" ng-model="nowQuota.score">
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="quotaNameInput" class="col-sm-3 control-label">指标名称：</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" id="quotaNameInput" placeholder="请输入指标名称" value="{{nowQuota.name}}">
+									<input type="text" class="form-control" id="quotaNameInput" placeholder="请输入指标名称" ng-model="nowQuota.name">
 								</div>
 							</div>	
 							<div class="form-group">
 								<label for="quotaInfoInput" class="col-sm-3 control-label">指标说明：</label>
 								<div class="col-sm-9">
-									<textarea class="form-control" id="quotaInfoInput" placeholder="请输入指标说明">
-										{{nowQuota.desc}}
+									<textarea class="form-control" id="quotaInfoInput" placeholder="请输入指标说明"  ng-model="nowQuota.desc">
 									</textarea>
 								</div>
 							</div>												
@@ -310,8 +304,6 @@
         </div>
  	</div>
 
- 	<div class="modal fade" id="gradePanelModal" ng-controller="GradePanelController">
- 	</div>
 
  	<!-- build:lib -->
  	<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>

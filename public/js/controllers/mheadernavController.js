@@ -11,25 +11,26 @@ angular.module('dy.controllers.managehandernav',[
 			var keyword = '';
 			
 
-			for(var i = 0;i<4;i++){
+			for(var i = 0;i<6;i++){
 				gradeList.push({
-					name : '年级'+i,
+					name : (i+1)+'年级',
 					id :　i
 				});
 			}
 
-			for(var i = 0;i<4;i++){
+			for(var i = 0;i<15;i++){
 				classList.push({
-					name : '班级'+i,
+					name : (i+1)+'班级',
 					id :　i
 				});
 			}	
 
 
 
-			Scope.gradeList = gradeList;
-			Scope.classList = classList;
-			Scope.keyword = keyword;
+			Root.gradeList = gradeList;
+			Root.classList = classList;
+			Root.termList = {};
+			// Scope.keyword = keyword;
 			
 
 			//变更年级
@@ -47,7 +48,6 @@ angular.module('dy.controllers.managehandernav',[
 				console.log(e,d);
 			}
 
-
-			Mgrade.getGradeList();
+			Mgrade.getTermList();
 		}
 	]);

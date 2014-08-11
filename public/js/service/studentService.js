@@ -11,13 +11,30 @@ angular.module('dy.services.student', [
 				onegrade : ''     //一个学期的信息
 			};
 
-			//拉学生列表
-			function getUserList(param,success,error){
+			function conventStudent(data){
+				for(var i in data){
+					data[i].cid = data[i].id;
+					data[i].id = data[i]._id;
+					Root.studentList[data[i]._id] = data[i];
+				}
+			}
 
+			//拉学生列表
+			function getStudentList(param,success,error){
+				var ts = new Date().getTime();
+				Http.get('/teacher/student?_='+ts,null,{responseType:'json'})
+					.success(function(data,status){
+						conventStudent(data.student);
+						console.log('拉学生列表成功!', data);
+						if(success) success(data, status);
+					})
+					.error(function(data,status){
+						if(error) error(data, status);
+					});
 			};
 
 			//拉学生个人信息
-			function getUserInfo(param,success,error){
+			function getStudentInfo(param,success,error){
 
 				// $http.get(BACKEND_SERVER + '/studentInfo', {responseType:'json', params:params})
 				// 	.success(function(data,status){
@@ -38,14 +55,39 @@ angular.module('dy.services.student', [
 				}
 			};
 
-			function getUser(){
+			function getStudent(){
 				return Root.User;
 			}
 
+			function createStudent(param,success,error){
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/student?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                    	console.log(data);
+                    	if(data.error === 'ok' || data.code === 0){
+                    		var student = JSON.parse(param.student);
+                    		//Root.quotaList.push(param.term);
+                    	}
+                        console.log('添加学生成功!', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                        if(error) error(data, status);
+                    });	
+			}
+
 			return {
-				getUserList : getUserList,
-				getUserInfo : getUserInfo,
-				getUser : getUser
+				createStudent : createStudent,
+				getStudentList : getStudentList,
+				getStudentInfo : getStudentInfo,
+				getStudent : getStudent
 			}
 
 		}
