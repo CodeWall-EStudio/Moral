@@ -16,8 +16,37 @@ angular.module('dy.services.mgrade', [
 			};
 
 
+			function createTerm(param,success,error){
+				var ts = new Date().getTime();
+
+				var body = Util.object.toUrlencodedString(param);
+				console.log(param,body);
+				Http.post('/teacher/term?_=' + ts,
+                        param,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                        console.log('[mGradeService] term config =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                        console.error('[ActivityService] FAIL TO FETCH ACTIVITY CONFIGURATIONS');
+                        if(error) error(data, status);
+                    });				
+			}
+
+			function modifyTerm(param,success,error){
+				
+			}			
+
+
 			return {
-				getGradeList : getGradeList
+				getGradeList : getGradeList,
+				createTerm : createTerm,
+				modifyTerm : modifyTerm
 			}
 
 		}
