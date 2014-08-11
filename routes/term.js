@@ -3,6 +3,7 @@
  */
 
 var db = require('../middleware/db');
+var CONSTANTS = require('../config/constants');
 
 // the middleware function
 module.exports = function term(method) {
@@ -17,17 +18,21 @@ module.exports = function term(method) {
                             if (err) return console.error(err);
                             console.log('The number of updated documents was %d', numberAffected);
                             console.log('The raw response from Mongo was ', raw);
-                            res.json({ error: 'ok' });
+                            var id = '';
+                            if (raw.ok && !raw.updatedExisting) {
+                                id = raw.upserted[0]._id;
+                            }
+                            res.json({ code: CONSTANTS.MSG_SUCC, id: id });
                         });
                     } else {
-                        res.json({ error: null });
+                        res.json({ code: CONSTANTS.MSG_PARAM });
                     }
                 } catch(err) {
                     console.error(err);
-                    res.json({ error: err });
+                    res.json({ code: CONSTANTS.MSG_ERR });
                 }
             } else {
-                res.json({ error: null });
+                res.json({ code: CONSTANTS.MSG_PARAM });
             }
         } else {
             termModel.find(function (err, terms) {
@@ -35,7 +40,7 @@ module.exports = function term(method) {
                    //return console.error(err);
                 };
                 console.log(terms)
-                res.json({ term: terms });
+                res.json({ code: CONSTANTS.MSG_SUCC, term: terms });
             });
 
         }

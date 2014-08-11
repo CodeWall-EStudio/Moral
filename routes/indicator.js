@@ -3,6 +3,7 @@
  */
 
 var db = require('../middleware/db');
+var CONSTANTS = require('../config/constants');
 
 // the middleware function
 module.exports = function indicator(method) {
@@ -15,28 +16,37 @@ module.exports = function indicator(method) {
                     if (data.name && req.body.term) {
                         data.term = req.body.term;
                         indicatorModel.update({ name: data.name, term: data.term }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
-                            if (err) return console.error(err);
-                            console.log('The number of updated documents was %d', numberAffected);
-                            console.log('The raw response from Mongo was ', raw);
-                            res.json({ error: 'ok' });
+                            if (err) {
+                                console.error(err);
+                                res.json({ code: CONSTANTS.MSG_ERR });
+                            } else {
+                                console.log('The number of updated documents was %d', numberAffected);
+                                console.log('The raw response from Mongo was ', raw);
+                                var id = '';
+                                if (raw.ok && !raw.updatedExisting) {
+                                    id = raw.upserted[0]._id;
+                                }
+                                res.json({ code: CONSTANTS.MSG_SUCC, id: id });
+                            }
                         });
                     } else {
-                        res.json({ error: null });
+                        res.json({ code: CONSTANTS.MSG_PARAM });
                     }
                 } catch(err) {
                     console.error(err);
-                    res.json({ error: err });
+                    res.json({ code: CONSTANTS.MSG_ERR });
                 }
             } else {
-                res.json({ error: null });
+                res.json({ code: CONSTANTS.MSG_PARAM });
             }
         } else {
             indicatorModel.find(function (err, indicators) {
                 if (err) {
-                    //return console.error(err);
-                };
-                console.log(indicators)
-                res.json({ indicator: indicators });
+                    console.error(err);
+                    res.json({ code: CONSTANTS.MSG_ERR });
+                } else {
+                    res.json({ code: CONSTANTS.MSG_SUCC, indicator: indicators });
+                }
             });
         }
     }
