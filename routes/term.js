@@ -5,15 +5,15 @@
 var db = require('../middleware/db');
 
 // the middleware function
-module.exports = function student(method) {
+module.exports = function term(method) {
     return function (req, res, next) {
-        var studentModel = db.getStudentModel();
+        var termModel = db.getTermModel();
         if (method === 'post') {
-            if (req.body.student) {
+            if (req.body.term) {
                 try {
-                    var data = JSON.parse(req.body.student);
-                    if (data.id) {
-                        studentModel.update({ id: data.id }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
+                    var data = JSON.parse(req.body.term);
+                    if (data.name) {
+                        termModel.update({ name: data.name }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
                             if (err) return console.error(err);
                             console.log('The number of updated documents was %d', numberAffected);
                             console.log('The raw response from Mongo was ', raw);
@@ -30,12 +30,12 @@ module.exports = function student(method) {
                 res.json({ error: null });
             }
         } else {
-            studentModel.find(function (err, students) {
+            termModel.find(function (err, terms) {
                 if (err) {
-                    //return console.error(err);
+                   //return console.error(err);
                 };
-                console.log(students)
-                res.json({ student: students });
+                console.log(terms)
+                res.json({ term: terms });
             });
 
         }
@@ -43,5 +43,5 @@ module.exports = function student(method) {
 }
 
 /*
- student: {"id":"230126200703240579","name":"白益昊","number":"0108021141901019","grade":1,"class":1,"pid":22709,"sex":1}
+ term: {"name":"2014-2015学年度 第一学期","active": false, "year": 2014, "day": 15, "months":[{"s":9,"e":10}, {"s":10, "e":11}, {"s":11, "e":12}, {"s":12, "e":1}]}
  */

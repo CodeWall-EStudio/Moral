@@ -29,14 +29,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 初始化路由处理
 // 处理老师请求
-var teacher = require('./routes/teacher');
+var teacher = require('./routes/teacher_route');
 var routerTeacher = express.Router();
 routerTeacher.all('*', teacher);
 app.use('/teacher', routerTeacher);
 
 // 初始化路由处理
 // 处理学生请求
-var student = require('./routes/student');
+var student = require('./routes/student_route');
 var routerStudent = express.Router();
 routerStudent.all('*', student);
 app.use('/student', routerStudent);

@@ -36,12 +36,16 @@ module.exports = function auth(method, role) {
                     if (!status) {
 
                     }
-                    var data = JSON.parse(response);
-                    var sess = req.session;
-                    sess.user = {};
-                    sess.user.id = data.loginName;
-                    sess.user.skey = data.encodeKey;
-                    sess.user.role = role;
+                    try {
+                        var data = JSON.parse(response);
+                        var sess = req.session;
+                        sess.user = {};
+                        sess.user.id = data.loginName;
+                        sess.user.skey = data.encodeKey;
+                        sess.user.role = role;
+                    } catch(err) {
+                        console.error(err);
+                    }
                     res.redirect(hostUrl + '/' + role);
                 });
             } else {

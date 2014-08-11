@@ -5,15 +5,16 @@
 var db = require('../middleware/db');
 
 // the middleware function
-module.exports = function student(method) {
+module.exports = function indicator(method) {
     return function (req, res, next) {
-        var studentModel = db.getStudentModel();
+        var indicatorModel = db.getIndicatorModel();
         if (method === 'post') {
-            if (req.body.student) {
+            if (req.body.indicator) {
                 try {
-                    var data = JSON.parse(req.body.student);
-                    if (data.id) {
-                        studentModel.update({ id: data.id }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
+                    var data = JSON.parse(req.body.indicator);
+                    if (data.name && req.body.term) {
+                        data.term = req.body.term;
+                        indicatorModel.update({ name: data.name, term: data.term }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
                             if (err) return console.error(err);
                             console.log('The number of updated documents was %d', numberAffected);
                             console.log('The raw response from Mongo was ', raw);
@@ -30,18 +31,18 @@ module.exports = function student(method) {
                 res.json({ error: null });
             }
         } else {
-            studentModel.find(function (err, students) {
+            indicatorModel.find(function (err, indicators) {
                 if (err) {
                     //return console.error(err);
                 };
-                console.log(students)
-                res.json({ student: students });
+                console.log(indicators)
+                res.json({ indicator: indicators });
             });
-
         }
     }
 }
 
+
 /*
- student: {"id":"230126200703240579","name":"白益昊","number":"0108021141901019","grade":1,"class":1,"pid":22709,"sex":1}
+ term: "53e87c5a9cced0e709a2f247", indicator: {"name": "道德水准", "order": 1, "score": 5, "desc": "就是看你有没有道德"}
  */

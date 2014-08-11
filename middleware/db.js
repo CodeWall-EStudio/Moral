@@ -33,23 +33,25 @@ var teacherSchema = new Schema({
 // 学期
 var termSchema = new Schema({
     name: String,
+    active: Boolean,
+    year: Number,
+    day: Number,
     months: [
-        {grade: Number, class: Number}
-    ],
-    day: String
+        {s: Number, e: Number}
+    ]
 });
 // 指标
 var indicatorSchema = new Schema({
-    order: Number,
+    term: Schema.Types.ObjectId,
     name: String,
+    order: Number,
     score: Number,
-    desc: String,
-    term: String
+    desc: String
 });
 // 评分
 var scoreSchema = new Schema({
     student: String,
-    term: String,
+    term: Schema.Types.ObjectId,
     year: Number,
     month: Number,
     scores: Number,
@@ -66,5 +68,21 @@ var scoreSchema = new Schema({
 
 exports.getStudentModel = function () {
     return mongoose.model('student', studentSchema);
-}
+};
+
+exports.getIndicatorModel = function () {
+    return mongoose.model('indicator', indicatorSchema);
+};
+
+exports.getTermModel = function () {
+    return mongoose.model('term', termSchema);
+};
+
+exports.getTeacherModel = function () {
+    return mongoose.model('teacher', teacherSchema);
+};
+
+exports.getScoreModel = function () {
+    return mongoose.model('score', scoreSchema);
+};
 
