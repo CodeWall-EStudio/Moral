@@ -6,6 +6,7 @@ var db = require('../middleware/db');
 
 // the middleware function
 module.exports = function student(method) {
+
     return function (req, res, next) {
         var studentModel = db.getStudentModel();
         if (method === 'post') {

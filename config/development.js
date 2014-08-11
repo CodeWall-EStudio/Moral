@@ -4,3 +4,4 @@
  */
 
 exports.DB = 'mongodb://moral:DfvszXKePFtfB9KM@localhost:27017/moral';
+exports.PORT = 3000;

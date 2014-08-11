@@ -80,7 +80,9 @@ angular.module('dy.controllers.gradepanel',[
 					day : Root.Term.day,
 					months : Root.Term.months
 				}
-				Mgrade.createTerm(param);
+				Mgrade.createTerm({
+					term : param
+				});
 			}
 
 			Scope.modifyTerm = function(){

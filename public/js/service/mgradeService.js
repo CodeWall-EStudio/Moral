@@ -22,7 +22,7 @@ angular.module('dy.services.mgrade', [
 				var body = Util.object.toUrlencodedString(param);
 				console.log(param,body);
 				Http.post('/teacher/term?_=' + ts,
-                        param,
+                        body,
                         {
                             responseType: 'json',
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}

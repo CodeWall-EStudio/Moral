@@ -15,6 +15,7 @@ router.all('*', auth('', role));
 /* GET home page. */
 router.get('/', function (req, res) {
     var sess = req.session;
+    console.log(sess);
     /*var studentModel = db.getStudentModel();
      studentModel.findOne().exec(function(error, student){
      console.log(student);
