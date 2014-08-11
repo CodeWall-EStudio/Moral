@@ -3,6 +3,7 @@
  */
 
 var db = require('../middleware/db');
+var CONSTANTS = require('../config/constants');
 
 // the middleware function
 module.exports = function teacher(method) {
@@ -17,17 +18,17 @@ module.exports = function teacher(method) {
                             if (err) return console.error(err);
                             console.log('The number of updated documents was %d', numberAffected);
                             console.log('The raw response from Mongo was ', raw);
-                            res.json({ error: 'ok' });
+                            res.json({ code: CONSTANTS.MSG_SUCC });
                         });
                     } else {
-                        res.json({ error: null });
+                        res.json({ code: CONSTANTS.MSG_PARAM });
                     }
                 } catch(err) {
                     console.error(err);
-                    res.json({ error: err });
+                    res.json({ code: CONSTANTS.MSG_ERR });
                 }
             } else {
-                res.json({ error: null });
+                res.json({ code: CONSTANTS.MSG_PARAM });
             }
         } else {
             teacherModel.find(function (err, teachers) {
@@ -35,7 +36,7 @@ module.exports = function teacher(method) {
                     //return console.error(err);
                 };
                 console.log(teachers)
-                res.json({ teacher: teachers });
+                res.json({ code: CONSTANTS.MSG_SUCC, teacher: teachers });
             });
 
         }

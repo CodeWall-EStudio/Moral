@@ -12,6 +12,10 @@ var config = require('./config/' + app.get('env') + '.js');
 var CONSTANTS = require('./config/constants.js');
 CONSTANTS.ENV = app.get('env');
 
+if (CONSTANTS.ENV !== 'development') {
+    app.enable('trust proxy');
+}
+
 // console.log(config.DB);
 
 // view engine setup

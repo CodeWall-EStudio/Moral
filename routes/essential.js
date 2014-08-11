@@ -3,6 +3,7 @@
  */
 
 var db = require('../middleware/db');
+var CONSTANTS = require('../config/constants');
 
 // the middleware function
 module.exports = function example(method, role) {
@@ -24,12 +25,12 @@ module.exports = function example(method, role) {
                         scoreModel.find({student: sess.user.id, term: term._id}, function(err, scores){
                             if (err) {
                             }
-                            res.json({student: sess.user, term: term, indicator: indicators, score: scores});
+                            res.json({code: CONSTANTS.MSG_SUCC, user: sess.user, term: term, indicator: indicators, score: scores});
                         });
                     });
                 });
             } else {
-                res.json({});
+                res.json({code: CONSTANTS.MSG_PARAM});
             }
         }
     }
