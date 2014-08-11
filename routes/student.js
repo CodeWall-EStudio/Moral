@@ -21,7 +21,11 @@ module.exports = function student(method) {
                             } else {
                                 console.log('The number of updated documents was %d', numberAffected);
                                 console.log('The raw response from Mongo was ', raw);
-                                res.json({ code: CONSTANTS.MSG_SUCC });
+                                var id = '';
+                                if (raw.ok && !raw.updatedExisting) {
+                                    id = raw.upserted[0]._id;
+                                }
+                                res.json({ code: CONSTANTS.MSG_SUCC, id: id });
                             }
                         });
                     } else {
