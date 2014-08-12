@@ -46,7 +46,7 @@ router.post('/student', student('post'));
 router.get('/essential', essential('teacher'));
 
 /* score */
-router.get('/score', score('get'));
+router.get('/score/:term?/:student?', score('get'));
 router.post('/score', score('post'));
 
 /* manage */

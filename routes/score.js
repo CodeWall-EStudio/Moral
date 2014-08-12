@@ -39,7 +39,13 @@ module.exports = function score(method) {
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
         } else {
-            scoreModel.find(function (err, scores) {
+            var conn = {};
+            var t = req.param('term');
+            var s = req.param('student');
+            if (t && s) {
+                conn = {id: s, term: t}
+            }
+            scoreModel.find(conn, function (err, scores) {
                 if (err) {
                     console.error(err);
                     res.json({ code: CONSTANTS.MSG_ERR });

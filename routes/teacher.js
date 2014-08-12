@@ -42,7 +42,18 @@ module.exports = function teacher(method) {
                 res.json({ code: CONSTANTS.MSG_SUCC, teacher: teachers });
             });
         } else {
-            res.json({ code: CONSTANTS.MSG_SUCC, teacher: req.session.user });
+            var user = req.session.user;
+            if(user.id) {
+                var relationshipModel = db.getRelationshipModel();
+                relationshipModel.find({id: user.id}, function(err, data){
+                    if (err) {
+
+                    }
+                    res.json({ code: CONSTANTS.MSG_SUCC, teacher: req.session.user, relationship: data });
+                });
+            } else {
+                res.json({ code: CONSTANTS.MSG_SUCC, teacher: req.session.user });
+            }
         }
     }
 }
