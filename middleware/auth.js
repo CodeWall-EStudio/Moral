@@ -81,10 +81,7 @@ module.exports = function auth(method, role) {
     return function (req, res, next) {
 
         if (role === 'teacher') {
-            var hostUrl = req.protocol + '://' + req.host;
-            if (CONSTANTS.PORT != 80 || CONSTANTS.PORT != 443) {
-                hostUrl += ':' + CONSTANTS.PORT;
-            }
+            var hostUrl = req.protocol + '://' + req.headers.host;
             var valUrl = hostUrl + '/' + role + '/validate';
             if (req.param('action')) {
                 valUrl += '/' + req.param('action');
@@ -156,10 +153,7 @@ module.exports = function auth(method, role) {
                 next();
             }
         }  else if (role === 'student') {
-            var hostUrl = req.protocol + '://' + req.host;
-            if (CONSTANTS.PORT != 80 || CONSTANTS.PORT != 443) {
-                hostUrl += ':' + CONSTANTS.PORT;
-            }
+            var hostUrl = req.protocol + '://' + req.headers.host;
             var studentModel = db.getStudentModel();
             if (method === 'in') {
                 res.render('login', {});
