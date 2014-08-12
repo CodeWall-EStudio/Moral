@@ -12,6 +12,7 @@ var teacher = require('./teacher');
 var score = require('./score');
 var essential = require('./essential');
 var manage = require('./manage');
+var upload = require('./upload');
 
 var role = 'teacher';
 
@@ -19,8 +20,6 @@ router.all('*', auth('', role));
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    var sess = req.session;
-    console.log(sess.user);
     res.render('index', { title: 'Express', v: sess.views });
 });
 
@@ -55,5 +54,9 @@ router.post('/score', score('post'));
 /* manage */
 router.get('/manage', manage('get'));
 router.post('/manage', manage('post'));
+
+/* upload */
+router.get('/upload', upload('get'));
+router.post('/upload', upload('post'));
 
 module.exports = router;

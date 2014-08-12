@@ -11,13 +11,11 @@ module.exports = function manage(method) {
         if (method === 'post') {
         } else {
             var sess = req.session;
-            if (sess.user.id) {
-
-            } else {
-                res.redirect('/teacher/login');
+            if (!sess.user.id) {
+                res.redirect('/teacher/login/manage');
+                return;
             }
-            console.log('get');
-            res.render('manage');
+            res.render('manage', {user: sess.user});
         }
     }
 }

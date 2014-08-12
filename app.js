@@ -4,6 +4,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var multer  = require('multer');
 var session = require('express-session');
 var app = express();
 
@@ -26,7 +27,7 @@ app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(bodyParser({uploadDir:'./upload'}));
+app.use(multer({ dest: './upload/'}));
 app.use(cookieParser());
 app.use(session({secret: 'keyboard cat', resave: true, saveUninitialized: true}));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));

@@ -132,7 +132,6 @@ module.exports = function auth(method, role) {
                                         if (req.param('action')) {
                                             reUrl += '/' + req.param('action');
                                         }
-                                        console.log(reUrl);
                                         res.redirect(reUrl);
                                     });
                                 }
