@@ -39,7 +39,6 @@ module.exports = function term(method) {
                 if (err) {
                    //return console.error(err);
                 };
-                console.log(terms)
                 res.json({ code: CONSTANTS.MSG_SUCC, term: terms });
             });
 

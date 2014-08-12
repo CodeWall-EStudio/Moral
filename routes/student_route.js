@@ -15,7 +15,6 @@ router.all('*', auth('', role));
 /* GET home page. */
 router.get('/', function (req, res) {
     var sess = req.session;
-    console.log(sess);
     /*var studentModel = db.getStudentModel();
      studentModel.findOne().exec(function(error, student){
      console.log(student);
@@ -34,7 +33,6 @@ router.get('/', function (req, res) {
 
      }
      });*/
-    console.log(sess.user);
     res.render('index', { title: 'Express', v: sess.views });
 });
 

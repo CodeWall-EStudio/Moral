@@ -43,7 +43,7 @@ module.exports = function upload(method) {
                                         if (err) {
                                             console.error(err);
                                         }
-                                        res.redirect('/teacher/login/manage');
+                                        res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
                                     });
                                 });
 

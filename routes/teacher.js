@@ -39,7 +39,6 @@ module.exports = function teacher(method) {
                 if (err) {
                     //return console.error(err);
                 };
-                console.log(teachers)
                 res.json({ code: CONSTANTS.MSG_SUCC, teacher: teachers });
             });
 
