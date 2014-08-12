@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="css/main.css" />  
  </head>
-<body>
+<body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
  		<ul class="nav nav-tabs top-nav">
  			<li ng-class="{hide:User.auth === 0,active:getMode() === 'result'}"><a ng-click="switchMode('result')">评价统计</a></li>
@@ -21,25 +21,27 @@
  	</div>
 
  	<div class="content">
- 		<div ng-controller="mgradelistController">
+ 		<div ng-controller="mHeaderNavController">
 	 		<div class="content-header">
 	 			<div class="grade-zone">
 		 			<div class="grade-dom dropdown" >
-		 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-model="nowTerm">{{nowTerm.name}} <span class="caret"></span></a>
+		 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-model="Term.name">{{Term.name}} <span class="caret"></span></a>
 		 				<ul class="dropdown-menu" role="menu">
 		 					<li ng-repeat="item in termList"><a ng-click="selectTerm(item.id)">{{item.name}}</a></li>
 		 				</ul>
 		 			</div>
 		 			<div class="grade-dom dropdown">
-		 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-model="nowGrade">{{nowGrade.name}} <span class="caret"></span></a>
+		 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-model="nowGrade">{{nowGrade}}年级 <span class="caret"></span></a>
 		 				<ul class="dropdown-menu" role="menu">
-		 					<li ng-repeat="item in gradeList"><a ng-click="selectGrade(item.id)">{{item.name}}</a></li>
+		 					<li ng-repeat="item in gradeList">
+		 						<a data-value="{{item.id}}" ng-click="changeGrade(item.id)">{{item.name}}</a>
+		 					</li>		 					
 		 				</ul>
 		 			</div>
 		 			<div class="grade-dom dropdown">
-		 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-model="nowClass">{{nowClass.name}} <span class="caret"></span></a>
+		 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-model="nowClass">{{nowClass}}班 <span class="caret"></span></a>
 		 				<ul class="dropdown-menu" role="menu">
-		 					<li ng-repeat="item in classList"><a ng-click="selectGrade(item.id)">{{item.name}}</a></li>
+		 					<li ng-repeat="item in classList"><a ng-click="changeClass(item.id)">{{item.name}}</a></li>
 		 				</ul>
 		 			</div>		 				 			
 		 			<ul class="nav grade-dom grade-list">
@@ -58,8 +60,8 @@
 
  		<div class="content-main">
  			<!--学生列表-->
- 			<div class="content-list">
- 				<table class="table table-striped table-hover" ng-controller="studentController" ng-model='userList'>
+ 			<div class="content-list" ng-controller="studentController">
+ 				<table class="table table-striped table-hover" ng-model='studentList'>
  					<tr>
  						<th>姓名<span class="uaret"></span></th>
  						<th>性别<span class="caret"></span></th>
@@ -67,19 +69,19 @@
  						<th>班级<span class="caret"></span></th>
  						<th>得分<span class="caret"></span></th>
  					</tr>
- 					<tr ng-repeat="item in userList" ng-click="showStudentRecord(item.id)">
+ 					<tr ng-repeat="item in studentList" ng-click="selectStudent(item._id)">
  						<td>{{item.name}}</td>
- 						<td>{{item.sex}}</td>
+ 						<td>{{item.nsex}}</td>
  						<td>{{item.grade}}</td>
  						<td>{{item.class}}</td>
- 						<td>{{item.record}}</td>
+ 						<td>{{item.score}}</td>
  					</tr>
  				</table>
  			</div>
 
- 			<div class="content-info">
+ 			<div class="content-info" ng-controller="quotaController">
  				<!--年级概要-->
- 				<dl class="content-summary" ng-class="">
+ 				<dl class="content-summary" ng-class="{hide:getMode() === 'record'}">
  					<dt>1年级 4班 概要9月</dt>
  					<dd>
  						<ul>
@@ -93,18 +95,18 @@
  					</dd>
  				</dl>
 
- 				<div>
+ 				<div ng-class="{hide:getMode() === 'record'}"> 
 	 				<dl class="content-summary">
 	 					<dt>
-	 						<div class="title">小明 1年级 3班 本学期 总分: 98 全校排名 :1 </div>
+	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: 98 全校排名 :1 </div>
 	 						<button class="btn btn-default">返回概要</button>
 	 					</dt>
 	 				</dl> 
 
-	 				<dl class="content-score">
-	 					<dt>指标1</dt>
+	 				<dl class="content-score" ng-repeat="item in quotaList">
+	 					<dt>{{item.name}}</dt>
 	 					<dd class="score-info">
-	 						指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明指标说明
+	 						{{item.desc}}
 	 					</dd>
 	 					<dd class="score-result">
 	 						<ul class="score-list">
@@ -123,7 +125,36 @@
 	 						</ul>
 	 					</dd>
 	 				</dl>
- 				</div> 				
+ 				</div> 	
+
+ 				<dl class="content-summary"  ng-class="{hide:getMode() === 'result' || !hasStudent()}" ng-model="nowStudent">
+ 					<dt>
+ 						<div class="title">{{nowStudent.name}} 老师评价 {{nowDate | date:'M月' }} </div>
+ 						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
+ 						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
+ 						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
+ 					</dt>
+ 				</dl> 				
+ 				<dl class="content-score"  ng-class="{hide:getMode() === 'result' || !hasStudent()}" ng-repeat="item in quotaList" ng-model="quotaList">
+ 					<dt>{{item.name}}</dt>
+ 					<dd class="score-info">
+ 						{{item.desc}}
+ 					</dd>
+ 					<dd class="score-result">
+ 						<ul class="write-score">
+ 							<li>
+ 								打分
+ 								<div class="num{{item.now}}">
+ 									<i ng-click="setStudentQuota(item.id,1)"></i>
+ 									<i ng-click="setStudentQuota(item.id,2)"></i>
+ 									<i ng-click="setStudentQuota(item.id,3)"></i>
+ 									<i ng-click="setStudentQuota(item.id,4)"></i>
+ 									<i ng-click="setStudentQuota(item.id,5)"></i>
+ 								</div>
+ 							</li>
+ 						</ul>
+ 					</dd>
+ 				</dl> 							
  			</div> 			
 	 	</div>	
  	</div>
@@ -145,6 +176,7 @@
 	<script src="js/service/quotaService.js"></script>
 	<script src="js/controllers/gradelistController.js"></script>
 	<script src="js/controllers/indexnavController.js"></script>
+	<script src="js/controllers/mheadernavController.js"></script>
 	<script src="js/controllers/studentController.js"></script>
 	<script src="js/controllers/teacherController.js"></script>
 	<script src="js/controllers/quotaController.js"></script>

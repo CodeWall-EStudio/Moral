@@ -25,17 +25,17 @@
                         <li>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-addon ico-username"></span>
-                                <input type="text" class="form-control" placeholder="输入学生中文姓名">
+                                <input type="text" name="id" class="form-control" placeholder="输入学生中文姓名" ng-model="username">
                             </div>
                         </li>
                         <li>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-addon ico-pwd"></span>
-                                <input type="text" class="form-control" placeholder="输入登录ID码">
+                                <input type="text" id="number" class="form-control" placeholder="输入登录ID码" ng-model="pwd">
                             </div>
                         </li>
                         <li>
-                            <input type="submit" value="登录" class="btn btn-primary btn-lg btn-login"/>
+                            <input type="submit" value="登录" class="btn btn-primary btn-lg btn-login" ng-click="loginStudent()" />
                         </li>
                     </ul>
                 </div>
@@ -47,14 +47,18 @@
     版权所有
 </div>
 
-<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
-<script src="js/lib/angular/angular_1.2.6.js"></script>
-<script src="js/lib/bootstrap.min.js"></script>
+    <!-- build:lib -->
+    <script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
+    <script src="js/lib/angular/angular_1.2.6.js"></script>
+    <script src="js/lib/underscore/underscore.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <!-- endbuild -->
 
-<script src="js/constants/constants.js"></script>
-<script src="js/service/UtilsService.js"></script>
-<script src="js/controllers/LoginUinController.js"></script>
-<script src="js/userlogin.js"></script>
+    <script src="js/constants/constants.js"></script>
+    <script src="js/service/UtilsService.js"></script>
+    <script src="js/service/loginService.js"></script>
+    <script src="js/controllers/LoginUinController.js"></script>
+    <script src="js/userlogin.js"></script>
 
 </body>
 </html>

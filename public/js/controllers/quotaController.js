@@ -20,7 +20,7 @@ angular.module('dy.controllers.quota',[
 			var nowRecord = {};//当前指标打分列表
 
 			Root.nowQuota = {};
-			Scope.equaRecord = 0;
+			Root.nowScore = {};
 
 			function getEqua(){
 				var aRec = 0;
@@ -30,6 +30,14 @@ angular.module('dy.controllers.quota',[
 					num++;
 				}
 				return aRec/num;
+			}
+
+			function getScoreList(data){
+				var list = [];
+				for(var i in data){
+					list.push(data[i]);
+				}
+				return list;
 			}
 
 			//后台变更指标
@@ -69,13 +77,30 @@ angular.module('dy.controllers.quota',[
 
 			//给学生打分
 			Scope.saveStudentQuota = function(){
+				//老师打分
+				if(Root.isTeacher){
+					var param = {
+						student : Root.nowStudent._id,
+						term : Root.Term._id,
+						year : Root.Term.year,
+						month : 1,
+						scores : Scope.allScore,
+						teacherScores : getScoreList(Root.nowScore)
+					}
+				}else{
+				//学生/家长打分
 
-				Root.$emit(CMD_SAVE_QUOTA,nowRecord);
+				}
+				Quota.saveStudentQuota({
+					score : JSON.stringify(param)
+				});
+				//console.log(Root.nowStudent,Root.nowScore);
+				//Root.$emit(CMD_SAVE_QUOTA,nowRecord);
 			}
 
 			//重置学生分数
 			Scope.resetStudentQuota = function(){
-				Scope.equaRecord = 0;
+				Scope.allScore = 0;
 				for(var i in Root.quotaList){
 					Root.quotaList[i].now = 0;
 				}
@@ -86,11 +111,15 @@ angular.module('dy.controllers.quota',[
 			Scope.setStudentQuota = function(id,num){
 
 				nowRecord[id] = num;
-				console.log(id,num);
 				Root.quotaList[id].now = num;
+				Root.nowScore[id] = {
+					indicator : id,
+					score : num
+				};
 
-				//这里有问题..要修改下.
-				Scope.equaRecord = getEqua();
+				console.log(Root.nowScore);
+				// //这里有问题..要修改下.
+				Scope.allScore = getEqua();
 
 				Root.$emit(CMD_SET_QUOTA,{ 
 					id : id,

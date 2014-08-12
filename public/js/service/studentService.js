@@ -5,26 +5,38 @@ angular.module('dy.services.student', [
 	.service('studentService', [
 		'$rootScope','$location','$http','Util',function(Root,location,Http,Util){
 
-			var cgi = {
-				gradelist : '', //拉学期列表
-				creategrade : '', //创建学期
-				onegrade : ''     //一个学期的信息
-			};
+			var sList = [];
+			var sMap = {};
 
 			function conventStudent(data){
 				for(var i in data){
 					data[i].cid = data[i].id;
 					data[i].id = data[i]._id;
+					data[i].nsex = data[i].sex?'男':'女';
 					Root.studentList[data[i]._id] = data[i];
+					sList[data[i]._id] = data[i];
 				}
+
 			}
 
 			//拉学生列表
 			function getStudentList(param,success,error){
+				if(window.localStorage.getItem('student')){
+					console.log('拉缓存学生列表成功!');
+					var list  = JSON.parse(window.localStorage.getItem('student'));
+					Root.studentList = list;
+					sMap = list;
+					return;
+				}
+
 				var ts = new Date().getTime();
 				Http.get('/teacher/student?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
-						conventStudent(data.student);
+						//conventStudent(data.student);
+						Root.studentList = data.studentList;
+						sList = data.student;
+						sMap = data.studentList;
+						window.localStorage.setItem('student',JSON.stringify(sMap));
 						console.log('拉学生列表成功!', data);
 						if(success) success(data, status);
 					})
@@ -36,13 +48,13 @@ angular.module('dy.services.student', [
 			//拉学生个人信息
 			function getStudentInfo(param,success,error){
 
-				// $http.get(BACKEND_SERVER + '/studentInfo', {responseType:'json', params:params})
-				// 	.success(function(data,status){
+				Http.get('/student/essential', {responseType:'json'})
+					.success(function(data,status){
+						console.log(data);
+					})
+					.error(function(data,status){
 
-				// 	})
-				// 	.error(function(data,status){
-
-				// 	});
+					});
 				// console.log(12345);
 				Root.User = {
 				    id: 'dsgi3252436k;l143245',
@@ -86,11 +98,43 @@ angular.module('dy.services.student', [
                     });	
 			}
 
+			function selectGrade(id){
+				var list = sMap;
+				if(Root.nowClass !== '所有'){
+					list = Root.studentList;
+				}
+
+				var i = 0;
+				_.map(list,function(item,idx){
+					if(item.grade !== id){
+						i++;
+						delete Root.studentList[idx];
+					}
+				});
+				//console.log(Root.studentList);
+			}
+
+			function selectClass(id){
+				var list = sMap;
+				if(Root.nowGrade !== '所有'){
+					list = Root.studentList;
+				}
+
+				_.map(list,function(item,idx){
+					if(item.class !== id){
+						delete Root.studentList[idx];
+					}
+				});
+				console.log(Root.studentList);
+			}
+
 			return {
 				createStudent : createStudent,
 				getStudentList : getStudentList,
 				getStudentInfo : getStudentInfo,
-				getStudent : getStudent
+				getStudent : getStudent,
+				selectGrade : selectGrade,
+				selectClass : selectClass
 			}
 
 		}

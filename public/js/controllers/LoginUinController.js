@@ -6,12 +6,26 @@ http://dand.71xiaoxue.com:80/sso.web
 */
 angular.module('dy.controllers.loginUin', [
         'dy.constants',
-        'dy.services.utils'
+        'dy.services.utils',
+        'dy.services.login'
     ])
     .controller('loginUinController', [
-    	'$rootScope', '$scope','Util',function($rootScope,$scope,util){
-    		$scope.skey = util.cookie.get('skey');
-    		console.log($scope.skey);
+    	'$rootScope', '$scope','Util','Login',function(Root,Scope,Util,Login){
+    		Scope.skey = Util.cookie.get('skey');
+
+            Scope.username = '';
+            Scope.pwd = '';
+
+            Scope.loginStudent = function(){
+                var param = {
+                    id : Scope.username,
+                    number : Scope.pwd
+                }
+                //console.log(param);
+                Login.studentLogin(param);
+            }
+            
+    		console.log(Scope.skey);
     		
     	}
     ]);
