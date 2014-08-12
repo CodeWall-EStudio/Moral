@@ -5,19 +5,24 @@ angular.module('dy.services.teacher', [
 	.service('teacherService', [
 		'$rootScope','$location','$http','Util',function(Root,location,Http,Util){
 
-			var cgi = {
-				gradelist : '', //拉学期列表
-				creategrade : '', //创建学期
-				onegrade : ''     //一个学期的信息
-			};
-
-			function getQuotaList(param,success,error){
-
-			};
+			function getTeacherInfo(param,success,error){
+				console.log(12345);
+				var ts = new Date().getTime();
+				Http.get('/teacher?_='+ts,null,{responseType:'json'})
+					.success(function(data,status){
+						Root.Teacher = data.teacher.info;
+						//conventStudent(data.student);
+						console.log('拉老师资料成功!', data,Root.Teacher);
+						if(success) success(data, status);
+					})
+					.error(function(data,status){
+						if(error) error(data, status);
+					});
+			}
 
 
 			return {
-				getQuotaList : getQuotaList
+				getTeacherInfo : getTeacherInfo
 			}
 
 		}

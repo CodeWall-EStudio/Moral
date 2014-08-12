@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="css/main.css" />  
  </head>
-<body>
+<body ng-controller="studentController">
  	<div class="header-blue" ng-controller="indexnavController">
  		<ul class="nav nav-tabs top-nav">
  			<li ng-class="{active:getMode() === 'my' || !getMode()}"><a ng-click="switchMode('my')">我的数据</a></li>
@@ -16,19 +16,19 @@
  			<li ng-class="{active:getMode()  === 'parent'}"><a ng-click="switchMode('parent')">家长评价</a></li>
  		</ul>
  		<div class="userinfo">
- 			<span>{{User.name}}</span>
- 			<a ng-click="quitLogin()">退出</a>
+ 			<span>{{myInfo.name}}</span>
+ 			<a href="/student/lagout">退出</a>
  		</div>
  	</div>
 
 	<div class="content">
 		<div class="content-header" ng-controller="termController">
-			{{nowTrem.name}} {{nowTrem.nowmonth}}月德育评价 {{nowTrem.status?'开放中':'关闭'}} （{{nowTrem.starttime | date:'MM月dd日'}} 至 {{nowTrem.endtime | date:'MM月dd日'}}）  今天：{{nowDate | date:'MM月dd日'}}
+			{{myInfo.term.name}}学期  {{nowDate | date:'MM月'}}德育评价 {{myInfo.term.active?'开放中':'关闭'}} （{{nowTrem.starttime | date:'MM月dd日'}} 至 {{nowTrem.endtime | date:'MM月dd日'}}）  今天：{{nowDate | date:'MM月dd日'}}
 		</div>
 
 		<div class="content-main">
  			<!--学生个人信息-->
- 			<div class="content-userinfo" ng-class="{hide:getMode() !== 'my'}" ng-controller="studentController">
+ 			<div class="content-userinfo" ng-class="{hide:getMode() !== 'my'}">
  				<div class="my-badge">
  					<img src="css/imgs/badge.png" />
  					<h1>我的徽章</h1>
@@ -91,8 +91,8 @@
  					
  				<dl class="content-summary"  ng-class="{hide:getMode() === 'my'}">
  					<dt>
- 						<div class="title">{{User.name}} 自评 {{nowDate | date:'M月' }} </div>
- 						<div class="score-num">打分: <span ng-model=equaRecord>{{equaRecord}}</span></div>
+ 						<div class="title">{{myInfo.name}} 自评 {{nowDate | date:'M月' }} </div>
+ 						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
  						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
  						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
  					</dt>

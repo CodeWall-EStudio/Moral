@@ -29,9 +29,9 @@
  			<li  ng-class="{active:getMode()==='quota'}" ng-click="switchMode('quota')"><a ng-click="quotaShow()">指标管理</a></li>
  		</ul>
  		<div class="userinfo">
- 			<span>{{User.name}}</span>
+ 			<span><%= user.info.name %></span>
  			<a ng-class="{hide:User.auth===0}" ng-click="authManage()">授权管理</a>
- 			<a ng-click="quitManage()">退出</a>
+ 			<a href="/teacher/logout">退出</a>
  		</div>
  	</div>
 
@@ -65,7 +65,11 @@
 
 	 			<div class="content-insert-bar">
 	 				<a>下载当前列表</a>
-	 				<button class="btn btn-primary">导入CMIS数据</button>
+                    <form method="post" enctype="multipart/form-data" action="/teacher/upload">
+                        <input type="hidden" name="type" value="student">
+                        <input type="file" name="thumbnail">
+                        <input class="btn btn-primary" type="submit" >
+                    </form>
 	 			</div>
 			</div>
 
@@ -306,28 +310,28 @@
 
 
  	<!-- build:lib -->
- 	<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
- 	<script src="js/lib/angular/angular_1.2.6.js"></script>
- 	<script src="js/lib/underscore/underscore.min.js"></script>
-	<script src="js/lib/bootstrap.min.js"></script>
+ 	<script src="/js/lib/jquery/jquery-2.0.3.min.js"></script>
+ 	<script src="/js/lib/angular/angular_1.2.6.js"></script>
+ 	<script src="/js/lib/underscore/underscore.min.js"></script>
+	<script src="/js/lib/bootstrap.min.js"></script>
 	<!-- endbuild -->
 
 	<!-- build:manage -->
-	<script src="js/constants/constants.js"></script>
-	<script src="js/service/UtilsService.js"></script>
-	<script src="js/service/mgradeService.js"></script>
-	<script src="js/service/studentService.js"></script>
-	<script src="js/service/teacherService.js"></script>
-	<script src="js/service/quotaService.js"></script>
-	<script src="js/controllers/gradelistController.js"></script>
-	<script src="js/controllers/manageController.js"></script>
-	<script src="js/controllers/managenavController.js"></script>
-	<script src="js/controllers/mheadernavController.js"></script>
-	<script src="js/controllers/studentController.js"></script>
-	<script src="js/controllers/teacherController.js"></script>
-	<script src="js/controllers/quotaController.js"></script>
-	<script src="js/controllers/creategradeController.js"></script>
-	<script src="js/manage.js"></script>
+	<script src="/js/constants/constants.js"></script>
+	<script src="/js/service/UtilsService.js"></script>
+	<script src="/js/service/mgradeService.js"></script>
+	<script src="/js/service/studentService.js"></script>
+	<script src="/js/service/teacherService.js"></script>
+	<script src="/js/service/quotaService.js"></script>
+	<script src="/js/controllers/gradelistController.js"></script>
+	<script src="/js/controllers/manageController.js"></script>
+	<script src="/js/controllers/managenavController.js"></script>
+	<script src="/js/controllers/mheadernavController.js"></script>
+	<script src="/js/controllers/studentController.js"></script>
+	<script src="/js/controllers/teacherController.js"></script>
+	<script src="/js/controllers/quotaController.js"></script>
+	<script src="/js/controllers/creategradeController.js"></script>
+	<script src="/js/manage.js"></script>
 	<!-- endbuild -->
 
 

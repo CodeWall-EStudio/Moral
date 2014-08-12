@@ -8,21 +8,10 @@ angular.module('dy.controllers.teacher',[
 		'$rootScope', '$scope','Util','mGradeService','teacherService',function(Root,Scope,Util,Mgrade,Teacher){
 			console.log('load teachercontroller');
 
-			var teacherList = [];
-
 			Root.isTeacher = true;
+			Root.Teacher = {};
 
-			for(var i = 0;i<10;i++){
-				teacherList.push({
-					name : '老师'+i,
-					nick : '昵称'+i,
-					grade : i,
-					class : 2
-				});
-			}
-
-			Scope.teacherList = teacherList;
-
+			Teacher.getTeacherInfo();
 			//Student.getStudentList();
 		}
 	]);

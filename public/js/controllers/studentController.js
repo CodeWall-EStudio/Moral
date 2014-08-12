@@ -15,6 +15,8 @@ angular.module('dy.controllers.student',[
 			Scope.SelectdGrade = {};
 			Scope.SelectdClass = {};
 
+			Root.myInfo = {};
+
 			var userList = {};
 			var gradeList = [];
 

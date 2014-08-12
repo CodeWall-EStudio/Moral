@@ -122,7 +122,8 @@ li{
 /**/
 .content-header{
 	padding:10px;
-	height:58px;
+	/*height:58px;*/
+    height:128px;
 	line-height:38px;
 	background:#fff;
 }

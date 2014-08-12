@@ -78,24 +78,38 @@ angular.module('dy.controllers.quota',[
 			//给学生打分
 			Scope.saveStudentQuota = function(){
 				//老师打分
-				if(Root.isTeacher){
-					var param = {
-						student : Root.nowStudent._id,
-						term : Root.Term._id,
-						year : Root.Term.year,
-						month : 1,
-						scores : Scope.allScore,
-						teacherScores : getScoreList(Root.nowScore)
-					}
+				var sid,tid,year,month;
+				if(Root.Term){
+					sid = Root.nowStudent._id;
+					tid = Root.Term._id;
+					year = Root.Term.year;
+					month = 1;
 				}else{
-				//学生/家长打分
-
+					sid = Root.myInfo._id
+					tid = Root.myInfo.term._id;
+					year = Root.myInfo.term.year;
+					month = 1;
+				}
+				var param = {
+					student : sid,
+					term : tid,
+					year : year,
+					month : month,
+					scores : Scope.allScore,
+					teacherScores : getScoreList(Root.nowScore)
+				}				
+				if(Root.isTeacher){
+					param.teacherScores = getScoreList(Root.nowScore);
+				}else if(Root.getMode() === 'parent'){
+				//家长打分
+					param.parentScores = getScoreList(Root.nowScore);
+				}else{
+				//学生打分
+					param.selfScores	 = getScoreList(Root.nowScore);
 				}
 				Quota.saveStudentQuota({
 					score : JSON.stringify(param)
 				});
-				//console.log(Root.nowStudent,Root.nowScore);
-				//Root.$emit(CMD_SAVE_QUOTA,nowRecord);
 			}
 
 			//重置学生分数

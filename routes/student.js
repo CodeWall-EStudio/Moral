@@ -24,10 +24,7 @@ module.exports = function student(method) {
                                 console.log('The raw response from Mongo was ', raw);
                                 var id = '';
                                 if (raw.ok && !raw.updatedExisting) {
-                                    console.log(raw);
                                     id = raw.upserted;
-                                    console.log(id);
-
                                 }
                                 res.json({ code: CONSTANTS.MSG_SUCC, id: id });
                             }
@@ -42,17 +39,28 @@ module.exports = function student(method) {
             } else {
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
-        } else {
-            studentModel.find(function (err, students) {
+        } else if (method === 'list') {
+            var con = {};
+            var g = req.param('grade');
+            var c = req.param('class');
+            if (g && c) {
+               con = {grade: g, class: c};
+            }
+            studentModel.find(con, function (err, students) {
                 if (err) {
                     console.error(err);
                     res.json({ code: CONSTANTS.MSG_ERR });
                 } else {
-                    console.log(students)
-                    res.json({ code: CONSTANTS.MSG_SUCC, student: students });
+                    var studentList = new Object();
+                    for (var i = 0; i < students.length; i++) {
+                        studentList[students[i]._id] = students[i];
+                    }
+                    res.json({ code: CONSTANTS.MSG_SUCC, student: students, studentList: studentList });
                 }
             });
 
+        } else {
+            res.json({ code: CONSTANTS.MSG_SUCC, student: req.session.user });
         }
     }
 }

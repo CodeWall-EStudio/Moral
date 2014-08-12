@@ -12,17 +12,14 @@ var teacher = require('./teacher');
 var score = require('./score');
 var essential = require('./essential');
 var manage = require('./manage');
+var upload = require('./upload');
 
 var role = 'teacher';
 
 router.all('*', auth('', role));
 
 /* GET home page. */
-router.get('/', function (req, res) {
-    var sess = req.session;
-    console.log(sess.user);
-    res.render('index', { title: 'Express', v: sess.views });
-});
+router.get('/', teacher('get'));
 
 /* login */
 router.get('/login/:action?', auth('in', role));
@@ -38,11 +35,11 @@ router.get('/indicator', indicator('get'));
 router.post('/indicator', indicator('post'));
 
 /* teacher */
-router.get('/teacher', teacher('get'));
+router.get('/teacher', teacher('list'));
 router.post('/teacher', teacher('post'));
 
 /* student */
-router.get('/student', student('get'));
+router.get('/student/:grade?/:class?', student('list'));
 router.post('/student', student('post'));
 
 /* essential */
@@ -55,5 +52,9 @@ router.post('/score', score('post'));
 /* manage */
 router.get('/manage', manage('get'));
 router.post('/manage', manage('post'));
+
+/* upload */
+router.get('/upload', upload('get'));
+router.post('/upload', upload('post'));
 
 module.exports = router;

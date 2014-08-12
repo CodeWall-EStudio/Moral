@@ -50,21 +50,19 @@ angular.module('dy.services.student', [
 
 				Http.get('/student/essential', {responseType:'json'})
 					.success(function(data,status){
-						console.log(data);
+						if(data.code === 0){
+							Root.myInfo = data.user;
+							Root.myInfo.score = data.score;
+							Root.myInfo.term = data.term;
+							Root.myInfo.quota = data.quota;
+							console.log('拉取学生资料成功',data);
+						}else{
+
+						}
 					})
 					.error(function(data,status){
 
 					});
-				// console.log(12345);
-				Root.User = {
-				    id: 'dsgi3252436k;l143245',
-				    name: '测试学生',
-				    number: 50,   //学生证号码
-				    grade:  1,  
-				    class: 2,
-				    pid:   30,    //没用到
-				    sex: 1
-				}
 			};
 
 			function getStudent(){
