@@ -80,12 +80,12 @@ angular.module('dy.controllers.quota',[
 				//老师打分
 				var sid,tid,year,month;
 				if(Root.Term){
-					sid = Root.nowStudent._id;
+					sid = Root.nowStudent.id;
 					tid = Root.Term._id;
 					year = Root.Term.year;
 					month = 1;
 				}else{
-					sid = Root.myInfo._id
+					sid = Root.myInfo.id
 					tid = Root.myInfo.term._id;
 					year = Root.myInfo.term.year;
 					month = 1;
