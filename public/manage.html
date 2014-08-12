@@ -40,7 +40,7 @@
 			<div class="content-header user-header hide" ng-class="{hide:getMode()!=='student'}">
 				<div class="content-manager-bar">
 					<div class="col-sm-3 grade-list">
-						<a class="dropdown-toggle" data-toggle="dropdown">所有年级<span class="caret"></span></a>
+						<a class="dropdown-toggle" data-toggle="dropdown">{{nowGrade}}年级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 		 					<li ng-repeat="item in gradeList">
 		 						<a data-value="{{item.id}}" ng-click="changeGrade(item.id)">{{item.name}}</a>
@@ -49,7 +49,7 @@
 					</div>
 
 					<div class="col-sm-3 grade-list">
-						<a class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
+						<a class="dropdown-toggle" data-toggle="dropdown">{{nowClass}}班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 		 					<li ng-repeat="item in classList">
 		 						<a data-value="{{item.id}}" ng-click="changeClass(item.id)">{{item.name}}</a>
@@ -142,9 +142,15 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label  class="col-sm-3 control-label">CMIS_ID：</label>
+								<label  class="col-sm-3 control-label">证件号：</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" id="studentNameCid" placeholder="请输入CMIS_ID：" ng-model="nowStudent.cid">
+									<input type="text" class="form-control" id="studentNameCid" placeholder="请输入证件号：" ng-model="nowStudent.id">
+								</div>
+							</div>								
+							<div class="form-group">
+								<label  class="col-sm-3 control-label">学籍号：</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="studentNameCid" placeholder="请输入学籍号：" ng-model="nowStudent.number">
 								</div>
 							</div>							
 							<div class="form-group">

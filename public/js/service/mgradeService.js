@@ -13,7 +13,7 @@ angular.module('dy.services.mgrade', [
 
 			function conventTerm(data){
 				if(!Root.termList){
-					Root.termList = [];
+					Root.termList = {};
 				}
 				if(!Root.Term){
 					Root.Term = {};

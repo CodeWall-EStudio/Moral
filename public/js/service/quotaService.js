@@ -71,11 +71,36 @@ angular.module('dy.services.quota', [
 
 			}
 
+			function saveStudentQuota(param,success,error){
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/score?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                    	console.log(data);
+                    	if(data.error === 'ok' || data.error === 0){
+
+                    		//Root.quotaList.push(param.term);
+                    	}
+                        console.log('[quotaService] quota crate suc =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                        if(error) error(data, status);
+                    });					
+			}
+
 
 			return {
 				getQuotaList : getQuotaList,
 				createQuota : createQuota,
-				modifyQuota : modifyQuota
+				modifyQuota : modifyQuota,
+				saveStudentQuota : saveStudentQuota
 			}
 
 		}

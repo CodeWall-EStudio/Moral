@@ -22,5 +22,7 @@ angular.module('dy.controllers.mgradelist',[
 			Scope.selectMonth = function(id){
 				console.log(id);
 			}
+
+			Mgrade.getTermList();
 		}
 	]);

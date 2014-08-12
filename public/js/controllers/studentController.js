@@ -15,35 +15,24 @@ angular.module('dy.controllers.student',[
 			Scope.SelectdGrade = {};
 			Scope.SelectdClass = {};
 
+			Root.myInfo = {};
+
 			var userList = {};
 			var gradeList = [];
 
+			Root.rStudent = {};
 			Root.studentList = {};
 			Root.nowStudent = {};
 
-			console.log(Root.nowStudent);
-
-			// for(var i = 0;i<10;i++){
-			// 	userList[i] = {
-			// 		name : '姓名'+i,
-			// 		nick : '昵称'+i,
-			// 		cid : i,
-			// 		sex : '男',
-			// 		grade : 1,
-			// 		class : Math.round(Math.random()*10),
-			// 		record : Math.round(Math.random()*100)
-			// 	};
-			// }
 
 			function resetData(){
 				// Scope.name = '';
 				// Scope.cmis = '';
 			}
 		
-
-			Scope.changeUser = function(id){
-				console.log(1);
-			}	
+			Root.selectStudent = function(id){
+				Root.nowStudent = Root.studentList[id];
+			}
 
 			Scope.createUser = function(){
 				//resetData();
@@ -55,8 +44,9 @@ angular.module('dy.controllers.student',[
 				Root.nowStudent.grade = Scope.SelectdGrade.id;
 				Root.nowStudent.class = Scope.SelectdClass.id;
 				var param = {
-					id : Root.nowStudent.cid,
+					number : Root.nowStudent.number,
 					name : Root.nowStudent.name,
+					id : Root.nowStudent.id,
 					grade : Root.nowStudent.grade,
 					class : Root.nowStudent.class,
 					pid : 1000,
@@ -68,13 +58,21 @@ angular.module('dy.controllers.student',[
 
 			}
 
+			Root.hasStudent = function(){
+				return !$.isEmptyObject(Root.nowStudent);
+			}
+
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				console.log(d.id,d.num);
 			});
 
 
 			Student.getStudentList();
-			Student.getStudentInfo();
+			
+			var url = Location.absUrl();
+			if(url.indexOf('student.html') > 0){
+				Student.getStudentInfo();
+			}
 
 		}
 	]);
