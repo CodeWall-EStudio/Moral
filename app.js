@@ -26,6 +26,7 @@ app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+app.use(bodyParser({uploadDir:'./upload'}));
 app.use(cookieParser());
 app.use(session({secret: 'keyboard cat', resave: true, saveUninitialized: true}));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));

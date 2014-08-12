@@ -24,11 +24,14 @@ var studentSchema = new Schema({
 // 老师
 var teacherSchema = new Schema({
     id: String,
+    authority: Number /* 0 普通 1 数据管理 2 系统管理 3 校长*/
+});
+// 关系
+var relationshipSchema = new Schema({
+    id: String,
     name: String,
-    authority: Number, /*是否足够*/
-    classes: [
-        {grade: Number, class: Number}
-    ]
+    grade: Number,
+    class: Number
 });
 // 学期
 var termSchema = new Schema({
@@ -84,5 +87,9 @@ exports.getTeacherModel = function () {
 
 exports.getScoreModel = function () {
     return mongoose.model('score', scoreSchema);
+};
+
+exports.getRelationshipModel = function () {
+    return mongoose.model('relationship', relationshipSchema);
 };
 

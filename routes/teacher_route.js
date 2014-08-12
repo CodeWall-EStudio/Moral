@@ -11,6 +11,7 @@ var student = require('./student');
 var teacher = require('./teacher');
 var score = require('./score');
 var essential = require('./essential');
+var manage = require('./manage');
 
 var role = 'teacher';
 
@@ -24,9 +25,9 @@ router.get('/', function (req, res) {
 });
 
 /* login */
-router.get('/login', auth('in', role));
+router.get('/login/:action?', auth('in', role));
 router.get('/logout', auth('out', role));
-router.get('/validate', auth('check', role));
+router.get('/validate/:action?', auth('validate', role));
 
 /* term */
 router.get('/term', term('get'));
@@ -50,5 +51,9 @@ router.get('/essential', essential('teacher'));
 /* score */
 router.get('/score', score('get'));
 router.post('/score', score('post'));
+
+/* manage */
+router.get('/manage', manage('get'));
+router.post('/manage', manage('post'));
 
 module.exports = router;
