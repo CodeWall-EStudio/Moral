@@ -48,8 +48,58 @@ module.exports = function upload(method) {
                                 });
 
                             } else if (req.body.type === 'teacher') {
+                                var teacherModel = db.getStudentModel();
+                                studentModel.remove({}, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    }
+                                    var students = new Array();
+                                    for (var i = 0; i<data.length; i++) {
+                                        if (i > 1) {
+                                            students.push({
+                                                id: data[i][5],
+                                                name: data[i][3],
+                                                number: data[i][6],
+                                                grade: data[i][0],
+                                                class: data[i][1],
+                                                pid: data[i][2],
+                                                sex: data[i][4] == '男' ? 1 : 0});
+                                        }
+                                    }
+                                    studentModel.create(students, function(err) {
+                                        if (err) {
+                                            console.error(err);
+                                        }
+                                        res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
+                                    });
+                                });
 
                             } else if (req.body.type === 'term') {
+                                var termModel = db.getStudentModel();
+                                studentModel.remove({}, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    }
+                                    var students = new Array();
+                                    for (var i = 0; i<data.length; i++) {
+                                        if (i > 1) {
+                                            students.push({
+                                                id: data[i][5],
+                                                name: data[i][3],
+                                                number: data[i][6],
+                                                grade: data[i][0],
+                                                class: data[i][1],
+                                                pid: data[i][2],
+                                                sex: data[i][4] == '男' ? 1 : 0});
+                                        }
+                                    }
+                                    studentModel.create(students, function(err) {
+                                        if (err) {
+                                            console.error(err);
+                                        }
+                                        res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
+                                    });
+                                });
 
                             } else if (req.body.type === 'indicator') {
 

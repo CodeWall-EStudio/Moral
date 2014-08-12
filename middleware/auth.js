@@ -131,6 +131,8 @@ module.exports = function auth(method, role) {
                                         var reUrl = hostUrl + '/' + role;
                                         if (req.param('action')) {
                                             reUrl += '/' + req.param('action');
+                                        } else {
+                                            reUrl += '.html';
                                         }
                                         res.redirect(reUrl);
                                     });
@@ -157,7 +159,8 @@ module.exports = function auth(method, role) {
             if (method === 'in') {
                 res.render('login', {});
             } else if (method === 'out') {
-
+                req.session.destroy();
+                res.redirect(hostUrl + '/' + role + '.html');
             } else if (method === 'check') {
 
             } else if (method === 'post') {
@@ -169,12 +172,12 @@ module.exports = function auth(method, role) {
                     if (studentEntity) {
                         if (req.body.number === studentEntity.number) {
                             sess.user = studentEntity;
-                            res.redirect(hostUrl + '/' + role);
+                            res.redirect(hostUrl + '/' + role + '.html');
                         } else {
-                            res.redirect(hostUrl + '/' + role);
+                            res.redirect(hostUrl + '/' + role + '.html');
                         }
                     } else {
-                        res.redirect(hostUrl + '/' + role);
+                        res.redirect(hostUrl + '/' + role + '.html');
                     }
                 });
             } else {

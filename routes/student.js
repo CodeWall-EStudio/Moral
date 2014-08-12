@@ -39,8 +39,14 @@ module.exports = function student(method) {
             } else {
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
-        } else {
-            studentModel.find(function (err, students) {
+        } else if (method === 'list') {
+            var con = {};
+            var g = req.param('grade');
+            var c = req.param('class');
+            if (g && c) {
+               con = {grade: g, class: c};
+            }
+            studentModel.find(con, function (err, students) {
                 if (err) {
                     console.error(err);
                     res.json({ code: CONSTANTS.MSG_ERR });
@@ -53,6 +59,8 @@ module.exports = function student(method) {
                 }
             });
 
+        } else {
+            res.json({ code: CONSTANTS.MSG_SUCC, student: req.session.user });
         }
     }
 }

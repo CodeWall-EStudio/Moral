@@ -34,14 +34,15 @@ module.exports = function teacher(method) {
             } else {
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
-        } else {
+        } else if (method === 'list') {
             teacherModel.find(function (err, teachers) {
                 if (err) {
                     //return console.error(err);
                 };
                 res.json({ code: CONSTANTS.MSG_SUCC, teacher: teachers });
             });
-
+        } else {
+            res.json({ code: CONSTANTS.MSG_SUCC, teacher: req.session.user });
         }
     }
 }
