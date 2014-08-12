@@ -45,7 +45,6 @@ angular.module('dy.controllers.managehandernav',[
 
 			//变更班级
 			Scope.changeClass = function(id){
-				console.log(i);
 				Root.nowClass = id;
 				Student.selectClass(id);
 			}

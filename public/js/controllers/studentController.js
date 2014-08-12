@@ -62,17 +62,27 @@ angular.module('dy.controllers.student',[
 				return !$.isEmptyObject(Root.nowStudent);
 			}
 
+			Root.orderStudent = function(type){
+				Student.orderByStudent(type);
+			}
+
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				console.log(d.id,d.num);
 			});
 
 
-			Student.getStudentList();
+			
 			
 			var url = Location.absUrl();
 			if(url.indexOf('student.html') > 0){
+				
+				if(!Util.cookie.get('skey')){
+					window.location.href="/student/login";
+					return;
+				}				
 				Student.getStudentInfo();
 			}
+			Student.getStudentList();
 
 		}
 	]);

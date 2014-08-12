@@ -6,7 +6,6 @@ angular.module('dy.services.teacher', [
 		'$rootScope','$location','$http','Util',function(Root,location,Http,Util){
 
 			function getTeacherInfo(param,success,error){
-				console.log(12345);
 				var ts = new Date().getTime();
 				Http.get('/teacher?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){

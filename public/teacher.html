@@ -71,9 +71,12 @@
  					</tr>
  					<tr ng-repeat="item in studentList" ng-click="selectStudent(item._id)">
  						<td>{{item.name}}</td>
- 						<td>{{item.nsex}}</td>
- 						<td>{{item.grade}}</td>
- 						<td>{{item.class}}</td>
+ 						<td>
+ 							<span ng-hide="item.sex">女</span>
+ 							<span ng-show="item.sex">男</span>
+ 						</td>
+ 						<td>{{item.grade}}年级</td>
+ 						<td>{{item.class}}班</td>
  						<td>{{item.score}}</td>
  					</tr>
  				</table>

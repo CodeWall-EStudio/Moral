@@ -123,7 +123,14 @@ angular.module('dy.services.student', [
 						delete Root.studentList[idx];
 					}
 				});
-				console.log(Root.studentList);
+			}
+
+			function orderByStudent(type){
+				console.log(type);
+				var sort = _.sortBy(Root.studentList,function(item){
+					return -item[type];
+				});
+				Root.studentList = sort;
 			}
 
 			return {
@@ -132,7 +139,8 @@ angular.module('dy.services.student', [
 				getStudentInfo : getStudentInfo,
 				getStudent : getStudent,
 				selectGrade : selectGrade,
-				selectClass : selectClass
+				selectClass : selectClass,
+				orderByStudent : orderByStudent
 			}
 
 		}

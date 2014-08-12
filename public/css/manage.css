@@ -134,6 +134,14 @@ li{
 
 .content-insert-bar{
 	float:right;
+	position:relative;
+	
+}
+.content-insert-bar .hide-input{
+	position:absolute;
+	top:0;
+	right:0;
+	opacity: 0;
 }
 
 .grade-zone{
@@ -211,6 +219,8 @@ li{
 .content-info{
 	background:#fff;
 	padding-left:10px;
+	height:100%;
+	min-height:600px;	
 }
 
 .content-info .div-form{
@@ -226,6 +236,9 @@ li{
 	left:0;
 	padding:0 10px;
 	width:450px;
+	height: 100%;
+	overflow: hidden;
+	overflow-y: auto;		
 }
 
 .user-action{

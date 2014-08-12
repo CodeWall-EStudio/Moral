@@ -15,7 +15,7 @@ module.exports = function manage(method) {
                 res.redirect('/teacher/login/manage');
                 return;
             }
-            res.render('manage', {user: sess.user});
+            res.render('/manage.html', {user: sess.user});
         }
     }
 }

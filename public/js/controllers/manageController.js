@@ -2,19 +2,22 @@ angular.module('dy.controllers.manage',[
         'dy.constants',
         'dy.services.utils',
         'dy.services.mgrade',
-        'dy.services.student'	
+        'dy.services.student',
+        'dy.services.teacher'	
 	])
 	.controller('manageController',[
-		'$rootScope', '$scope','$location','Util','mGradeService','studentService',function(Root,Scope,$location,Util,Mgrade,User){
-			console.log('load managenavcontroller');
+		'$rootScope', '$scope','$location','Util','mGradeService','studentService','teacherService',function(Root,Scope,$location,Util,Mgrade,Student,Teacher){
+			console.log('load managecontroller');
 
-			var nowUser = {};
-
-			Root.User = {
-				nick : '测试用户',
-				name : 'testuser',
-				auth : 15
+			if(!Util.cookie.get('skey')){
+				//window.location.href="/teacher/login";
+				//return;
 			}
+
+			Root.Teacher = {};
+
+			Teacher.getTeacherInfo();			
+			console.log(Root.Teacher,Teacher);
 
 		}
 	]);

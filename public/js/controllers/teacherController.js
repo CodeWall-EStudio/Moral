@@ -8,6 +8,11 @@ angular.module('dy.controllers.teacher',[
 		'$rootScope', '$scope','Util','mGradeService','teacherService',function(Root,Scope,Util,Mgrade,Teacher){
 			console.log('load teachercontroller');
 
+			if(!Util.cookie.get('skey')){
+				//window.location.href="/teacher/login";
+				return;
+			}
+
 			Root.isTeacher = true;
 			Root.Teacher = {};
 
