@@ -9,7 +9,6 @@ angular.module('dy.controllers.managehandernav',[
 			console.log('load mheadercontroller');
 			var gradeList = [];
 			var classList = [];
-			var keyword = '';
 			
 
 			for(var i = 0;i<6;i++){
@@ -28,15 +27,17 @@ angular.module('dy.controllers.managehandernav',[
 
 			Root.nowGrade = 1;
 			Root.nowClass = 1;
+			Root.nowMonth = 0;
+			Scope.searchKeyWord = '';
 
 			Root.termList = {};
 			Root.gradeList = gradeList;
 			Root.classList = classList;
 
-
-			// Scope.keyword = keyword;
+			Scope.selectTerm = function(id){
+				Root.Term = Root.termList[id];
+			}
 			
-
 			//变更年级
 			Scope.changeGrade = function(id){
 				Root.nowGrade = id;
@@ -51,8 +52,16 @@ angular.module('dy.controllers.managehandernav',[
 
 			//搜索
 			Scope.startSearch = function(e,d){
-				console.log(e,d);
+				Student.searchStudent(Scope.searchKeyWord);
 			}
+
+			Scope.getNowMonth = function(){
+				return new Date().getMonth();
+			}
+
+			Scope.selectMonth = function(month){
+				Root.nowMonth = month;
+			};
 
 			Mgrade.getTermList();
 		}

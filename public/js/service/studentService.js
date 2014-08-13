@@ -26,6 +26,7 @@ angular.module('dy.services.student', [
 					var list  = JSON.parse(window.localStorage.getItem('student'));
 					Root.studentList = list;
 					sMap = list;
+					if(success) success(list);
 					return;
 				}
 
@@ -37,6 +38,7 @@ angular.module('dy.services.student', [
 						sList = data.student;
 						sMap = data.studentList;
 						window.localStorage.setItem('student',JSON.stringify(sMap));
+
 						console.log('拉学生列表成功!', data);
 						if(success) success(data, status);
 					})
@@ -65,10 +67,98 @@ angular.module('dy.services.student', [
 					});
 			};
 
+
+			//转成map
+			function convertScore(data){
+				var teacher = {},
+					parent = {},
+					self = {};
+
+				_.map(data,function(data,idx){
+
+				});
+			}
+
+			function convertOneScore(data){
+				if(!data){
+					return;
+				}
+				var tmp = _.max([data.selfScores,data.parentScores,data.teacherScores],function(list){
+					return list.length;
+				})
+				var list = {};
+				//先确保每个指标都保存了.
+				_.map(tmp,function(item,idx){
+					list[item.indicator] = {
+						self : 0,
+						parent : 0,
+						teacher : 0
+					};
+				});
+
+				_.each(data.selfScores,function(item,idx){
+					list[item.indicator].self = item.score;
+				});
+
+				_.each(data.parentScores,function(item,idx){
+					list[item.indicator].parent = item.score;
+				});
+				_.each(data.teacherScores,function(item,idx){
+					list[item.indicator].teacher = item.score;
+				});
+				return list;
+			}
+
+			//拉学生评分
+			function getScore(param,success,error){
+				var ts = new Date().getTime();
+				Http.get('/teacher/score?_='+ts,
+					{
+						responseType:'json',
+						params : param
+					})
+					.success(function(data,status){
+						if(data.code === 0){
+							if(data.score.length === 0){
+								return;
+							}
+							var score = convertOneScore(data.score[0]);
+
+							if(Root.nowStudent.id === data.score[0].student){
+								Root.nowStudent.scorelist[Root.nowMonth] = score;
+								Root.nowStudent.score[Root.nowMonth] = data.score[0].scores;
+							}
+							console.log('获取学生评分成功!',data);
+						}
+						if(success) success(data, status);
+					})
+					.error(function(data,status){
+						if(error) error(data, status);
+					});			
+			}
+
+			//拉学生评分列表
+			function getScoreList(param,success,error){
+				Http.get('/teacher/score?_='+ts,
+					{
+						responseType:'json'
+					})
+					.success(function(data,status){
+						if(data.code === 0){
+							console.log('获取学生评分成功!',data);
+						}
+						if(success) success(data, status);
+					})
+					.error(function(data,status){
+						if(error) error(data, status);
+					});	
+			}
+
 			function getStudent(){
 				return Root.User;
 			}
 
+			//添加学生
 			function createStudent(param,success,error){
 				var ts = new Date().getTime();
 				var body = Util.object.toUrlencodedString(param);
@@ -96,6 +186,7 @@ angular.module('dy.services.student', [
                     });	
 			}
 
+			//选择一个指定学期的学生
 			function selectGrade(id){
 				var list = sMap;
 				if(Root.nowClass !== '所有'){
@@ -112,6 +203,7 @@ angular.module('dy.services.student', [
 				//console.log(Root.studentList);
 			}
 
+			//选择一个指定班级的学生
 			function selectClass(id){
 				var list = sMap;
 				if(Root.nowGrade !== '所有'){
@@ -125,6 +217,7 @@ angular.module('dy.services.student', [
 				});
 			}
 
+			//按类型降序排列学生
 			function orderByStudent(type){
 				console.log(type);
 				var sort = _.sortBy(Root.studentList,function(item){
@@ -133,14 +226,31 @@ angular.module('dy.services.student', [
 				Root.studentList = sort;
 			}
 
+			//搜索学生
+			function searchStudent(key){
+				//console.log(Root.nowGrade,Root.nowClass);
+				if(key == ''){
+					Root.studentList = sMap;
+				}
+				var list = sMap;
+				_.map(list,function(item,idx){
+					if(item.name.indexOf(key) < 0){
+						delete Root.studentList[item._id];
+					}
+				});
+			}
+
 			return {
-				createStudent : createStudent,
-				getStudentList : getStudentList,
-				getStudentInfo : getStudentInfo,
-				getStudent : getStudent,
-				selectGrade : selectGrade,
+				createStudent : createStudent, //添加学生
+				getStudentList : getStudentList, //拉学生列表
+				getStudentInfo : getStudentInfo, //拉当前登录学生信息
+				getStudent : getStudent,         //
+				selectGrade : selectGrade,		//
 				selectClass : selectClass,
-				orderByStudent : orderByStudent
+				orderByStudent : orderByStudent,
+				searchStudent : searchStudent,
+				getScore : getScore,
+				getScoreList : getScoreList
 			}
 
 		}

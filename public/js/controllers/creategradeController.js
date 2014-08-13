@@ -66,8 +66,8 @@ angular.module('dy.controllers.gradepanel',[
 
 
 			Scope.handleConfirmBtnClick = function(){
-				if(Root.Term.id){
-					Scope.modifyTerm();
+				if(Root.Term._id){
+					Scope.createTerm();
 				}else{
 					Scope.createTerm();
 				}
@@ -81,11 +81,19 @@ angular.module('dy.controllers.gradepanel',[
 					day : Root.Term.day,
 					months : Root.Term.months
 				}
+				if(Root.Term._id){
+					
+				}
 				Mgrade.createTerm({
 					term : JSON.stringify(param)
 				});
 				Root.hideGradePanel();
 			}
+
+			Root.modifyTerm = function(id){
+				Root.Term = Root.termList[id];
+				Root.$emit('create.grade.show',true);
+			}			
 
 			Root.setActiveTerm = function(id){
 				var param = Root.termList[id];
@@ -103,10 +111,7 @@ angular.module('dy.controllers.gradepanel',[
 				});
 			}			
 
-			Root.modifyTerm = function(id){
-				Root.Term = Root.termList[id];
-				Root.$emit('create.grade.show',true);
-			}
+
 
 			Root.$on('create.grade.show',function(e,d){
 				if(!d){

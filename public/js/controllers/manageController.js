@@ -14,6 +14,7 @@ angular.module('dy.controllers.manage',[
 				//return;
 			}
 
+			Root.isManage = true;
 			Root.Teacher = {};
 
 			Teacher.getTeacherInfo();			
