@@ -8,10 +8,9 @@ angular.module('dy.controllers.teacher',[
 		'$rootScope', '$scope','Util','mGradeService','teacherService',function(Root,Scope,Util,Mgrade,Teacher){
 			console.log('load teachercontroller');
 
-			console.log(Util.cookie.get('skey'),Util.cookie.get('role'));
-			if(!Util.cookie.get('skey')){
-				//window.location.href="/teacher/login";
-				//return;
+			if(Util.cookie.get('role') !== 'teacher'){
+				window.location.href="/teacher/login";
+				return;
 			}
 
 			if(Root.isManage){

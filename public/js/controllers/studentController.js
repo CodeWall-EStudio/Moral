@@ -8,6 +8,13 @@ angular.module('dy.controllers.student',[
 		'$rootScope', '$scope','$location','Util','mGradeService','studentService','CMD_SET_QUOTA',
 			function(Root,Scope,Location,Util,Mgrade,Student,CMD_SET_QUOTA){
 			console.log('load studentcontroller');
+			var url = Location.absUrl();
+
+			console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
+			if(url.indexOf('student.html') > 0 && Util.cookie.get('role') !== 'student'){
+				window.location.href="/student/login";
+				return;
+			}			
 			//sm = list 显示学生列表
 			//sm = info 显示学生个人资料
 			//sm = recode 显示自评说明

@@ -21,6 +21,7 @@ angular.module('dy.controllers.quota',[
 
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
+			Root.defScore = false; //默认的评分指标
 
 			function getEqua(){
 				var aRec = 0;

@@ -7,6 +7,7 @@ angular.module('dy.services.student', [
 
 			var sList = [];
 			var sMap = {};
+			var defScore = false;//默认的评分
 
 			function conventStudent(data){
 				for(var i in data){
@@ -79,6 +80,7 @@ angular.module('dy.services.student', [
 				});
 			}
 
+			//计算一个月的评分
 			function convertOneScore(data){
 				if(!data){
 					return;
@@ -109,6 +111,7 @@ angular.module('dy.services.student', [
 				return list;
 			}
 
+
 			//拉学生评分
 			function getScore(param,success,error){
 				var ts = new Date().getTime();
@@ -120,6 +123,8 @@ angular.module('dy.services.student', [
 					.success(function(data,status){
 						if(data.code === 0){
 							if(data.score.length === 0){
+								Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
+								Root.nowStudent.score[Root.nowMonth] = 0;								
 								return;
 							}
 							var score = convertOneScore(data.score[0]);
@@ -129,6 +134,9 @@ angular.module('dy.services.student', [
 								Root.nowStudent.score[Root.nowMonth] = data.score[0].scores;
 							}
 							console.log('获取学生评分成功!',data);
+						}else{
+								Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
+								Root.nowStudent.score[Root.nowMonth] = 0;	
 						}
 						if(success) success(data, status);
 					})
