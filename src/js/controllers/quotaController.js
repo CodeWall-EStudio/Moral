@@ -19,8 +19,9 @@ angular.module('dy.controllers.quota',[
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
-			Root.nowQuota = {};
-			Root.nowScore = {};
+			Root.nowQuota = {}; //当前指标
+			Root.nowScore = {}; //当前评分
+			Root.defScore = false; //默认的评分指标
 
 			function getEqua(){
 				var aRec = 0;
@@ -29,7 +30,7 @@ angular.module('dy.controllers.quota',[
 					aRec += nowRecord[i];
 					num++;
 				}
-				return aRec/num;
+				return aRec;
 			}
 
 			function getScoreList(data){
@@ -83,12 +84,12 @@ angular.module('dy.controllers.quota',[
 					sid = Root.nowStudent.id;
 					tid = Root.Term._id;
 					year = Root.Term.year;
-					month = 1;
+					month = Root.nowMonth;
 				}else{
 					sid = Root.myInfo.id
 					tid = Root.myInfo.term._id;
 					year = Root.myInfo.term.year;
-					month = 1;
+					month = Root.nowMonth;
 				}
 				var param = {
 					student : sid,
@@ -131,7 +132,7 @@ angular.module('dy.controllers.quota',[
 					score : num
 				};
 
-				console.log(Root.nowScore);
+				//console.log(Root.nowScore);
 				// //这里有问题..要修改下.
 				Scope.allScore = getEqua();
 
@@ -140,6 +141,11 @@ angular.module('dy.controllers.quota',[
 					num : num
 				});
 			}
+
+			Root.$on('status.student.change',function(){
+				Root.nowScore = {};
+				Scope.resetStudentQuota();
+			});
 
 			Quota.getQuotaList();
 		}

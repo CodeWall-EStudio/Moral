@@ -12,11 +12,11 @@ angular.module('dy.controllers.mgradelist',[
 			}
 
 			Scope.selectTerm = function(id){
-				Root.nowTerm = Root.termList[id];
+				//Root.nowTerm = Root.termList[id];
 			}
 
 			Scope.selectGrade = function(id){
-				Root.nowGrade = Root.gradeList[id];
+				//Root.nowGrade = Root.gradeList[id];
 			}
 
 			Scope.selectMonth = function(id){

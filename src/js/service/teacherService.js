@@ -11,7 +11,7 @@ angular.module('dy.services.teacher', [
 					.success(function(data,status){
 						Root.Teacher = data.teacher.info;
 						//conventStudent(data.student);
-						console.log('拉老师资料成功!', data,Root.Teacher);
+						console.log('拉老师资料成功!', data);
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -19,9 +19,23 @@ angular.module('dy.services.teacher', [
 					});
 			}
 
+			function getTeacherList(param,success,error){
+				Http.get('/teacher?_='+ts,null,{responseType:'json'})
+					.success(function(data,status){
+						Root.Teacher = data.teacher.info;
+						//conventStudent(data.student);
+						console.log('拉老师资料成功!', data);
+						if(success) success(data, status);
+					})
+					.error(function(data,status){
+						if(error) error(data, status);
+					});				
+			}
+
 
 			return {
-				getTeacherInfo : getTeacherInfo
+				getTeacherInfo : getTeacherInfo,
+				getTeacherList : getTeacherList
 			}
 
 		}

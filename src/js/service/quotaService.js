@@ -15,8 +15,14 @@ angular.module('dy.services.quota', [
 				if(!Root.quotaList){
 					Root.quotaList = {};
 				}
+				Root.defScore = {};
 				for(var i in data){
 					data[i].id = data[i]._id;
+					Root.defScore[data[i]._id] = {
+						self : 0,
+						parent : 0,
+						teacher: 0
+					};
 					Root.quotaList[data[i]._id] = data[i];
 				}
 			}

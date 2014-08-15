@@ -8,6 +8,13 @@ angular.module('dy.controllers.student',[
 		'$rootScope', '$scope','$location','Util','mGradeService','studentService','CMD_SET_QUOTA',
 			function(Root,Scope,Location,Util,Mgrade,Student,CMD_SET_QUOTA){
 			console.log('load studentcontroller');
+			var url = Location.absUrl();
+
+			console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
+			if(url.indexOf('student.html') > 0 && Util.cookie.get('role') !== 'student'){
+				window.location.href="/student/login";
+				return;
+			}			
 			//sm = list 显示学生列表
 			//sm = info 显示学生个人资料
 			//sm = recode 显示自评说明
@@ -32,6 +39,16 @@ angular.module('dy.controllers.student',[
 		
 			Root.selectStudent = function(id){
 				Root.nowStudent = Root.studentList[id];
+				Root.nowStudent.scorelist = {};
+				Root.nowStudent.score = {};
+				//console.log(Root.Term._id,Root.nowStudent._id);
+				var param = {
+					term : Root.Term._id,
+					student : Root.nowStudent.id,
+					month : Root.nowMonth
+				}
+				Student.getScore(param);
+				Root.$emit('status.student.change',true);
 			}
 
 			Scope.createUser = function(){
@@ -67,13 +84,14 @@ angular.module('dy.controllers.student',[
 			}
 
 			Root.$on(CMD_SET_QUOTA,function(e,d){
-				console.log(d.id,d.num);
+				//console.log(d.id,d.num);
 			});
 
 
 			
 			
 			var url = Location.absUrl();
+			var fn = function(){};
 			if(url.indexOf('student.html') > 0){
 				
 				if(!Util.cookie.get('skey')){
@@ -81,8 +99,14 @@ angular.module('dy.controllers.student',[
 					return;
 				}				
 				Student.getStudentInfo();
+			//如果是老师,需要再把分数拉一下.
+			}else if(url.indexOf('teacher.html') > 0){
+				fn = function(data){
+					Root.$emit('status.student.loaded',true);
+				};
 			}
-			Student.getStudentList();
+
+			Student.getStudentList(null,fn);
 
 		}
 	]);

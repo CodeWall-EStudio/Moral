@@ -9,11 +9,13 @@ angular.module('dy.controllers.manage',[
 		'$rootScope', '$scope','$location','Util','mGradeService','studentService','teacherService',function(Root,Scope,$location,Util,Mgrade,Student,Teacher){
 			console.log('load managecontroller');
 
-			if(!Util.cookie.get('skey')){
-				//window.location.href="/teacher/login";
-				//return;
+			//console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
+			if(Util.cookie.get('role') !== 'teacher'){
+				window.location.href="/teacher/login";
+				return;
 			}
 
+			Root.isManage = true;
 			Root.Teacher = {};
 
 			Teacher.getTeacherInfo();			
