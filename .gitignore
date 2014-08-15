@@ -1,5 +1,5 @@
 # projects files
 .idea/workspace.xml
-node_modules/
+/node_modules/*
 .DS_Store
 bk/

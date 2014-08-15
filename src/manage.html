@@ -98,16 +98,22 @@
 	 			</div>
 
 	 			<div class="content-insert-bar">
-	 				<a>下载含年级班级数据的模板</a>
-	 				<button class="btn btn-primary">导入班主任数据</button>
+                    <form method="post" enctype="multipart/form-data" action="/teacher/upload">
+                    	<a>下载含年级班级数据的模板</a>
+                        <button class="btn btn-primary">导入班主任数据</button>
+                        <input type="file" name="thumbnail" class="btn hide-input">
+                    </form>	 
 	 			</div>
 			</div>
 
 			<div class="content-header quota-header hide"  ng-class="{hide:getMode()!=='quota'}">
 	 			<div class="content-insert-bar">
-	 				<a>下载当前指标</a>
-	 				<a>下载模板</a>
-	 				<button class="btn btn-primary">从文件导入</button>
+                    <form method="post" enctype="multipart/form-data" action="/teacher/upload">
+	   	 				<a>下载当前指标</a>
+		 				<a>下载模板</a>
+                        <button class="btn btn-primary">从文件导入</button>
+                        <input type="file" name="thumbnail" class="btn hide-input">
+                    </form>	 	 				
 	 			</div>
 			</div>
 		</div>				
