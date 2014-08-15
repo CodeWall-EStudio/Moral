@@ -129,7 +129,7 @@ gulp.task('copy',function(){
 });
 
 gulp.task('watch',function(){
-  gulp.watch('./src/js/**',['concat','build']);
+  gulp.watch('./src/js/**',['concat']);
   gulp.watch('./src/css/**',['concat','copy','build']);  
   gulp.watch('./src/*.html',['build']);
   gulp.watch('./src/tmpl/*.html',['copy']);

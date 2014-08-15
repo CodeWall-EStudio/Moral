@@ -32,6 +32,7 @@ router.post('/term', term('post'));
 
 /* indicator */
 router.get('/indicator', indicator('get'));
+router.post('/indicator/delete', indicator('delete'));
 router.post('/indicator', indicator('post'));
 
 /* teacher */

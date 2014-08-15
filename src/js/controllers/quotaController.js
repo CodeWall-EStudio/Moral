@@ -19,6 +19,7 @@ angular.module('dy.controllers.quota',[
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
+			Root.quotaList = {}; //指标列表
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
@@ -42,7 +43,9 @@ angular.module('dy.controllers.quota',[
 			}
 
 			//后台变更指标
-			Scope.changeQuota = function(idx){
+			Scope.changeQuota = function(id){
+				console.log(id);
+				Root.nowQuota = Root.quotaList[id];
 			}	
 
 			//后台创建指标
@@ -51,8 +54,9 @@ angular.module('dy.controllers.quota',[
 
 			//后台保存指标
 			Scope.saveQuota = function(){
-				console.log(Root.nowQuota);
+				//console.log(Root.nowQuota);
 				var param = {
+					order : Root.nowQuota.order,
 					name : Root.nowQuota.name,
 					order : Root.nowQuota.order,
 					desc : Root.nowQuota.desc,
@@ -73,7 +77,9 @@ angular.module('dy.controllers.quota',[
 
 			//后台删除指标
 			Scope.delQuota = function(){
-				console.log(nowQuota);
+				Quota.delQuota({
+					id : Root.nowQuota._id
+				});
 			}			
 
 			//给学生打分
@@ -141,6 +147,13 @@ angular.module('dy.controllers.quota',[
 					num : num
 				});
 			}
+
+			Root.$on('status.grade.change',function(){
+				//重新拉学期单指标
+				Quota.getQuotaList({
+					term : Root.Term._id
+				});
+			})
 
 			Root.$on('status.student.change',function(){
 				Root.nowScore = {};

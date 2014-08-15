@@ -12,11 +12,13 @@ module.exports = function example(method, role) {
             next();
         } else {
             var sess = req.session;
+            console.log(sess);
             if (sess.user && sess.user.id) {
                 var termModel = db.getTermModel();
                 termModel.findOne({active: true}, function(err, term){
                     if (err) {
                     }
+                    console.log(term);
                     var indicatorModel = db.getIndicatorModel();
                     indicatorModel.find({term: term._id}, function(err, indicators){
                         if (err) {

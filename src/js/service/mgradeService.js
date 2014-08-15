@@ -28,7 +28,9 @@ angular.module('dy.services.mgrade', [
 						no = i;
 					}
 				}
-				Root.Term = data[no];
+				if(data[no]){
+					Root.Term = data[no];
+				}
 			}
 
 			function getTermList(param,success,error){
@@ -56,8 +58,9 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
-                    	if(data.error === 'ok' || data.error === 0){
-                    		Root.termList.push(param.term);
+                    	if(data.code === 0){
+                    		param._id = data.id;
+                    		Root.termList[data.id] = param;
                     	}
                         console.log('[mGradeService] term config =', data);
                         if(success) success(data, status);

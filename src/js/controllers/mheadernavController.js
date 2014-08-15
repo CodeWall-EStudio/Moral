@@ -30,7 +30,7 @@ angular.module('dy.controllers.managehandernav',[
 			Root.nowMonth = 0;
 			Scope.searchKeyWord = '';
 
-			Root.termList = {};
+			//Root.termList = {};
 			Root.gradeList = gradeList;
 			Root.classList = classList;
 
@@ -63,6 +63,6 @@ angular.module('dy.controllers.managehandernav',[
 				Root.nowMonth = month;
 			};
 
-			Mgrade.getTermList();
+			//Mgrade.getTermList();
 		}
 	]);

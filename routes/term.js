@@ -13,8 +13,11 @@ module.exports = function term(method) {
             if (req.body.term) {
                 try {
                     var data = JSON.parse(req.body.term);
+                    var id = data._id;
+                    delete data._id;
+                    console.log(data);
                     if (data.name) {
-                        termModel.update({ name: data.name }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
+                        termModel.update({ _id: id }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
                             if (err) return console.error(err);
                             console.log('The number of updated documents was %d', numberAffected);
                             console.log('The raw response from Mongo was ', raw);

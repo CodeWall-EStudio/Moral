@@ -7,9 +7,10 @@ angular.module('dy.controllers.gradepanel',[
 		'$rootScope', '$scope','Util','mGradeService',function(Root,Scope,Util,Mgrade){
 
 			var selectMonth = [];
-			var defMonthLength = 5;
+			var defMonthLength = 5
 
 			function checkMonth(idx){
+				console.log(Root.Term);
 				var list = $('#gradePanelModal .select-month li');
 				list.each(function(i){
 					if(i >= idx-1 && i < idx+defMonthLength-1){
@@ -21,6 +22,9 @@ angular.module('dy.controllers.gradepanel',[
 					}else{
 						$(this).removeClass('active').addClass('disabled');
 
+					}
+					if(!Root.Term.months){
+						Root.Term.months = {};
 					}
 					Root.Term.months = selectMonth;
 				});
@@ -101,6 +105,7 @@ angular.module('dy.controllers.gradepanel',[
 				Mgrade.createTerm({
 					term : JSON.stringify(param)
 				});
+				console.log(param);
 			}
 
 			Root.closeTerm = function(id){

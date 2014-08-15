@@ -117,7 +117,9 @@ angular.module('dy.services.mgrade', [
 						no = i;
 					}
 				}
-				Root.Term = data[no];
+				if(data[no]){
+					Root.Term = data[no];
+				}
 			}
 
 			function getTermList(param,success,error){
@@ -145,8 +147,9 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
-                    	if(data.error === 'ok' || data.error === 0){
-                    		Root.termList.push(param.term);
+                    	if(data.code === 0){
+                    		param._id = data.id;
+                    		Root.termList[data.id] = param;
                     	}
                         console.log('[mGradeService] term config =', data);
                         if(success) success(data, status);
@@ -542,8 +545,8 @@ angular.module('dy.services.quota', [
                     		}
                     		var quota = JSON.parse(param.indicator);
                     		quota._id = data.id;
-                    		quota.id = data.id;
                     		Root.quotaList[data.id] = quota;
+                    		console.log(Root.quotaList);
                     		//Root.quotaList.push(param.term);
                     	}
                         console.log('[quotaService] quota crate suc =', data);
@@ -569,11 +572,15 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                    	console.log(data);
-                    	if(data.error === 'ok' || data.error === 0){
-
+                    	if(data.code === 0){
+                    		param._id = data.id;
+                    		Root.quotaList[data.id] = param;
+                    		console.log(param);
+                    		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
+                    	console.log(Root.quotaList);
+
                         console.log('[quotaService] quota crate suc =', data);
                         if(success) success(data, status);
                     })
@@ -599,10 +606,12 @@ angular.module('dy.controllers.mgradelist',[
 	])
 	.controller('mgradelistController',[
 		'$rootScope', '$scope','Util','mGradeService',function(Root,Scope,Util,Mgrade){
-			Root.gradeList = {};
+			console.log('load mgradelistcontroller')
+			Root.termList = {};
+			Root.Term = {};
 
-			Root.showGrade = function(){
-
+			Root.showGrade = function(id){
+				Root.Term = Root.termList[id];
 			}
 
 			Scope.selectTerm = function(id){
@@ -700,7 +709,7 @@ angular.module('dy.controllers.managehandernav',[
 			Root.nowMonth = 0;
 			Scope.searchKeyWord = '';
 
-			Root.termList = {};
+			//Root.termList = {};
 			Root.gradeList = gradeList;
 			Root.classList = classList;
 
@@ -733,7 +742,7 @@ angular.module('dy.controllers.managehandernav',[
 				Root.nowMonth = month;
 			};
 
-			Mgrade.getTermList();
+			//Mgrade.getTermList();
 		}
 	]);
 angular.module('dy.controllers.student',[
@@ -900,6 +909,7 @@ angular.module('dy.controllers.quota',[
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
+			Root.quotaList = {}; //指标列表
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
@@ -934,6 +944,7 @@ angular.module('dy.controllers.quota',[
 			Scope.saveQuota = function(){
 				console.log(Root.nowQuota);
 				var param = {
+					order : Root.nowQuota.order,
 					name : Root.nowQuota.name,
 					order : Root.nowQuota.order,
 					desc : Root.nowQuota.desc,

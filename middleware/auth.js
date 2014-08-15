@@ -172,14 +172,17 @@ module.exports = function auth(method, role) {
 
             } else if (method === 'post') {
                 var sess = req.session;
-                studentModel.findOne({id: req.body.id}, function (err, studentEntity) {
+                console.log('sess',sess);
+                console.log(req.body);
+                studentModel.findOne({name: req.body.name}, function (err, studentEntity) {
                     if (err) {
                         console.error(err);
                     }
+                    console.log(studentEntity);
                     if (studentEntity) {
                         if (req.body.number === studentEntity.number) {
                             sess.user = studentEntity;
-			res.cookie('role', role, 60000);
+			             res.cookie('role', role, 60000);
                             res.redirect(hostUrl + '/' + role+'.html?#mode=my');
                         } else {
                             res.redirect(hostUrl + '/' + role + '.html');

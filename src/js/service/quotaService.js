@@ -12,9 +12,9 @@ angular.module('dy.services.quota', [
 			};
 
 			function conventQuota(data){
-				if(!Root.quotaList){
+				//if(!Root.quotaList){
 					Root.quotaList = {};
-				}
+				//}
 				Root.defScore = {};
 				for(var i in data){
 					data[i].id = data[i]._id;
@@ -27,12 +27,15 @@ angular.module('dy.services.quota', [
 				}
 			}
 
-			function getQuotaList(param,success,error){
+			function getQuotaList(params,success,error){
 				var ts = new Date().getTime();
-				Http.get('/teacher/indicator?_='+ts,null,{responseType:'json'})
+				params = params || {};
+				Http.get('/teacher/indicator?_='+ts,{responseType:'json',params:params})
 					.success(function(data,status){
-						conventQuota(data.indicator);
-						console.log('拉指标列表成功!', data);
+						if(data.code === 0){
+							conventQuota(data.indicator);
+							console.log('拉指标列表成功!', data);
+						}
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -55,14 +58,14 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                    	if(data.error === 'ok' || data.error === 0){
+                    	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
                     		}
-                    		var quota = JSON.parse(param.indicator);
-                    		quota._id = data.id;
-                    		quota.id = data.id;
-                    		Root.quotaList[data.id] = quota;
+                    		var d = JSON.parse(param.indicator);
+                    		d._id = data.id;
+                    		Root.quotaList[data.id] = d;
+                    		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
                         console.log('[quotaService] quota crate suc =', data);
@@ -88,17 +91,46 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                    	console.log(data);
-                    	if(data.error === 'ok' || data.error === 0){
-
+                    	if(data.code === 0){
+                    		param._id = data.id;
+                    		Root.quotaList[data.id] = param;
+                    		console.log(param);
+                    		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
+                    	console.log(Root.quotaList);
+
                         console.log('[quotaService] quota crate suc =', data);
                         if(success) success(data, status);
                     })
                     .error(function(data, status){
                         if(error) error(data, status);
                     });					
+			} 
+
+			function delQuota(params,success,error){
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(params);
+				Http.post('/teacher/indicator/delete?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                    	if(data.code === 0){
+                    		delete Root.quotaList[params.id];
+                    		Root.nowQuota = {};
+                    		//Root.quotaList.push(param.term);
+                    	}
+
+                        console.log('[quotaService] quota delete suc =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                        if(error) error(data, status);
+                    });	
 			}
 
 
@@ -106,7 +138,8 @@ angular.module('dy.services.quota', [
 				getQuotaList : getQuotaList,
 				createQuota : createQuota,
 				modifyQuota : modifyQuota,
-				saveStudentQuota : saveStudentQuota
+				saveStudentQuota : saveStudentQuota,
+				delQuota : delQuota
 			}
 
 		}
