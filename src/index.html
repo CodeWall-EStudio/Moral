@@ -402,8 +402,26 @@
  		版权所有
  	</div>
 
- 	<script src="js/lib/jslib.js"></script>
+ 	<!-- build:lib -->
+ 	<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
+ 	<script src="js/lib/angular/angular_1.2.6.js"></script>
+ 	<script src="js/lib/underscore/underscore.min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
+	<!-- endbuild -->
 
-
+	<!-- build:index -->
+	<script src="js/constants/constants.js"></script>
+	<script src="js/service/UtilsService.js"></script>
+	<script src="js/service/mgradeService.js"></script>
+	<script src="js/service/studentService.js"></script>
+	<script src="js/service/teacherService.js"></script>
+	<script src="js/service/quotaService.js"></script>
+	<script src="js/controllers/gradelistController.js"></script>
+	<script src="js/controllers/indexnavController.js"></script>
+	<script src="js/controllers/studentController.js"></script>
+	<script src="js/controllers/teacherController.js"></script>
+	<script src="js/controllers/quotaController.js"></script>
+	<script src="js/index.js"></script>
+	<!-- endbuild -->	
  </body>
  </html>

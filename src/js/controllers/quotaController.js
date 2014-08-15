@@ -30,7 +30,7 @@ angular.module('dy.controllers.quota',[
 					aRec += nowRecord[i];
 					num++;
 				}
-				return aRec/num;
+				return aRec;
 			}
 
 			function getScoreList(data){

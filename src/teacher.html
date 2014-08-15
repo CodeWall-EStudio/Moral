@@ -5,7 +5,10 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1408036312746">
+  <!-- build:maincss -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/main.css" />  
+  <!-- endbuild -->
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -163,9 +166,28 @@
  	</div>
 
 
- 	<script src="js/lib/jslib.js"></script>
+ 	<!-- build:lib -->
+ 	<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
+ 	<script src="js/lib/angular/angular_1.2.6.js"></script>
+ 	<script src="js/lib/underscore/underscore.min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
+	<!-- endbuild -->
 
-	<script src="js/teacher.js?t=1408036312746"></script>
+	<!-- build:teacher -->
+	<script src="js/constants/constants.js"></script>
+	<script src="js/service/UtilsService.js"></script>
+	<script src="js/service/mgradeService.js"></script>
+	<script src="js/service/studentService.js"></script>
+	<script src="js/service/teacherService.js"></script>
+	<script src="js/service/quotaService.js"></script>
+	<script src="js/controllers/gradelistController.js"></script>
+	<script src="js/controllers/indexnavController.js"></script>
+	<script src="js/controllers/mheadernavController.js"></script>
+	<script src="js/controllers/studentController.js"></script>
+	<script src="js/controllers/teacherController.js"></script>
+	<script src="js/controllers/quotaController.js"></script>
+	<script src="js/teacher.js"></script>
+	<!-- endbuild -->	
 
  </body>
  </html>

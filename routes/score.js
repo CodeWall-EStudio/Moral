@@ -42,8 +42,9 @@ module.exports = function score(method) {
             var conn = {};
             var t = req.param('term');
             var s = req.param('student');
-            if (t && s) {
-                conn = {id: s, term: t}
+            var m = req.param('month');
+            if (t && s && m) {
+                conn = {student: s, term: t, month: m}
             }
             scoreModel.find(conn, function (err, scores) {
                 if (err) {
