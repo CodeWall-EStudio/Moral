@@ -30,10 +30,10 @@ app.use(bodyParser.urlencoded());
 app.use(multer({ dest: './upload/'}));
 app.use(cookieParser());
 app.use(session({secret: 'keyboard cat', resave: true, saveUninitialized: true}));
-//app.use(require('less-middleware')(path.join(__dirname, 'public')));
-//app.use(express.static(path.join(__dirname, 'public')));
-app.use(require('less-middleware')(path.join(__dirname, 'src')));
-app.use(express.static(path.join(__dirname, 'src')));
+app.use(require('less-middleware')(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+//app.use(require('less-middleware')(path.join(__dirname, 'src')));
+//app.use(express.static(path.join(__dirname, 'src')));
 
 
 // 初始化路由处理
