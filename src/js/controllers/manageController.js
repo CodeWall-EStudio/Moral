@@ -19,7 +19,6 @@ angular.module('dy.controllers.manage',[
 			Root.Teacher = {};
 
 			Teacher.getTeacherInfo();			
-			console.log(Root.Teacher,Teacher);
 
 		}
 	]);

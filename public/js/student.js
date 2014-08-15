@@ -640,8 +640,8 @@ angular.module('dy.controllers.student',[
 
 			console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
 			if(url.indexOf('student.html') > 0 && Util.cookie.get('role') !== 'student'){
-				window.location.href="/student/login";
-				return;
+				// window.location.href="/student/login";
+				// return;
 			}			
 			//sm = list 显示学生列表
 			//sm = info 显示学生个人资料
@@ -723,8 +723,8 @@ angular.module('dy.controllers.student',[
 			if(url.indexOf('student.html') > 0){
 				
 				if(!Util.cookie.get('skey')){
-					window.location.href="/student/login";
-					return;
+					// window.location.href="/student/login";
+					// return;
 				}				
 				Student.getStudentInfo();
 			//如果是老师,需要再把分数拉一下.
