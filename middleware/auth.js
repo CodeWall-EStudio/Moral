@@ -113,6 +113,9 @@ module.exports = function auth(method, role) {
                             sess.user.id = data.loginName;
                             sess.user.skey = data.encodeKey;
                             sess.user.role = role;
+                            res.cookie('skey',data.encodeKey);
+                            res.cookie('role',role);
+                            console.log(sess);
                             decode(data.encodeKey, CONSTANTS.CAS_USER_INFO_CGI, function(err, response) {
                                 if (err) {
                                     console.error(err);
