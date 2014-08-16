@@ -51,7 +51,6 @@ angular.module('dy.controllers.quota',[
 
 			//后台保存指标
 			Scope.saveQuota = function(){
-				console.log(Root.nowQuota);
 				var param = {
 					name : Root.nowQuota.name,
 					order : Root.nowQuota.order,

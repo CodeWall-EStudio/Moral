@@ -528,6 +528,7 @@ angular.module('dy.services.quota', [
 			function createQuota(param,success,error){
 				var ts = new Date().getTime();
 				var body = Util.object.toUrlencodedString(param);
+
 				Http.post('/teacher/indicator?_=' + ts,
                         body,
                         {
@@ -951,7 +952,6 @@ angular.module('dy.controllers.quota',[
 
 			//后台保存指标
 			Scope.saveQuota = function(){
-				console.log(Root.nowQuota);
 				var param = {
 					name : Root.nowQuota.name,
 					order : Root.nowQuota.order,

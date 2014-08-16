@@ -47,6 +47,7 @@ angular.module('dy.services.quota', [
 			function createQuota(param,success,error){
 				var ts = new Date().getTime();
 				var body = Util.object.toUrlencodedString(param);
+
 				Http.post('/teacher/indicator?_=' + ts,
                         body,
                         {
