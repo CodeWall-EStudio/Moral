@@ -28,7 +28,10 @@ router.get('/validate/:action?', auth('validate', role));
 
 /* term */
 router.get('/term', term('get'));
-router.post('/term', term('post'));
+router.post('/term', term('post'))
+router.post('/term/modify', term('modify'));
+router.post('/term/setact', term('setact'));
+
 
 /* indicator */
 router.get('/indicator', indicator('get'));

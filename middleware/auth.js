@@ -183,7 +183,7 @@ module.exports = function auth(method, role) {
                         if (req.body.number === studentEntity.number) {
                             sess.user = studentEntity;
 			             res.cookie('role', role, 60000);
-                            res.redirect(hostUrl + '/' + role+'.html?#mode=my');
+                            res.redirect(hostUrl + '/' + role+'.html');
                         } else {
                             res.redirect(hostUrl + '/' + role + '.html');
                         }

@@ -44,7 +44,7 @@ angular.module('dy.services.mgrade', [
 					.error(function(data,status){
 						if(error) error(data, status);
 					});
-			};
+			};			
 
 
 			function createTerm(param,success,error){
@@ -71,15 +71,78 @@ angular.module('dy.services.mgrade', [
                     });				
 			}
 
+
 			function modifyTerm(param,success,error){
-				
-			}			
+				console.log('modify term');
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/term/modify?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                    	if(data.code === 0){
+                    		param._id = data.id;
+                    		Root.termList[data.id] = param;
+                    	}
+                        console.log('[mGradeService] term config =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                    	//需要加上失败的逻辑
+                        if(error) error(data, status);
+                    });					
+			}		
+
+			function changeTermAct(id){
+				_.map(Root.termList,function(item){
+					if(item._id !== id){
+						item.active = false;
+					}
+				});
+			}
+
+			//激活学期
+			function setActTerm(param,success,error){
+				console.log('modify term');
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/term/setact?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+						var d = Root.termList[param.id];
+                    	if(data.code === 0){
+                    		d.active = param.active;
+                    		if(d.active){
+                    			changeTermAct(param.id);
+                    		}
+                    	}else{
+                    		d.active = param.active?false:true;
+                    	}
+                    	Root.termList[param.id] = d;
+                        console.log('[mGradeService] term set act config =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                    	//需要加上失败的逻辑
+                        if(error) error(data, status);
+                    });					
+			}	
 
 
 			return {
 				getTermList : getTermList,
 				createTerm : createTerm,
-				modifyTerm : modifyTerm
+				modifyTerm : modifyTerm,
+				setActTerm : setActTerm
 			}
 
 		}

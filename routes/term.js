@@ -9,14 +9,14 @@ var CONSTANTS = require('../config/constants');
 module.exports = function term(method) {
     return function (req, res, next) {
         var termModel = db.getTermModel();
+        console.log(method);
         if (method === 'post') {
             if (req.body.term) {
                 try {
                     var data = JSON.parse(req.body.term);
                     var id = data._id;
                     delete data._id;
-                    console.log(data);
-                    if (data.name) {
+                    if (id) {
                         termModel.update({ _id: id }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
                             if (err) return console.error(err);
                             console.log('The number of updated documents was %d', numberAffected);
@@ -37,6 +37,39 @@ module.exports = function term(method) {
             } else {
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
+        } else if( method ==='setact'){
+            try{
+                var id = req.body.id;
+                var active = req.body.active;
+
+                if(active){
+                    console.log('is active');
+                    termModel.update({},{$set:{active:false}},function(err,raw){
+
+                        if(err){
+                            res.json({ code: CONSTANTS.MSG_PARAM });
+                            return;
+                        }
+
+                        termModel.update({_id:id},{$set:{active:true}},function(err,raw){
+                            if (err) return console.error(err);
+                            console.log('update suc!');
+                            res.json({ code: CONSTANTS.MSG_SUCC});
+                        });
+                    });
+
+                }else{
+                    termModel.update({_id:id},{$set:{active:false}},function(err,raw){
+                        console.log(raw);
+                        if (err) return console.error(err);
+                        res.json({ code: CONSTANTS.MSG_SUCC});
+                    });
+                }
+            }catch(err){
+                console.log('error',err);
+                res.json({ code: CONSTANTS.MSG_PARAM });
+            }
+            //res.json({ code: CONSTANTS.MSG_PARAM });
         } else {
             termModel.find(function (err, terms) {
                 if (err) {

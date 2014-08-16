@@ -101,9 +101,9 @@ angular.module('dy.controllers.gradepanel',[
 
 			Root.setActiveTerm = function(id){
 				var param = Root.termList[id];
-				param.active = true;
-				Mgrade.createTerm({
-					term : JSON.stringify(param)
+				Mgrade.setActTerm({
+					id : param._id,
+					active : true
 				});
 				console.log(param);
 			}
@@ -111,8 +111,9 @@ angular.module('dy.controllers.gradepanel',[
 			Root.closeTerm = function(id){
 				var param = Root.termList[id];
 				param.active = false;
-				Mgrade.createTerm({
-					term : JSON.stringify(param)
+				Mgrade.setActTerm({
+					id : param._id,
+					active : false
 				});
 			}			
 
