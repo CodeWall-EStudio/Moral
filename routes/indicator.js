@@ -40,6 +40,33 @@ module.exports = function indicator(method) {
             } else {
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
+        } else if (method === 'modify') {
+            console.log('modify indictor!');
+            if(req.body.indicator){
+                try {
+                    var data = JSON.parse(req.body.indicator);
+                    if (req.body.id) {
+                        var id = req.body.id;
+                        delete data._id;
+                        indicatorModel.update({ _id:id}, data, function (err, numberAffected, raw) {
+                            if (err) {
+                                res.json({ code: CONSTANTS.MSG_ERR });
+                            } else {
+                                console.log('The number of updated documents was %d', numberAffected);
+                                console.log('The raw response from Mongo was ', raw);
+                                res.json({ code: CONSTANTS.MSG_SUCC, id: id });
+                            }
+                        });
+                    } else {
+                        res.json({ code: CONSTANTS.MSG_PARAM });
+                    }
+                } catch(err) {
+                    res.json({ code: CONSTANTS.MSG_ERR });
+                }
+            }else{
+                console.log('not param');
+                res.json({ code: CONSTANTS.MSG_PARAM });
+            }
         } else if (method === 'delete'){
             console.log('delete');
             var con = {};

@@ -58,13 +58,21 @@ angular.module('dy.services.student', [
 							Root.myInfo.score = data.score;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
+							if(data.term){
+								Root.studentTerm = true;
+							}
+							Root.Term = data.term;
+							console.log(Root.myInfo);
 							console.log('拉取学生资料成功',data);
 						}else{
-
+							Root.Term  = false;
+						}
+						if(success){
+							success(data);
 						}
 					})
 					.error(function(data,status){
-
+						console.log(data);
 					});
 			};
 

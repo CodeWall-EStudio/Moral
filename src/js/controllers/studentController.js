@@ -23,6 +23,7 @@ angular.module('dy.controllers.student',[
 			Scope.SelectdClass = {};
 
 			Root.myInfo = {};
+			Root.studentTerm = false;
 
 			var userList = {};
 			var gradeList = [];
@@ -85,10 +86,7 @@ angular.module('dy.controllers.student',[
 
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				//console.log(d.id,d.num);
-			});
-
-
-			
+			});		
 			
 			var url = Location.absUrl();
 			var fn = function(){};
@@ -98,15 +96,21 @@ angular.module('dy.controllers.student',[
 					// window.location.href="/student/login";
 					// return;
 				}				
-				Student.getStudentInfo();
-			//如果是老师,需要再把分数拉一下.
-			}else if(url.indexOf('teacher.html') > 0){
+				Student.getStudentInfo(null,function(d){
+					if(d.code !== 0){
+						console.log('拉数据失败');
+						Root.studentTerm = false;
+//top-nav .scores').remove();
+					}
+				});
+			//如果是老师或管理,需要再把分数拉一下.
+			}else{
 				fn = function(data){
 					Root.$emit('status.student.loaded',true);
-				};
+				}
+				Student.getStudentList(null,fn);
 			}
 
-			Student.getStudentList(null,fn);
 
 		}
 	]);

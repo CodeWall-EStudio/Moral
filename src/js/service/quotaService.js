@@ -77,7 +77,33 @@ angular.module('dy.services.quota', [
 			};
 
 			function modifyQuota(param,success,error){
-
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/indicator/modify?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                    	if(data.code === 0){
+                    		if(!Root.quotaList){
+                    			Root.quotaList = {};
+                    		}
+                    		var d = JSON.parse(param.indicator);
+                    		console.log(d,data.id);
+                    		d._id = data.id;
+                    		Root.quotaList[data.id] = d;
+                    		Root.nowQuota = {};
+                    		//Root.quotaList.push(param.term);
+                    	}
+                        console.log('[quotaService] quota modify suc =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                        if(error) error(data, status);
+                    });
 			}
 
 			function saveStudentQuota(param,success,error){

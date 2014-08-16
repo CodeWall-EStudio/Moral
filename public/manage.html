@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统</title>
-  <link rel="stylesheet" href="css/manage.css?t=1408127062008">
+  <link rel="stylesheet" href="css/manage.css?t=1408203293122">
  </head>
 
 <body ng-controller="manageController">
@@ -244,7 +244,7 @@
 		 					<button class="btn btn-primary" ng-click="createQuota()">新建</button>
 		 					<button class="btn btn-primary" ng-click="saveQuota()">保存</button>
 		 					<button class="btn btn-primary btn-danger" ng-click="delQuota()">删除</button>
-		 					<button class="btn btn-primary" data-dismiss="modal">复位</button>
+		 					<button class="btn btn-primary" data-dismiss="modal" ng-click="resetQuota()">复位</button>
 		 				</div>	
 						<div class="div-form">
 							<div class="form-group">
@@ -256,7 +256,7 @@
 							<div class="form-group">
 								<label for="quotaRecordSelect" class="col-sm-3 control-label">分值：</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" id="quotaRecordInput" placeholder="请输入指标分值" ng-model="nowQuota.score">
+									<input type="text" value="5" disabled="disabled" class="form-control" id="quotaRecordInput" placeholder="请输入指标分值">
 								</div>
 							</div>
 							<div class="form-group">
@@ -290,7 +290,7 @@
 						<div class="form-group">
 							<label for="gradeNameInput" class="col-sm-3 control-label">学期名称：</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="gradeNameInput" placeholder="请输入学期名称" ng-model="Term.name">
+								<input type="text" class="form-control" id="gradeNameInput" placeholder="请输入学期名称" ng-model="nowTerm.name">
 							</div>
 						</div>
 						<div class="form-group">
@@ -307,7 +307,7 @@
 								每月1日至 
 							</label>
 							<div class="col-sm-2">
-								<select class="form-control input-sm" id="endResDate" ng-options="day for day in daylist" ng-model="Term.day">
+								<select class="form-control input-sm" id="endResDate" ng-options="day for day in daylist" ng-model="nowTerm.day">
 									<option value="0">请选择结束日期</option>
 								</select>
 							</div>
@@ -325,7 +325,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/manage.js?t=1408127062008"></script>
+	<script src="js/manage.js?t=1408203293122"></script>
 
 
 </body>

@@ -36,6 +36,7 @@ router.post('/term/setact', term('setact'));
 /* indicator */
 router.get('/indicator', indicator('get'));
 router.post('/indicator/delete', indicator('delete'));
+router.post('/indicator/modify', indicator('modify'));
 router.post('/indicator', indicator('post'));
 
 /* teacher */

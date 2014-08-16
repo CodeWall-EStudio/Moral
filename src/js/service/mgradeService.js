@@ -59,8 +59,12 @@ angular.module('dy.services.mgrade', [
 					)
                     .success(function(data, status){
                     	if(data.code === 0){
-                    		param._id = data.id;
-                    		Root.termList[data.id] = param;
+                    		var tdata = JSON.parse(param.term);
+                    		tdata._id = data.id;
+                    		Root.termList[data.id] = tdata;
+                    		if(Root.Term._id === data.id){
+                    			Root.Term = tdata;
+                    		}
                     	}
                         console.log('[mGradeService] term config =', data);
                         if(success) success(data, status);

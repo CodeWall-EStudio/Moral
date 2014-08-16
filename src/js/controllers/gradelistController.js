@@ -8,6 +8,7 @@ angular.module('dy.controllers.mgradelist',[
 			console.log('load mgradelistcontroller')
 			Root.termList = {};
 			Root.Term = {};
+			Root.nowTerm = {};
 
 			Root.showGrade = function(id){
 				Root.Term = Root.termList[id];

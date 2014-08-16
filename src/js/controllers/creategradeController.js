@@ -10,7 +10,6 @@ angular.module('dy.controllers.gradepanel',[
 			var defMonthLength = 5
 
 			function checkMonth(idx){
-				console.log(Root.Term);
 				var list = $('#gradePanelModal .select-month li');
 				list.each(function(i){
 					if(i >= idx-1 && i < idx+defMonthLength-1){
@@ -79,14 +78,15 @@ angular.module('dy.controllers.gradepanel',[
 
 			Scope.createTerm = function(){
 				var param = {
-					name : Root.Term.name,
+					name : Root.nowTerm.name,
 					active : false,
 					year : new Date().getFullYear(),
-					day : Root.Term.day,
-					months : Root.Term.months
+					day : Root.nowTerm.day,
+					months : Root.nowTerm.months
 				}
-				if(Root.Term._id){
-					
+				if(Root.nowTerm._id){
+					param._id = Root.nowTerm._id;
+					param.active = Root.nowTerm.active;
 				}
 				Mgrade.createTerm({
 					term : JSON.stringify(param)
@@ -96,6 +96,8 @@ angular.module('dy.controllers.gradepanel',[
 
 			Root.modifyTerm = function(id){
 				Root.Term = Root.termList[id];
+				Root.nowTerm = {};
+				$.extend(Root.nowTerm,Root.Term);
 				Root.$emit('create.grade.show',true);
 			}			
 
@@ -122,6 +124,7 @@ angular.module('dy.controllers.gradepanel',[
 			Root.$on('create.grade.show',function(e,d){
 				if(!d){
 					Scope.panelTitle = '新建学期';
+					Root.nowTerm = {};
 				}else{
 					Scope.panelTitle = '修改学期';
 				}

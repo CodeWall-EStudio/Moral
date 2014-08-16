@@ -9,7 +9,6 @@ var CONSTANTS = require('../config/constants');
 module.exports = function term(method) {
     return function (req, res, next) {
         var termModel = db.getTermModel();
-        console.log(method);
         if (method === 'post') {
             if (req.body.term) {
                 try {
@@ -21,20 +20,30 @@ module.exports = function term(method) {
                             if (err) return console.error(err);
                             console.log('The number of updated documents was %d', numberAffected);
                             console.log('The raw response from Mongo was ', raw);
-                            var id = '';
+                            //var id = '';
                             if (raw.ok && !raw.updatedExisting) {
                                 id = raw.upserted;
                             }
                             res.json({ code: CONSTANTS.MSG_SUCC, id: id });
                         });
                     } else {
-                        res.json({ code: CONSTANTS.MSG_PARAM });
+                        termModel.update({ name: data.name }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
+                            if (err) return console.error(err);
+                            console.log('The number of updated documents was %d', numberAffected);
+                            console.log('The raw response from Mongo was ', raw);
+                            var id = '';
+                            if (raw.ok && !raw.updatedExisting) {
+                                id = raw.upserted;
+                            }
+                            res.json({ code: CONSTANTS.MSG_SUCC, id: id });
+                        });
                     }
                 } catch(err) {
                     console.error(err);
                     res.json({ code: CONSTANTS.MSG_ERR });
                 }
             } else {
+                console.log('no param');
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
         } else if( method ==='setact'){
@@ -43,13 +52,13 @@ module.exports = function term(method) {
                 var active = req.body.active;
 
                 if(active){
-                    console.log('is active');
-                    termModel.update({},{$set:{active:false}},function(err,raw){
+                    termModel.update({active:true},{active:false},{multi:true},function(err,raw){
 
                         if(err){
                             res.json({ code: CONSTANTS.MSG_PARAM });
                             return;
                         }
+                        console.log('set act numb:',raw,id);
 
                         termModel.update({_id:id},{$set:{active:true}},function(err,raw){
                             if (err) return console.error(err);
