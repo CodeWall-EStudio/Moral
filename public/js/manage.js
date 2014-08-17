@@ -255,8 +255,6 @@ angular.module('dy.services.student', [
 
 			function conventStudent(data){
 				for(var i in data){
-					data[i].cid = data[i].id;
-					data[i].id = data[i]._id;
 					data[i].nsex = data[i].sex?'男':'女';
 					Root.studentList[data[i]._id] = data[i];
 					sList[data[i]._id] = data[i];
@@ -267,10 +265,10 @@ angular.module('dy.services.student', [
 			//拉学生列表
 			function getStudentList(param,success,error){
 				if(window.localStorage.getItem('student')){
-					console.log('拉缓存学生列表成功!');
 					var list  = JSON.parse(window.localStorage.getItem('student'));
 					Root.studentList = list;
 					sMap = list;
+					console.log('拉缓存学生列表成功!',list);
 					if(success) success(list);
 					return;
 				}
@@ -300,6 +298,7 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							Root.myInfo = data.user;
 							Root.myInfo.score = data.score;
+							Root.myInfo.all = data.all;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
 							if(data.term){
@@ -430,12 +429,14 @@ angular.module('dy.services.student', [
                         }					
 					)
                     .success(function(data, status){
-                    	console.log(data);
                     	if(data.error === 'ok' || data.code === 0){
                     		var student = JSON.parse(param.student);
                     		student.id = data.id;
                     		student._id = data.id;
                     		Root.studentList[data.id] = student;
+                    		sMap[data.id] = student;
+                    		window.localStorage.setItem('student',JSON.stringify(sMap));
+                    		Root.nowStudent = {};
                     		//Root.quotaList.push(param.term);
                     	}
                         console.log('添加学生成功!', data);
@@ -843,18 +844,14 @@ angular.module('dy.controllers.managehandernav',[
 			
 
 			for(var i = 0;i<6;i++){
-				gradeList.push({
-					name : (i+1)+'年级',
-					id :　i+1
-				});
+				gradeList.push(i+1);
 			}
 
 			for(var i = 0;i<15;i++){
-				classList.push({
-					name : (i+1)+'班级',
-					id :　i+1
-				});
+				classList.push(i+1);
 			}	
+
+			console.log(gradeList);
 
 			Root.nowGrade = 1;
 			Root.nowClass = 1;
@@ -918,8 +915,8 @@ angular.module('dy.controllers.student',[
 			//sm = info 显示学生个人资料
 			//sm = recode 显示自评说明
 
-			Scope.SelectdGrade = {};
-			Scope.SelectdClass = {};
+			//Scope.SelectdGrade = {};
+			//Scope.SelectdClass = {};
 
 			Root.myInfo = {};
 			Root.studentTerm = false;
@@ -938,9 +935,19 @@ angular.module('dy.controllers.student',[
 			}
 		
 			Root.selectStudent = function(id){
-				Root.nowStudent = Root.studentList[id];
+				Root.nowStudent = {};
+				var st = Root.studentList[id];
+				$.extend(Root.nowStudent,st);
 				Root.nowStudent.scorelist = {};
 				Root.nowStudent.score = {};
+
+				// var sg = {};
+				// $.extend(sg,Root.gradeList[st.grade]);
+				// var sc = {};
+				// $.extend(sg,Root.gradeList[st.class]);
+
+				// Scope.SelectedGrade = sg;
+				// Scope.SelectedClass = st;
 				//console.log(Root.Term._id,Root.nowStudent._id);
 				var param = {
 					term : Root.Term._id,
@@ -951,15 +958,21 @@ angular.module('dy.controllers.student',[
 				Root.$emit('status.student.change',true);
 			}
 
+			Scope.resetStudent = function(){
+				Root.nowStudent = {};
+			}
+
 			Scope.createUser = function(){
 				//resetData();
+				Root.nowStudent = {};
 				$('#userZone .div-form').show();
 			}	
 
 			Scope.saveStudent = function(){
 				 //student: {"id":"230126200703240579","name":"白益昊","number":"0108021141901019","grade":1,"class":1,"pid":22709,"sex":1}
-				Root.nowStudent.grade = Scope.SelectdGrade.id;
-				Root.nowStudent.class = Scope.SelectdClass.id;
+				//Root.nowStudent.grade = Scope.SelectdGrade.id;
+				//Root.nowStudent.class = Scope.SelectdClass.id;
+
 				var param = {
 					number : Root.nowStudent.number,
 					name : Root.nowStudent.name,
@@ -967,7 +980,8 @@ angular.module('dy.controllers.student',[
 					grade : Root.nowStudent.grade,
 					class : Root.nowStudent.class,
 					pid : 1000,
-					sex : Root.nowStudent.sex
+					sex : Root.nowStudent.sex,
+					_id : Root.nowStudent._id
 				}
 				Student.createStudent({
 					student : JSON.stringify(param)

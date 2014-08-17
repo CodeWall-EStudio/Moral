@@ -19,8 +19,8 @@ angular.module('dy.controllers.student',[
 			//sm = info 显示学生个人资料
 			//sm = recode 显示自评说明
 
-			Scope.SelectdGrade = {};
-			Scope.SelectdClass = {};
+			//Scope.SelectdGrade = {};
+			//Scope.SelectdClass = {};
 
 			Root.myInfo = {};
 			Root.studentTerm = false;
@@ -39,9 +39,19 @@ angular.module('dy.controllers.student',[
 			}
 		
 			Root.selectStudent = function(id){
-				Root.nowStudent = Root.studentList[id];
+				Root.nowStudent = {};
+				var st = Root.studentList[id];
+				$.extend(Root.nowStudent,st);
 				Root.nowStudent.scorelist = {};
 				Root.nowStudent.score = {};
+
+				// var sg = {};
+				// $.extend(sg,Root.gradeList[st.grade]);
+				// var sc = {};
+				// $.extend(sg,Root.gradeList[st.class]);
+
+				// Scope.SelectedGrade = sg;
+				// Scope.SelectedClass = st;
 				//console.log(Root.Term._id,Root.nowStudent._id);
 				var param = {
 					term : Root.Term._id,
@@ -52,15 +62,21 @@ angular.module('dy.controllers.student',[
 				Root.$emit('status.student.change',true);
 			}
 
+			Scope.resetStudent = function(){
+				Root.nowStudent = {};
+			}
+
 			Scope.createUser = function(){
 				//resetData();
+				Root.nowStudent = {};
 				$('#userZone .div-form').show();
 			}	
 
 			Scope.saveStudent = function(){
 				 //student: {"id":"230126200703240579","name":"白益昊","number":"0108021141901019","grade":1,"class":1,"pid":22709,"sex":1}
-				Root.nowStudent.grade = Scope.SelectdGrade.id;
-				Root.nowStudent.class = Scope.SelectdClass.id;
+				//Root.nowStudent.grade = Scope.SelectdGrade.id;
+				//Root.nowStudent.class = Scope.SelectdClass.id;
+
 				var param = {
 					number : Root.nowStudent.number,
 					name : Root.nowStudent.name,
@@ -68,7 +84,8 @@ angular.module('dy.controllers.student',[
 					grade : Root.nowStudent.grade,
 					class : Root.nowStudent.class,
 					pid : 1000,
-					sex : Root.nowStudent.sex
+					sex : Root.nowStudent.sex,
+					_id : Root.nowStudent._id
 				}
 				Student.createStudent({
 					student : JSON.stringify(param)

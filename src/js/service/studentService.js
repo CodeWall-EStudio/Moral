@@ -11,8 +11,6 @@ angular.module('dy.services.student', [
 
 			function conventStudent(data){
 				for(var i in data){
-					data[i].cid = data[i].id;
-					data[i].id = data[i]._id;
 					data[i].nsex = data[i].sex?'男':'女';
 					Root.studentList[data[i]._id] = data[i];
 					sList[data[i]._id] = data[i];
@@ -23,10 +21,10 @@ angular.module('dy.services.student', [
 			//拉学生列表
 			function getStudentList(param,success,error){
 				if(window.localStorage.getItem('student')){
-					console.log('拉缓存学生列表成功!');
 					var list  = JSON.parse(window.localStorage.getItem('student'));
 					Root.studentList = list;
 					sMap = list;
+					console.log('拉缓存学生列表成功!',list);
 					if(success) success(list);
 					return;
 				}
@@ -56,6 +54,7 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							Root.myInfo = data.user;
 							Root.myInfo.score = data.score;
+							Root.myInfo.all = data.all;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
 							if(data.term){
@@ -186,12 +185,14 @@ angular.module('dy.services.student', [
                         }					
 					)
                     .success(function(data, status){
-                    	console.log(data);
                     	if(data.error === 'ok' || data.code === 0){
                     		var student = JSON.parse(param.student);
                     		student.id = data.id;
                     		student._id = data.id;
                     		Root.studentList[data.id] = student;
+                    		sMap[data.id] = student;
+                    		window.localStorage.setItem('student',JSON.stringify(sMap));
+                    		Root.nowStudent = {};
                     		//Root.quotaList.push(param.term);
                     	}
                         console.log('添加学生成功!', data);

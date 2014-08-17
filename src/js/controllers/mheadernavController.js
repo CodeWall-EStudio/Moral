@@ -12,18 +12,14 @@ angular.module('dy.controllers.managehandernav',[
 			
 
 			for(var i = 0;i<6;i++){
-				gradeList.push({
-					name : (i+1)+'年级',
-					id :　i+1
-				});
+				gradeList.push(i+1);
 			}
 
 			for(var i = 0;i<15;i++){
-				classList.push({
-					name : (i+1)+'班级',
-					id :　i+1
-				});
+				classList.push(i+1);
 			}	
+
+			console.log(gradeList);
 
 			Root.nowGrade = 1;
 			Root.nowClass = 1;
