@@ -59,6 +59,7 @@ angular.module('dy.controllers.managehandernav',[
 
 			//搜索
 			Scope.startSearch = function(e,d){
+				console.log(d,Scope.searchKeyWord);
 				Student.searchStudent(Scope.searchKeyWord);
 			}
 

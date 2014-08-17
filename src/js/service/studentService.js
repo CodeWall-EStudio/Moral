@@ -262,14 +262,12 @@ angular.module('dy.services.student', [
 			function searchStudent(key){
 				//console.log(Root.nowGrade,Root.nowClass);
 				if(key == ''){
-					Root.studentList = sMap;
+					return;
 				}
-				var list = sMap;
-				_.map(list,function(item,idx){
-					if(item.name.indexOf(key) < 0){
-						delete Root.studentList[item._id];
-					}
-				});
+				
+				Root.studentList = _.filter(sMap,function(item){
+					return item.name.indexOf(key)>=0
+				});				
 			}
 
 			return {
