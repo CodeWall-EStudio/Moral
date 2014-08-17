@@ -825,21 +825,15 @@ angular.module('dy.controllers.managehandernav',[
 			
 
 			for(var i = 0;i<6;i++){
-				gradeList.push({
-					name : (i+1)+'年级',
-					id :　i+1
-				});
+				gradeList.push(i+1);
 			}
 
 			for(var i = 0;i<15;i++){
-				classList.push({
-					name : (i+1)+'班级',
-					id :　i+1
-				});
+				classList.push(i+1);
 			}	
 
-			Root.nowGrade = 1;
-			Root.nowClass = 1;
+			Root.nowGrade = '所有';
+			Root.nowClass = '所有';
 			Root.nowMonth = 0;
 			Scope.searchKeyWord = '';
 

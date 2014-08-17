@@ -44,8 +44,9 @@
 					<div class="col-sm-3 grade-list">
 						<a class="dropdown-toggle" data-toggle="dropdown">{{nowGrade}}年级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
+							<li ng-click="changeGrade(0)">所有年级</li>
 		 					<li ng-repeat="item in gradeList">
-		 						<a data-value="{{item.id}}" ng-click="changeGrade(item.id)">{{item.name}}</a>
+		 						<a data-value="{{item}}" ng-click="changeGrade(item)">{{item}}年级</a>
 		 					</li>
 						</ul>
 					</div>
@@ -53,8 +54,9 @@
 					<div class="col-sm-3 grade-list">
 						<a class="dropdown-toggle" data-toggle="dropdown">{{nowClass}}班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
+							<li ng-click="changeClass(0)">所有班级</li>
 		 					<li ng-repeat="item in classList">
-		 						<a data-value="{{item.id}}" ng-click="changeClass(item.id)">{{item.name}}</a>
+		 						<a data-value="{{item}}" ng-click="changeClass(item)">{{item}}班</a>
 		 					</li>						
 						</ul>
 					</div>	
