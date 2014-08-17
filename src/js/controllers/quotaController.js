@@ -19,6 +19,7 @@ angular.module('dy.controllers.quota',[
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
+			Root.quotaList = {}; //指标列表
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
@@ -42,23 +43,30 @@ angular.module('dy.controllers.quota',[
 			}
 
 			//后台变更指标
-			Scope.changeQuota = function(idx){
+			Scope.changeQuota = function(id){
+				Root.nowQuota = Root.quotaList[id];
 			}	
 
 			//后台创建指标
 			Scope.createQuota = function(){
 			}	
 
+			Scope.resetQuota = function(){
+				Root.nowQuota = {};
+			}
+
 			//后台保存指标
 			Scope.saveQuota = function(){
 				var param = {
+					order : Root.nowQuota.order,
 					name : Root.nowQuota.name,
 					order : Root.nowQuota.order,
 					desc : Root.nowQuota.desc,
-					score : Root.nowQuota.score
+					score : 5//Root.nowQuota.score
 				}
 				if(Root.nowQuota._id){
-					Quota.createQuota({
+					Quota.modifyQuota({
+						id : Root.nowQuota._id,
 						term : Root.Term._id,
 						indicator : JSON.stringify(param)
 					});
@@ -72,32 +80,33 @@ angular.module('dy.controllers.quota',[
 
 			//后台删除指标
 			Scope.delQuota = function(){
-				console.log(nowQuota);
+				Quota.delQuota({
+					id : Root.nowQuota._id
+				});
 			}			
 
 			//给学生打分
 			Scope.saveStudentQuota = function(){
 				//老师打分
-				var sid,tid,year,month;
-				if(Root.Term){
-					sid = Root.nowStudent.id;
-					tid = Root.Term._id;
-					year = Root.Term.year;
-					month = Root.nowMonth;
-				}else{
-					sid = Root.myInfo.id
-					tid = Root.myInfo.term._id;
-					year = Root.myInfo.term.year;
-					month = Root.nowMonth;
-				}
+				var sid,tid,year,month
 				var param = {
-					student : sid,
-					term : tid,
-					year : year,
-					month : month,
-					scores : Scope.allScore,
-					teacherScores : getScoreList(Root.nowScore)
-				}				
+					month : Root.nowMonth || new Date().getMonth()+1,
+					scores : Scope.allScore
+				};
+				console.log(Root.myInfo);
+				if(!$.isEmptyObject(Root.nowStudent)){
+					param.student = Root.nowStudent.id;
+					param.term = Root.Term._id;
+					param.year = Root.Term.year;
+				}else{
+					param.student = Root.myInfo.id;
+					param.term = Root.myInfo.term._id;
+					param.year = Root.myInfo.term.year;
+				}
+				// var param = {
+				// 	teacherScores : getScoreList(Root.nowScore)
+				// }		
+				//console.log(Root.nowScore);		
 				if(Root.isTeacher){
 					param.teacherScores = getScoreList(Root.nowScore);
 				}else if(Root.getMode() === 'parent'){
@@ -107,6 +116,7 @@ angular.module('dy.controllers.quota',[
 				//学生打分
 					param.selfScores	 = getScoreList(Root.nowScore);
 				}
+				console.log(param);
 				Quota.saveStudentQuota({
 					score : JSON.stringify(param)
 				});
@@ -140,6 +150,13 @@ angular.module('dy.controllers.quota',[
 					num : num
 				});
 			}
+
+			Root.$on('status.grade.change',function(){
+				//重新拉学期单指标
+				Quota.getQuotaList({
+					term : Root.Term._id
+				});
+			})
 
 			Root.$on('status.student.change',function(){
 				Root.nowScore = {};

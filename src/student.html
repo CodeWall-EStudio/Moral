@@ -14,8 +14,8 @@
  	<div class="header-blue" ng-controller="indexnavController">
  		<ul class="nav nav-tabs top-nav">
  			<li ng-class="{active:getMode() === 'my' || !getMode()}"><a ng-click="switchMode('my')">我的数据</a></li>
- 			<li ng-class="{active:getMode() === 'record'}"><a ng-click="switchMode('record')">学生自评</a></li>
- 			<li ng-class="{active:getMode()  === 'parent'}"><a ng-click="switchMode('parent')">家长评价</a></li>
+ 			<li class="scores" ng-class="{active:getMode() === 'record',hide:!studentTerm}"><a ng-click="switchMode('record')">学生自评</a></li>
+ 			<li class="scores" ng-class="{active:getMode()  === 'parent',hide:!studentTerm}"><a ng-click="switchMode('parent')">家长评价</a></li>
  		</ul>
  		<div class="userinfo">
  			<span>{{myInfo.name}}</span>
@@ -52,7 +52,7 @@
  				</div>
  			</div>
  			<!--自评说明-->
- 			<div class="content-assessment-info" ng-class="{hide:getMode() === 'my'}">
+ 			<div class="content-assessment-info" ng-class="{hide:getMode() === 'my' || !studentTrem}">
  				<dl>
  					<dt>学生自评打分方法说明:</dt>
  					<dd>

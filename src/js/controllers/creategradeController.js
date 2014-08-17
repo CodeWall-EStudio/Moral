@@ -7,7 +7,7 @@ angular.module('dy.controllers.gradepanel',[
 		'$rootScope', '$scope','Util','mGradeService',function(Root,Scope,Util,Mgrade){
 
 			var selectMonth = [];
-			var defMonthLength = 5;
+			var defMonthLength = 5
 
 			function checkMonth(idx){
 				var list = $('#gradePanelModal .select-month li');
@@ -21,6 +21,9 @@ angular.module('dy.controllers.gradepanel',[
 					}else{
 						$(this).removeClass('active').addClass('disabled');
 
+					}
+					if(!Root.Term.months){
+						Root.Term.months = {};
 					}
 					Root.Term.months = selectMonth;
 				});
@@ -75,14 +78,15 @@ angular.module('dy.controllers.gradepanel',[
 
 			Scope.createTerm = function(){
 				var param = {
-					name : Root.Term.name,
+					name : Root.nowTerm.name,
 					active : false,
 					year : new Date().getFullYear(),
-					day : Root.Term.day,
-					months : Root.Term.months
+					day : Root.nowTerm.day,
+					months : Root.nowTerm.months
 				}
-				if(Root.Term._id){
-					
+				if(Root.nowTerm._id){
+					param._id = Root.nowTerm._id;
+					param.active = Root.nowTerm.active;
 				}
 				Mgrade.createTerm({
 					term : JSON.stringify(param)
@@ -92,22 +96,26 @@ angular.module('dy.controllers.gradepanel',[
 
 			Root.modifyTerm = function(id){
 				Root.Term = Root.termList[id];
+				Root.nowTerm = {};
+				$.extend(Root.nowTerm,Root.Term);
 				Root.$emit('create.grade.show',true);
 			}			
 
 			Root.setActiveTerm = function(id){
 				var param = Root.termList[id];
-				param.active = true;
-				Mgrade.createTerm({
-					term : JSON.stringify(param)
+				Mgrade.setActTerm({
+					id : param._id,
+					active : true
 				});
+				console.log(param);
 			}
 
 			Root.closeTerm = function(id){
 				var param = Root.termList[id];
 				param.active = false;
-				Mgrade.createTerm({
-					term : JSON.stringify(param)
+				Mgrade.setActTerm({
+					id : param._id,
+					active : false
 				});
 			}			
 
@@ -116,6 +124,7 @@ angular.module('dy.controllers.gradepanel',[
 			Root.$on('create.grade.show',function(e,d){
 				if(!d){
 					Scope.panelTitle = '新建学期';
+					Root.nowTerm = {};
 				}else{
 					Scope.panelTitle = '修改学期';
 				}

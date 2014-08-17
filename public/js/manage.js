@@ -117,7 +117,9 @@ angular.module('dy.services.mgrade', [
 						no = i;
 					}
 				}
-				Root.Term = data[no];
+				if(data[no]){
+					Root.Term = data[no];
+				}
 			}
 
 			function getTermList(param,success,error){
@@ -131,7 +133,7 @@ angular.module('dy.services.mgrade', [
 					.error(function(data,status){
 						if(error) error(data, status);
 					});
-			};
+			};			
 
 
 			function createTerm(param,success,error){
@@ -145,8 +147,13 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
-                    	if(data.error === 'ok' || data.error === 0){
-                    		Root.termList.push(param.term);
+                    	if(data.code === 0){
+                    		var tdata = JSON.parse(param.term);
+                    		tdata._id = data.id;
+                    		Root.termList[data.id] = tdata;
+                    		if(Root.Term._id === data.id){
+                    			Root.Term = tdata;
+                    		}
                     	}
                         console.log('[mGradeService] term config =', data);
                         if(success) success(data, status);
@@ -157,15 +164,78 @@ angular.module('dy.services.mgrade', [
                     });				
 			}
 
+
 			function modifyTerm(param,success,error){
-				
-			}			
+				console.log('modify term');
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/term/modify?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                    	if(data.code === 0){
+                    		param._id = data.id;
+                    		Root.termList[data.id] = param;
+                    	}
+                        console.log('[mGradeService] term config =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                    	//需要加上失败的逻辑
+                        if(error) error(data, status);
+                    });					
+			}		
+
+			function changeTermAct(id){
+				_.map(Root.termList,function(item){
+					if(item._id !== id){
+						item.active = false;
+					}
+				});
+			}
+
+			//激活学期
+			function setActTerm(param,success,error){
+				console.log('modify term');
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/term/setact?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+						var d = Root.termList[param.id];
+                    	if(data.code === 0){
+                    		d.active = param.active;
+                    		if(d.active){
+                    			changeTermAct(param.id);
+                    		}
+                    	}else{
+                    		d.active = param.active?false:true;
+                    	}
+                    	Root.termList[param.id] = d;
+                        console.log('[mGradeService] term set act config =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                    	//需要加上失败的逻辑
+                        if(error) error(data, status);
+                    });					
+			}	
 
 
 			return {
 				getTermList : getTermList,
 				createTerm : createTerm,
-				modifyTerm : modifyTerm
+				modifyTerm : modifyTerm,
+				setActTerm : setActTerm
 			}
 
 		}
@@ -232,13 +302,21 @@ angular.module('dy.services.student', [
 							Root.myInfo.score = data.score;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
+							if(data.term){
+								Root.studentTerm = true;
+							}
+							Root.Term = data.term;
+							console.log(Root.myInfo);
 							console.log('拉取学生资料成功',data);
 						}else{
-
+							Root.Term  = false;
+						}
+						if(success){
+							success(data);
 						}
 					})
 					.error(function(data,status){
-
+						console.log(data);
 					});
 			};
 
@@ -493,9 +571,9 @@ angular.module('dy.services.quota', [
 			};
 
 			function conventQuota(data){
-				if(!Root.quotaList){
+				//if(!Root.quotaList){
 					Root.quotaList = {};
-				}
+				//}
 				Root.defScore = {};
 				for(var i in data){
 					data[i].id = data[i]._id;
@@ -508,12 +586,15 @@ angular.module('dy.services.quota', [
 				}
 			}
 
-			function getQuotaList(param,success,error){
+			function getQuotaList(params,success,error){
 				var ts = new Date().getTime();
-				Http.get('/teacher/indicator?_='+ts,null,{responseType:'json'})
+				params = params || {};
+				Http.get('/teacher/indicator?_='+ts,{responseType:'json',params:params})
 					.success(function(data,status){
-						conventQuota(data.indicator);
-						console.log('拉指标列表成功!', data);
+						if(data.code === 0){
+							conventQuota(data.indicator);
+							console.log('拉指标列表成功!', data);
+						}
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -537,14 +618,14 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                    	if(data.error === 'ok' || data.error === 0){
+                    	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
                     		}
-                    		var quota = JSON.parse(param.indicator);
-                    		quota._id = data.id;
-                    		quota.id = data.id;
-                    		Root.quotaList[data.id] = quota;
+                    		var d = JSON.parse(param.indicator);
+                    		d._id = data.id;
+                    		Root.quotaList[data.id] = d;
+                    		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
                         console.log('[quotaService] quota crate suc =', data);
@@ -556,7 +637,33 @@ angular.module('dy.services.quota', [
 			};
 
 			function modifyQuota(param,success,error){
-
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/indicator/modify?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                    	if(data.code === 0){
+                    		if(!Root.quotaList){
+                    			Root.quotaList = {};
+                    		}
+                    		var d = JSON.parse(param.indicator);
+                    		console.log(d,data.id);
+                    		d._id = data.id;
+                    		Root.quotaList[data.id] = d;
+                    		Root.nowQuota = {};
+                    		//Root.quotaList.push(param.term);
+                    	}
+                        console.log('[quotaService] quota modify suc =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                        if(error) error(data, status);
+                    });
 			}
 
 			function saveStudentQuota(param,success,error){
@@ -570,17 +677,46 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                    	console.log(data);
-                    	if(data.error === 'ok' || data.error === 0){
-
+                    	if(data.code === 0){
+                    		param._id = data.id;
+                    		Root.quotaList[data.id] = param;
+                    		console.log(param);
+                    		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
+                    	console.log(Root.quotaList);
+
                         console.log('[quotaService] quota crate suc =', data);
                         if(success) success(data, status);
                     })
                     .error(function(data, status){
                         if(error) error(data, status);
                     });					
+			} 
+
+			function delQuota(params,success,error){
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(params);
+				Http.post('/teacher/indicator/delete?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }					
+					)
+                    .success(function(data, status){
+                    	if(data.code === 0){
+                    		delete Root.quotaList[params.id];
+                    		Root.nowQuota = {};
+                    		//Root.quotaList.push(param.term);
+                    	}
+
+                        console.log('[quotaService] quota delete suc =', data);
+                        if(success) success(data, status);
+                    })
+                    .error(function(data, status){
+                        if(error) error(data, status);
+                    });	
 			}
 
 
@@ -588,7 +724,8 @@ angular.module('dy.services.quota', [
 				getQuotaList : getQuotaList,
 				createQuota : createQuota,
 				modifyQuota : modifyQuota,
-				saveStudentQuota : saveStudentQuota
+				saveStudentQuota : saveStudentQuota,
+				delQuota : delQuota
 			}
 
 		}
@@ -596,13 +733,18 @@ angular.module('dy.services.quota', [
 angular.module('dy.controllers.mgradelist',[
         'dy.constants',
         'dy.services.utils',
-        'dy.services.mgrade'	
+        'dy.services.mgrade'
 	])
 	.controller('mgradelistController',[
 		'$rootScope', '$scope','Util','mGradeService',function(Root,Scope,Util,Mgrade){
-			Root.gradeList = {};
+			console.log('load mgradelistcontroller')
+			Root.termList = {};
+			Root.Term = {};
+			Root.nowTerm = {};
 
-			Root.showGrade = function(){
+			Root.showGrade = function(id){
+				Root.Term = Root.termList[id];
+				Root.$emit('status.grade.change',id);
 
 			}
 
@@ -679,13 +821,13 @@ angular.module('dy.controllers.managenav',[
                 }
 			}					
 
-			Scope.authManage = function(){
+			// Scope.authManage = function(){
 
-			}
+			// }
 
-			Scope.quitManage = function(){
+			// Scope.quitManage = function(){
 
-			}
+			// }
 		}
 	]);
 angular.module('dy.controllers.managehandernav',[
@@ -720,7 +862,7 @@ angular.module('dy.controllers.managehandernav',[
 			Root.nowMonth = 0;
 			Scope.searchKeyWord = '';
 
-			Root.termList = {};
+			//Root.termList = {};
 			Root.gradeList = gradeList;
 			Root.classList = classList;
 
@@ -753,7 +895,7 @@ angular.module('dy.controllers.managehandernav',[
 				Root.nowMonth = month;
 			};
 
-			Mgrade.getTermList();
+			//Mgrade.getTermList();
 		}
 	]);
 angular.module('dy.controllers.student',[
@@ -781,6 +923,7 @@ angular.module('dy.controllers.student',[
 			Scope.SelectdClass = {};
 
 			Root.myInfo = {};
+			Root.studentTerm = false;
 
 			var userList = {};
 			var gradeList = [];
@@ -843,10 +986,7 @@ angular.module('dy.controllers.student',[
 
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				//console.log(d.id,d.num);
-			});
-
-
-			
+			});		
 			
 			var url = Location.absUrl();
 			var fn = function(){};
@@ -856,15 +996,21 @@ angular.module('dy.controllers.student',[
 					// window.location.href="/student/login";
 					// return;
 				}				
-				Student.getStudentInfo();
-			//如果是老师,需要再把分数拉一下.
-			}else if(url.indexOf('teacher.html') > 0){
+				Student.getStudentInfo(null,function(d){
+					if(d.code !== 0){
+						console.log('拉数据失败');
+						Root.studentTerm = false;
+//top-nav .scores').remove();
+					}
+				});
+			//如果是老师或管理,需要再把分数拉一下.
+			}else{
 				fn = function(data){
 					Root.$emit('status.student.loaded',true);
-				};
+				}
+				Student.getStudentList(null,fn);
 			}
 
-			Student.getStudentList(null,fn);
 
 		}
 	]);
@@ -920,6 +1066,7 @@ angular.module('dy.controllers.quota',[
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
+			Root.quotaList = {}; //指标列表
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
@@ -943,23 +1090,30 @@ angular.module('dy.controllers.quota',[
 			}
 
 			//后台变更指标
-			Scope.changeQuota = function(idx){
+			Scope.changeQuota = function(id){
+				Root.nowQuota = Root.quotaList[id];
 			}	
 
 			//后台创建指标
 			Scope.createQuota = function(){
 			}	
 
+			Scope.resetQuota = function(){
+				Root.nowQuota = {};
+			}
+
 			//后台保存指标
 			Scope.saveQuota = function(){
 				var param = {
+					order : Root.nowQuota.order,
 					name : Root.nowQuota.name,
 					order : Root.nowQuota.order,
 					desc : Root.nowQuota.desc,
-					score : Root.nowQuota.score
+					score : 5//Root.nowQuota.score
 				}
 				if(Root.nowQuota._id){
-					Quota.createQuota({
+					Quota.modifyQuota({
+						id : Root.nowQuota._id,
 						term : Root.Term._id,
 						indicator : JSON.stringify(param)
 					});
@@ -973,32 +1127,33 @@ angular.module('dy.controllers.quota',[
 
 			//后台删除指标
 			Scope.delQuota = function(){
-				console.log(nowQuota);
+				Quota.delQuota({
+					id : Root.nowQuota._id
+				});
 			}			
 
 			//给学生打分
 			Scope.saveStudentQuota = function(){
 				//老师打分
-				var sid,tid,year,month;
-				if(Root.Term){
-					sid = Root.nowStudent.id;
-					tid = Root.Term._id;
-					year = Root.Term.year;
-					month = Root.nowMonth;
-				}else{
-					sid = Root.myInfo.id
-					tid = Root.myInfo.term._id;
-					year = Root.myInfo.term.year;
-					month = Root.nowMonth;
-				}
+				var sid,tid,year,month
 				var param = {
-					student : sid,
-					term : tid,
-					year : year,
-					month : month,
-					scores : Scope.allScore,
-					teacherScores : getScoreList(Root.nowScore)
-				}				
+					month : Root.nowMonth || new Date().getMonth()+1,
+					scores : Scope.allScore
+				};
+				console.log(Root.myInfo);
+				if(!$.isEmptyObject(Root.nowStudent)){
+					param.student = Root.nowStudent.id;
+					param.term = Root.Term._id;
+					param.year = Root.Term.year;
+				}else{
+					param.student = Root.myInfo.id;
+					param.term = Root.myInfo.term._id;
+					param.year = Root.myInfo.term.year;
+				}
+				// var param = {
+				// 	teacherScores : getScoreList(Root.nowScore)
+				// }		
+				//console.log(Root.nowScore);		
 				if(Root.isTeacher){
 					param.teacherScores = getScoreList(Root.nowScore);
 				}else if(Root.getMode() === 'parent'){
@@ -1008,6 +1163,7 @@ angular.module('dy.controllers.quota',[
 				//学生打分
 					param.selfScores	 = getScoreList(Root.nowScore);
 				}
+				console.log(param);
 				Quota.saveStudentQuota({
 					score : JSON.stringify(param)
 				});
@@ -1042,6 +1198,13 @@ angular.module('dy.controllers.quota',[
 				});
 			}
 
+			Root.$on('status.grade.change',function(){
+				//重新拉学期单指标
+				Quota.getQuotaList({
+					term : Root.Term._id
+				});
+			})
+
 			Root.$on('status.student.change',function(){
 				Root.nowScore = {};
 				Scope.resetStudentQuota();
@@ -1059,7 +1222,7 @@ angular.module('dy.controllers.gradepanel',[
 		'$rootScope', '$scope','Util','mGradeService',function(Root,Scope,Util,Mgrade){
 
 			var selectMonth = [];
-			var defMonthLength = 5;
+			var defMonthLength = 5
 
 			function checkMonth(idx){
 				var list = $('#gradePanelModal .select-month li');
@@ -1073,6 +1236,9 @@ angular.module('dy.controllers.gradepanel',[
 					}else{
 						$(this).removeClass('active').addClass('disabled');
 
+					}
+					if(!Root.Term.months){
+						Root.Term.months = {};
 					}
 					Root.Term.months = selectMonth;
 				});
@@ -1127,14 +1293,15 @@ angular.module('dy.controllers.gradepanel',[
 
 			Scope.createTerm = function(){
 				var param = {
-					name : Root.Term.name,
+					name : Root.nowTerm.name,
 					active : false,
 					year : new Date().getFullYear(),
-					day : Root.Term.day,
-					months : Root.Term.months
+					day : Root.nowTerm.day,
+					months : Root.nowTerm.months
 				}
-				if(Root.Term._id){
-					
+				if(Root.nowTerm._id){
+					param._id = Root.nowTerm._id;
+					param.active = Root.nowTerm.active;
 				}
 				Mgrade.createTerm({
 					term : JSON.stringify(param)
@@ -1144,22 +1311,26 @@ angular.module('dy.controllers.gradepanel',[
 
 			Root.modifyTerm = function(id){
 				Root.Term = Root.termList[id];
+				Root.nowTerm = {};
+				$.extend(Root.nowTerm,Root.Term);
 				Root.$emit('create.grade.show',true);
 			}			
 
 			Root.setActiveTerm = function(id){
 				var param = Root.termList[id];
-				param.active = true;
-				Mgrade.createTerm({
-					term : JSON.stringify(param)
+				Mgrade.setActTerm({
+					id : param._id,
+					active : true
 				});
+				console.log(param);
 			}
 
 			Root.closeTerm = function(id){
 				var param = Root.termList[id];
 				param.active = false;
-				Mgrade.createTerm({
-					term : JSON.stringify(param)
+				Mgrade.setActTerm({
+					id : param._id,
+					active : false
 				});
 			}			
 
@@ -1168,6 +1339,7 @@ angular.module('dy.controllers.gradepanel',[
 			Root.$on('create.grade.show',function(e,d){
 				if(!d){
 					Scope.panelTitle = '新建学期';
+					Root.nowTerm = {};
 				}else{
 					Scope.panelTitle = '修改学期';
 				}

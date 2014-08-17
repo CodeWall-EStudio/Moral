@@ -31,12 +31,12 @@ angular.module('dy.controllers.managenav',[
                 }
 			}					
 
-			Scope.authManage = function(){
+			// Scope.authManage = function(){
 
-			}
+			// }
 
-			Scope.quitManage = function(){
+			// Scope.quitManage = function(){
 
-			}
+			// }
 		}
 	]);

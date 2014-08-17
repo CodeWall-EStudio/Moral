@@ -13,6 +13,7 @@ module.exports = function score(method) {
             if (req.body.score) {
                 try {
                     var data = JSON.parse(req.body.score);
+                    console.log(data);
                     if (data.student && data.term && data.month) {
                         scoreModel.update({ student: data.student, term: data.term, month: data.month }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
                             if (err) {

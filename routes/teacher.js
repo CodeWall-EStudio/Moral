@@ -7,6 +7,7 @@ var CONSTANTS = require('../config/constants');
 
 // the middleware function
 module.exports = function teacher(method) {
+    console.log('-------',method,'---------');
     return function (req, res, next) {
         var teacherModel = db.getTeacherModel();
         if (method === 'post') {
@@ -35,6 +36,7 @@ module.exports = function teacher(method) {
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
         } else if (method === 'list') {
+            console.log('----- teacher -------');
             teacherModel.find(function (err, teachers) {
                 if (err) {
                     //return console.error(err);
@@ -42,6 +44,7 @@ module.exports = function teacher(method) {
                 res.json({ code: CONSTANTS.MSG_SUCC, teacher: teachers });
             });
         } else {
+            console.log('----- other ----');
             var user = req.session.user;
             if(user.id) {
                 var relationshipModel = db.getRelationshipModel();
