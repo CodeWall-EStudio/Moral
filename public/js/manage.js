@@ -1030,6 +1030,12 @@ angular.module('dy.controllers.student',[
 				// Scope.name = '';
 				// Scope.cmis = '';
 			}
+
+			Root.changeStudent = function(id){
+				Root.nowStudent = {};
+				var st = Root.studentList[id];
+				$.extend(Root.nowStudent,st);				
+			}
 		
 			Root.selectStudent = function(id){
 				Root.nowStudent = {};

@@ -139,7 +139,7 @@
 	 						<th ng-click="orderStudent('grade')">年级<span class="caret" ng-class="{uaret:order['grade']}"></span></th>
 	 						<th ng-click="orderStudent('class')">班级<span class="caret" ng-class="{uaret:order['id']}"></span></th>
 	 					</tr>
-	 					<tr ng-repeat="item in studentList" ng-click="selectStudent(item._id)">
+	 					<tr ng-repeat="item in studentList" ng-click="changeStudent(item._id)">
 	 						<td>{{item.name}}</td>
 	 						<td>{{item.id}}</td>
 	 						<td>
