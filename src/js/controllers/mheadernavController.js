@@ -21,6 +21,9 @@ angular.module('dy.controllers.managehandernav',[
 
 			Root.nowGrade = '所有';
 			Root.nowClass = '所有';
+			// Root.nowGrade = 1;
+			// Root.nowClass = 1;
+
 			Root.nowMonth = 0;
 			Scope.searchKeyWord = '';
 
@@ -34,15 +37,25 @@ angular.module('dy.controllers.managehandernav',[
 			
 			//变更年级
 			Scope.changeGrade = function(id){
-				Root.nowGrade = id;
-				Student.selectGrade(id);
+				Root.nowGrade = id || '所有';
+				Student.filterStudent(Root.nowGrade,Root.nowClass);
 			}
 
 			//变更班级
 			Scope.changeClass = function(id){
-				Root.nowClass = id;
-				Student.selectClass(id);
+				Root.nowClass = id || '所有';
+				Student.filterStudent(Root.nowGrade,Root.nowClass);
 			}
+
+			//变更年级
+			Scope.changeGradeTeacher = function(id){
+				Root.nowGrade = id || '所有';
+			}
+
+			//变更班级
+			Scope.changeClassTeacher = function(id){
+				Root.nowClass = id || '所有';
+			}			
 
 			//搜索
 			Scope.startSearch = function(e,d){

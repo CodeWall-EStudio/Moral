@@ -126,8 +126,12 @@ angular.module('dy.services.mgrade', [
 				var ts = new Date().getTime();
 				Http.get('/teacher/term?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
-						conventTerm(data.term);
-						console.log('拉学期列表成功!', data);
+						if(data.code === 0){
+							conventTerm(data.term);
+							console.log('拉学期列表成功!', data);
+						}else{
+							Root.$emit('msg.showcode',data.code);
+						}
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -147,6 +151,7 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
+                    	Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		var tdata = JSON.parse(param.term);
                     		tdata._id = data.id;
@@ -177,6 +182,7 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
+                    	Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		param._id = data.id;
                     		Root.termList[data.id] = param;
@@ -211,6 +217,7 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
+                    	Root.$emit('msg.codeshow',data.code);
 						var d = Root.termList[param.id];
                     	if(data.code === 0){
                     		d.active = param.active;
@@ -255,8 +262,6 @@ angular.module('dy.services.student', [
 
 			function conventStudent(data){
 				for(var i in data){
-					data[i].cid = data[i].id;
-					data[i].id = data[i]._id;
 					data[i].nsex = data[i].sex?'男':'女';
 					Root.studentList[data[i]._id] = data[i];
 					sList[data[i]._id] = data[i];
@@ -267,10 +272,10 @@ angular.module('dy.services.student', [
 			//拉学生列表
 			function getStudentList(param,success,error){
 				if(window.localStorage.getItem('student')){
-					console.log('拉缓存学生列表成功!');
 					var list  = JSON.parse(window.localStorage.getItem('student'));
 					Root.studentList = list;
 					sMap = list;
+					console.log('拉缓存学生列表成功!',list);
 					if(success) success(list);
 					return;
 				}
@@ -279,12 +284,15 @@ angular.module('dy.services.student', [
 				Http.get('/teacher/student?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
 						//conventStudent(data.student);
-						Root.studentList = data.studentList;
-						sList = data.student;
-						sMap = data.studentList;
-						window.localStorage.setItem('student',JSON.stringify(sMap));
-
-						console.log('拉学生列表成功!', data);
+						if(data.code === 0){
+							Root.studentList = data.studentList;
+							sList = data.student;
+							sMap = data.studentList;
+							window.localStorage.setItem('student',JSON.stringify(sMap));
+							console.log('拉学生列表成功!', data);
+						}else{
+							Root.$emit('msg.showcode',data.code);
+						}
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -300,6 +308,7 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							Root.myInfo = data.user;
 							Root.myInfo.score = data.score;
+							Root.myInfo.all = data.all;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
 							if(data.term){
@@ -310,6 +319,7 @@ angular.module('dy.services.student', [
 							console.log('拉取学生资料成功',data);
 						}else{
 							Root.Term  = false;
+							Root.$emit('msg.showcode',data.code);
 						}
 						if(success){
 							success(data);
@@ -389,6 +399,7 @@ angular.module('dy.services.student', [
 						}else{
 								Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
 								Root.nowStudent.score[Root.nowMonth] = 0;	
+								Root.$emit('msg.showcode',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -406,6 +417,8 @@ angular.module('dy.services.student', [
 					.success(function(data,status){
 						if(data.code === 0){
 							console.log('获取学生评分成功!',data);
+						}else{
+							Root.$emit('msg.showcode',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -430,12 +443,15 @@ angular.module('dy.services.student', [
                         }					
 					)
                     .success(function(data, status){
-                    	console.log(data);
+                    	Root.$emit('msg.showcode',data.code);
                     	if(data.error === 'ok' || data.code === 0){
                     		var student = JSON.parse(param.student);
                     		student.id = data.id;
                     		student._id = data.id;
                     		Root.studentList[data.id] = student;
+                    		sMap[data.id] = student;
+                    		window.localStorage.setItem('student',JSON.stringify(sMap));
+                    		Root.nowStudent = {};
                     		//Root.quotaList.push(param.term);
                     	}
                         console.log('添加学生成功!', data);
@@ -447,41 +463,48 @@ angular.module('dy.services.student', [
 			}
 
 			//选择一个指定学期的学生
-			function selectGrade(id){
-				var list = sMap;
-				if(Root.nowClass !== '所有'){
-					list = Root.studentList;
+			function filterStudent(gid,cid){
+				var list = {};
+
+				if(gid === '所有'){
+					gid = 0;
+				}
+				if(cid === '所有'){
+					cid = 0;
 				}
 
-				var i = 0;
-				_.map(list,function(item,idx){
-					if(item.grade !== id){
-						i++;
-						delete Root.studentList[idx];
-					}
-				});
-				//console.log(Root.studentList);
-			}
-
-			//选择一个指定班级的学生
-			function selectClass(id){
-				var list = sMap;
-				if(Root.nowGrade !== '所有'){
-					list = Root.studentList;
+				if(!gid && !cid){
+					$.extend(list,sMap);
+					Root.studentList = list;
+					return;
+				}else{
+					_.each(sMap,function(item){
+						if(gid && cid){
+							Root.studentList = _.filter(sMap,function(item){
+								return item.grade===gid && item.class===cid;
+							});
+						}else if(gid){
+							Root.studentList = _.filter(sMap,function(item){
+								return item.grade===gid;
+							});
+						}else{
+							Root.studentList = _.filter(sMap,function(item){
+								return item.class===cid;
+							});
+						}
+					});
 				}
-
-				_.map(list,function(item,idx){
-					if(item.class !== id){
-						delete Root.studentList[idx];
-					}
-				});
 			}
+
 
 			//按类型降序排列学生
-			function orderByStudent(type){
-				console.log(type);
+			function orderByStudent(type,order){
 				var sort = _.sortBy(Root.studentList,function(item){
-					return -item[type];
+					if(order){
+						return -item[type];
+					}else{
+						return +item[type];
+					}
 				});
 				Root.studentList = sort;
 			}
@@ -505,8 +528,7 @@ angular.module('dy.services.student', [
 				getStudentList : getStudentList, //拉学生列表
 				getStudentInfo : getStudentInfo, //拉当前登录学生信息
 				getStudent : getStudent,         //
-				selectGrade : selectGrade,		//
-				selectClass : selectClass,
+				filterStudent : filterStudent,		//
 				orderByStudent : orderByStudent,
 				searchStudent : searchStudent,
 				getScore : getScore,
@@ -552,7 +574,9 @@ angular.module('dy.services.quota', [
 						if(data.code === 0){
 							conventQuota(data.indicator);
 							console.log('拉指标列表成功!', data);
-						}
+						}else{
+                            Root.$emit('msg.showcode',data.code);
+                        }
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -576,6 +600,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
+                        Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
@@ -605,6 +630,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
+                        Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
@@ -635,6 +661,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
+                        Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		param._id = data.id;
                     		Root.quotaList[data.id] = param;
@@ -663,6 +690,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
+                        Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		delete Root.quotaList[params.id];
                     		Root.nowQuota = {};
@@ -677,13 +705,25 @@ angular.module('dy.services.quota', [
                     });	
 			}
 
+            function orderByQuota(type,order){
+                var sort = _.sortBy(Root.quotaList,function(item){
+                    if(order){
+                        return -item[type];
+                    }else{
+                        return +item[type];
+                    }
+                });
+                Root.quotaList = sort;
+            }
+
 
 			return {
 				getQuotaList : getQuotaList,
 				createQuota : createQuota,
 				modifyQuota : modifyQuota,
 				saveStudentQuota : saveStudentQuota,
-				delQuota : delQuota
+				delQuota : delQuota,
+                orderByQuota : orderByQuota
 			}
 
 		}
@@ -790,8 +830,8 @@ angular.module('dy.controllers.student',[
 			//sm = info 显示学生个人资料
 			//sm = recode 显示自评说明
 
-			Scope.SelectdGrade = {};
-			Scope.SelectdClass = {};
+			//Scope.SelectdGrade = {};
+			//Scope.SelectdClass = {};
 
 			Root.myInfo = {};
 			Root.studentTerm = false;
@@ -803,6 +843,14 @@ angular.module('dy.controllers.student',[
 			Root.studentList = {};
 			Root.nowStudent = {};
 
+			Scope.order = {
+				name : 1,
+				id : 0,
+				sex : 0,
+				grade : 0,
+				class : 0,
+				score : 0
+			};
 
 			function resetData(){
 				// Scope.name = '';
@@ -810,10 +858,11 @@ angular.module('dy.controllers.student',[
 			}
 		
 			Root.selectStudent = function(id){
-				Root.nowStudent = Root.studentList[id];
+				Root.nowStudent = {};
+				var st = Root.studentList[id];
+				$.extend(Root.nowStudent,st);
 				Root.nowStudent.scorelist = {};
 				Root.nowStudent.score = {};
-				//console.log(Root.Term._id,Root.nowStudent._id);
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent.id,
@@ -823,15 +872,21 @@ angular.module('dy.controllers.student',[
 				Root.$emit('status.student.change',true);
 			}
 
+			Scope.resetStudent = function(){
+				Root.nowStudent = {};
+			}
+
 			Scope.createUser = function(){
 				//resetData();
+				Root.nowStudent = {};
 				$('#userZone .div-form').show();
 			}	
 
 			Scope.saveStudent = function(){
 				 //student: {"id":"230126200703240579","name":"白益昊","number":"0108021141901019","grade":1,"class":1,"pid":22709,"sex":1}
-				Root.nowStudent.grade = Scope.SelectdGrade.id;
-				Root.nowStudent.class = Scope.SelectdClass.id;
+				//Root.nowStudent.grade = Scope.SelectdGrade.id;
+				//Root.nowStudent.class = Scope.SelectdClass.id;
+
 				var param = {
 					number : Root.nowStudent.number,
 					name : Root.nowStudent.name,
@@ -839,7 +894,8 @@ angular.module('dy.controllers.student',[
 					grade : Root.nowStudent.grade,
 					class : Root.nowStudent.class,
 					pid : 1000,
-					sex : Root.nowStudent.sex
+					sex : Root.nowStudent.sex,
+					_id : Root.nowStudent._id
 				}
 				Student.createStudent({
 					student : JSON.stringify(param)
@@ -852,7 +908,8 @@ angular.module('dy.controllers.student',[
 			}
 
 			Root.orderStudent = function(type){
-				Student.orderByStudent(type);
+				Scope.order[type] = Scope.order[type]?0:1;
+				Student.orderByStudent(type,Scope.order[type]);
 			}
 
 			Root.$on(CMD_SET_QUOTA,function(e,d){
@@ -936,10 +993,22 @@ angular.module('dy.controllers.quota',[
 
 			//后台创建指标
 			Scope.createQuota = function(){
-			}	
+			};	
 
 			Scope.resetQuota = function(){
 				Root.nowQuota = {};
+			};
+
+			Scope.order = {
+				name : 0,
+				order : 0,
+				desc : 0
+			};
+
+			//排序
+			Scope.orderQuota = function(type){
+				Scope.order[type] = Scope.order[type]?0:1;
+				Quota.orderByQuota(type,Scope.order[type]);
 			}
 
 			//后台保存指标
@@ -1056,6 +1125,7 @@ angular.module('dy.controllers.quota',[
 ;(function(){
     angular.module('student', [
         'dy.controllers.mgradelist', //年级列表
+        'dy.controllers.msg',
         'dy.controllers.student', //学生
         'dy.controllers.indexnav', //导航条
         'dy.controllers.quota'//指标

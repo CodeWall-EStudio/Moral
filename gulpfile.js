@@ -16,9 +16,35 @@ var rjs = require('gulp-requirejs');
 var src = './src';
 var dist = './public';
 
-var cssList = ["./src/css/bootstrap.min.css","./src/css/main.css"];
-var mcssList = ["./src/css/bootstrap.min.css","./src/css/manage.css"];
-var jqlib = ['./src/js/lib/jquery/jquery-2.0.3.min.js','./src/js/lib/angular/angular_1.2.6.js','./src/js/lib/underscore/underscore.min.js','./src/js/lib/bootstrap.min.js'];
+var cssList = [
+  "./src/css/bootstrap.min.css",
+  "./src/css/main.css",
+  "./src/css/messenger.css",
+  "./src/css/messenger-spinner.css",
+  "./src/css/messenger-theme-air.css",
+  "./src/css/messenger-theme-block.css",
+  "./src/css/messenger-theme-flat.css",
+  "./src/css/messenger-theme-future.css",
+  "./src/css/messenger-theme-ice.css"
+];
+var mcssList = [
+  "./src/css/bootstrap.min.css",
+  "./src/css/manage.css",
+  "./src/css/messenger.css",
+  "./src/css/messenger-spinner.css",
+  "./src/css/messenger-theme-air.css",
+  "./src/css/messenger-theme-block.css",
+  "./src/css/messenger-theme-flat.css",
+  "./src/css/messenger-theme-future.css",
+  "./src/css/messenger-theme-ice.css"
+];
+var jqlib = [
+  './src/js/lib/jquery/jquery-2.0.3.min.js',
+  './src/js/lib/angular/angular_1.2.6.js',
+  './src/js/lib/underscore/underscore.min.js',
+  './src/js/lib/bootstrap.min.js',
+  './src/js/lib/messenger.min.js'
+];
 var teacher = [
   './src/js/constants/constants.js',
   './src/js/service/UtilsService.js',

@@ -35,7 +35,9 @@ angular.module('dy.services.quota', [
 						if(data.code === 0){
 							conventQuota(data.indicator);
 							console.log('拉指标列表成功!', data);
-						}
+						}else{
+                            Root.$emit('msg.showcode',data.code);
+                        }
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -59,6 +61,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
+                        Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
@@ -88,6 +91,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
+                        Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
@@ -118,6 +122,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
+                        Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		param._id = data.id;
                     		Root.quotaList[data.id] = param;
@@ -146,6 +151,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
+                        Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		delete Root.quotaList[params.id];
                     		Root.nowQuota = {};
@@ -160,13 +166,25 @@ angular.module('dy.services.quota', [
                     });	
 			}
 
+            function orderByQuota(type,order){
+                var sort = _.sortBy(Root.quotaList,function(item){
+                    if(order){
+                        return -item[type];
+                    }else{
+                        return +item[type];
+                    }
+                });
+                Root.quotaList = sort;
+            }
+
 
 			return {
 				getQuotaList : getQuotaList,
 				createQuota : createQuota,
 				modifyQuota : modifyQuota,
 				saveStudentQuota : saveStudentQuota,
-				delQuota : delQuota
+				delQuota : delQuota,
+                orderByQuota : orderByQuota
 			}
 
 		}

@@ -19,8 +19,8 @@ angular.module('dy.controllers.student',[
 			//sm = info 显示学生个人资料
 			//sm = recode 显示自评说明
 
-			Scope.SelectdGrade = {};
-			Scope.SelectdClass = {};
+			//Scope.SelectdGrade = {};
+			//Scope.SelectdClass = {};
 
 			Root.myInfo = {};
 			Root.studentTerm = false;
@@ -32,6 +32,14 @@ angular.module('dy.controllers.student',[
 			Root.studentList = {};
 			Root.nowStudent = {};
 
+			Scope.order = {
+				name : 1,
+				id : 0,
+				sex : 0,
+				grade : 0,
+				class : 0,
+				score : 0
+			};
 
 			function resetData(){
 				// Scope.name = '';
@@ -39,10 +47,11 @@ angular.module('dy.controllers.student',[
 			}
 		
 			Root.selectStudent = function(id){
-				Root.nowStudent = Root.studentList[id];
+				Root.nowStudent = {};
+				var st = Root.studentList[id];
+				$.extend(Root.nowStudent,st);
 				Root.nowStudent.scorelist = {};
 				Root.nowStudent.score = {};
-				//console.log(Root.Term._id,Root.nowStudent._id);
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent.id,
@@ -52,15 +61,21 @@ angular.module('dy.controllers.student',[
 				Root.$emit('status.student.change',true);
 			}
 
+			Scope.resetStudent = function(){
+				Root.nowStudent = {};
+			}
+
 			Scope.createUser = function(){
 				//resetData();
+				Root.nowStudent = {};
 				$('#userZone .div-form').show();
 			}	
 
 			Scope.saveStudent = function(){
 				 //student: {"id":"230126200703240579","name":"白益昊","number":"0108021141901019","grade":1,"class":1,"pid":22709,"sex":1}
-				Root.nowStudent.grade = Scope.SelectdGrade.id;
-				Root.nowStudent.class = Scope.SelectdClass.id;
+				//Root.nowStudent.grade = Scope.SelectdGrade.id;
+				//Root.nowStudent.class = Scope.SelectdClass.id;
+
 				var param = {
 					number : Root.nowStudent.number,
 					name : Root.nowStudent.name,
@@ -68,7 +83,8 @@ angular.module('dy.controllers.student',[
 					grade : Root.nowStudent.grade,
 					class : Root.nowStudent.class,
 					pid : 1000,
-					sex : Root.nowStudent.sex
+					sex : Root.nowStudent.sex,
+					_id : Root.nowStudent._id
 				}
 				Student.createStudent({
 					student : JSON.stringify(param)
@@ -81,7 +97,8 @@ angular.module('dy.controllers.student',[
 			}
 
 			Root.orderStudent = function(type){
-				Student.orderByStudent(type);
+				Scope.order[type] = Scope.order[type]?0:1;
+				Student.orderByStudent(type,Scope.order[type]);
 			}
 
 			Root.$on(CMD_SET_QUOTA,function(e,d){

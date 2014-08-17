@@ -7,7 +7,14 @@
   <title>德育系统-学生/家长</title>
   <!-- build:maincss -->
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="css/main.css" />  
+  <link rel="stylesheet" type="text/css" href="css/main.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/messenger.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-spinner.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-air.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-block.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-flat.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-future.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-ice.css" />
   <!-- endbuild -->
  </head>
 <body ng-controller="studentController">
@@ -64,7 +71,7 @@
 			<div class="content-info" ng-controller="quotaController">
  				<dl class="content-summary" ng-class="{hide:getMode() !== 'my'}">
  					<dt>
- 						<div class="title">{{User.name}} 自评 {{nowDate | date:'M月' }}  总分：{{User.allrecord}}</div>
+ 						<div class="title">{{myInfo.user.name}} 自评 {{nowDate | date:'M月' }}  总分：{{myInfo.all}}</div>
  					</dt>
  				</dl> 
 
@@ -77,15 +84,15 @@
  						<ul class="score-list">
  							<li>
  								教师
- 								<div>5</div>
+ 								<div>{{myInfo.score[item.id].teacher}}</div>
  							</li>
  							<li>
  								自评
- 								<div>4</div>
+ 								<div>{{myInfo.score[item.id].self}}</div>
  							</li>
  							<li>
  								家长
- 								<div>3</div>
+ 								<div>{{myInfo.score[item.id].parent}}</div>
  							</li>
  						</ul>
  					</dd>
@@ -122,12 +129,14 @@
 			</div>
 		</div>
 	</div>
+	<div ng-controller="msgController"></div>
 
  	<!-- build:lib -->
  	<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
  	<script src="js/lib/angular/angular_1.2.6.js"></script>
  	<script src="js/lib/underscore/underscore.min.js"></script>
 	<script src="js/lib/bootstrap.min.js"></script>
+	<script src="js/lib/messenger.min.js"></script>
 	<!-- endbuild -->
 
 	<!-- build:student -->
@@ -136,6 +145,7 @@
 	<script src="js/service/mgradeService.js"></script>
 	<script src="js/service/studentService.js"></script>
 	<script src="js/service/quotaService.js"></script>
+	<script src="js/controllers/msgController.js"></script>
 	<script src="js/controllers/gradelistController.js"></script>
 	<script src="js/controllers/indexnavController.js"></script>
 	<script src="js/controllers/studentController.js"></script>

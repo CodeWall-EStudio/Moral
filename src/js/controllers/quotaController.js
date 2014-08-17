@@ -49,10 +49,22 @@ angular.module('dy.controllers.quota',[
 
 			//后台创建指标
 			Scope.createQuota = function(){
-			}	
+			};	
 
 			Scope.resetQuota = function(){
 				Root.nowQuota = {};
+			};
+
+			Scope.order = {
+				name : 0,
+				order : 0,
+				desc : 0
+			};
+
+			//排序
+			Scope.orderQuota = function(type){
+				Scope.order[type] = Scope.order[type]?0:1;
+				Quota.orderByQuota(type,Scope.order[type]);
 			}
 
 			//后台保存指标

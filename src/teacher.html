@@ -8,6 +8,13 @@
   <!-- build:maincss -->
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="css/main.css" />  
+  <link rel="stylesheet" type="text/css" href="css/messenger.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-spinner.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-air.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-block.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-flat.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-future.css" />
+  <link rel="stylesheet" type="text/css" href="css/messenger-theme-ice.css" />  
   <!-- endbuild -->
  </head>
 <body ng-controller="teacherController">
@@ -164,13 +171,14 @@
  			</div> 			
 	 	</div>	
  	</div>
-
+	<div ng-controller="msgController"></div>
 
  	<!-- build:lib -->
  	<script src="js/lib/jquery/jquery-2.0.3.min.js"></script>
  	<script src="js/lib/angular/angular_1.2.6.js"></script>
  	<script src="js/lib/underscore/underscore.min.js"></script>
 	<script src="js/lib/bootstrap.min.js"></script>
+	<script src="js/lib/messenger.min.js"></script>
 	<!-- endbuild -->
 
 	<!-- build:teacher -->
@@ -180,6 +188,7 @@
 	<script src="js/service/studentService.js"></script>
 	<script src="js/service/teacherService.js"></script>
 	<script src="js/service/quotaService.js"></script>
+	<script src="js/controllers/msgController.js"></script>
 	<script src="js/controllers/gradelistController.js"></script>
 	<script src="js/controllers/indexnavController.js"></script>
 	<script src="js/controllers/mheadernavController.js"></script>

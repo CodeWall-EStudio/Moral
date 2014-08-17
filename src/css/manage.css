@@ -251,3 +251,28 @@ li{
 .hide{
 	display:none;
 }
+.uaret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 0 dotted;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #000000;
+  border-left: 4px solid transparent;
+  content: "";
+}
+th{
+	cursor:pointer;
+}
+
+.hide-input-student{
+	width:115px;
+}
+.hide-input-teacher{
+	width:124px;
+}
+.hide-input-quota{
+	width:96px;
+}

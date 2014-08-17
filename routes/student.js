@@ -14,7 +14,20 @@ module.exports = function student(method) {
             if (req.body.student) {
                 try {
                     var data = JSON.parse(req.body.student);
-                    if (data.id) {
+                    var _id = data._id;
+                    if (_id) {
+                        delete data._id;
+                        studentModel.update({ _id: _id }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
+                            if (err) {
+                                console.error(err);
+                                res.json({ code: CONSTANTS.MSG_ERR });
+                            } else {
+                                console.log('The number of updated documents was %d', numberAffected);
+                                console.log('The raw response from Mongo was ', raw);
+                                res.json({ code: CONSTANTS.MSG_SUCC, id: _id });
+                            }
+                        });
+                    } else if(data.name){
                         studentModel.update({ id: data.id }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
                             if (err) {
                                 console.error(err);

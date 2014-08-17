@@ -11,8 +11,6 @@ angular.module('dy.services.student', [
 
 			function conventStudent(data){
 				for(var i in data){
-					data[i].cid = data[i].id;
-					data[i].id = data[i]._id;
 					data[i].nsex = data[i].sex?'男':'女';
 					Root.studentList[data[i]._id] = data[i];
 					sList[data[i]._id] = data[i];
@@ -23,10 +21,10 @@ angular.module('dy.services.student', [
 			//拉学生列表
 			function getStudentList(param,success,error){
 				if(window.localStorage.getItem('student')){
-					console.log('拉缓存学生列表成功!');
 					var list  = JSON.parse(window.localStorage.getItem('student'));
 					Root.studentList = list;
 					sMap = list;
+					console.log('拉缓存学生列表成功!',list);
 					if(success) success(list);
 					return;
 				}
@@ -35,12 +33,15 @@ angular.module('dy.services.student', [
 				Http.get('/teacher/student?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
 						//conventStudent(data.student);
-						Root.studentList = data.studentList;
-						sList = data.student;
-						sMap = data.studentList;
-						window.localStorage.setItem('student',JSON.stringify(sMap));
-
-						console.log('拉学生列表成功!', data);
+						if(data.code === 0){
+							Root.studentList = data.studentList;
+							sList = data.student;
+							sMap = data.studentList;
+							window.localStorage.setItem('student',JSON.stringify(sMap));
+							console.log('拉学生列表成功!', data);
+						}else{
+							Root.$emit('msg.showcode',data.code);
+						}
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -56,6 +57,7 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							Root.myInfo = data.user;
 							Root.myInfo.score = data.score;
+							Root.myInfo.all = data.all;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
 							if(data.term){
@@ -66,6 +68,7 @@ angular.module('dy.services.student', [
 							console.log('拉取学生资料成功',data);
 						}else{
 							Root.Term  = false;
+							Root.$emit('msg.showcode',data.code);
 						}
 						if(success){
 							success(data);
@@ -145,6 +148,7 @@ angular.module('dy.services.student', [
 						}else{
 								Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
 								Root.nowStudent.score[Root.nowMonth] = 0;	
+								Root.$emit('msg.showcode',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -162,6 +166,8 @@ angular.module('dy.services.student', [
 					.success(function(data,status){
 						if(data.code === 0){
 							console.log('获取学生评分成功!',data);
+						}else{
+							Root.$emit('msg.showcode',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -186,12 +192,15 @@ angular.module('dy.services.student', [
                         }					
 					)
                     .success(function(data, status){
-                    	console.log(data);
+                    	Root.$emit('msg.showcode',data.code);
                     	if(data.error === 'ok' || data.code === 0){
                     		var student = JSON.parse(param.student);
                     		student.id = data.id;
                     		student._id = data.id;
                     		Root.studentList[data.id] = student;
+                    		sMap[data.id] = student;
+                    		window.localStorage.setItem('student',JSON.stringify(sMap));
+                    		Root.nowStudent = {};
                     		//Root.quotaList.push(param.term);
                     	}
                         console.log('添加学生成功!', data);
@@ -203,41 +212,48 @@ angular.module('dy.services.student', [
 			}
 
 			//选择一个指定学期的学生
-			function selectGrade(id){
-				var list = sMap;
-				if(Root.nowClass !== '所有'){
-					list = Root.studentList;
+			function filterStudent(gid,cid){
+				var list = {};
+
+				if(gid === '所有'){
+					gid = 0;
+				}
+				if(cid === '所有'){
+					cid = 0;
 				}
 
-				var i = 0;
-				_.map(list,function(item,idx){
-					if(item.grade !== id){
-						i++;
-						delete Root.studentList[idx];
-					}
-				});
-				//console.log(Root.studentList);
-			}
-
-			//选择一个指定班级的学生
-			function selectClass(id){
-				var list = sMap;
-				if(Root.nowGrade !== '所有'){
-					list = Root.studentList;
+				if(!gid && !cid){
+					$.extend(list,sMap);
+					Root.studentList = list;
+					return;
+				}else{
+					_.each(sMap,function(item){
+						if(gid && cid){
+							Root.studentList = _.filter(sMap,function(item){
+								return item.grade===gid && item.class===cid;
+							});
+						}else if(gid){
+							Root.studentList = _.filter(sMap,function(item){
+								return item.grade===gid;
+							});
+						}else{
+							Root.studentList = _.filter(sMap,function(item){
+								return item.class===cid;
+							});
+						}
+					});
 				}
-
-				_.map(list,function(item,idx){
-					if(item.class !== id){
-						delete Root.studentList[idx];
-					}
-				});
 			}
+
 
 			//按类型降序排列学生
-			function orderByStudent(type){
-				console.log(type);
+			function orderByStudent(type,order){
 				var sort = _.sortBy(Root.studentList,function(item){
-					return -item[type];
+					if(order){
+						return -item[type];
+					}else{
+						return +item[type];
+					}
 				});
 				Root.studentList = sort;
 			}
@@ -261,8 +277,7 @@ angular.module('dy.services.student', [
 				getStudentList : getStudentList, //拉学生列表
 				getStudentInfo : getStudentInfo, //拉当前登录学生信息
 				getStudent : getStudent,         //
-				selectGrade : selectGrade,		//
-				selectClass : selectClass,
+				filterStudent : filterStudent,		//
 				orderByStudent : orderByStudent,
 				searchStudent : searchStudent,
 				getScore : getScore,
