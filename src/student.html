@@ -37,7 +37,7 @@
 
 		<div class="content-main">
  			<!--学生个人信息-->
- 			<div class="content-userinfo" ng-class="{hide:getMode() !== 'my'}">
+ 			<div class="content-userinfo" ng-class="{hide:getMode() !== 'my' && getMode()}">
  				<div class="my-badge">
  					<img src="css/imgs/badge.png" />
  					<h1>我的徽章</h1>
@@ -69,13 +69,13 @@
  			</div>			
 
 			<div class="content-info" ng-controller="quotaController">
- 				<dl class="content-summary" ng-class="{hide:getMode() !== 'my'}">
+ 				<dl class="content-summary" ng-class="{hide:getMode() !== 'my' && getMode()}">
  					<dt>
  						<div class="title">{{myInfo.user.name}} 自评 {{nowDate | date:'M月' }}  总分：{{myInfo.all}}</div>
  					</dt>
  				</dl> 
 
- 				<dl class="content-score"  ng-class="{hide:getMode() !== 'my'}"  ng-repeat="item in quotaList">
+ 				<dl class="content-score"  ng-class="{hide:getMode() !== 'my' && getMode()}"  ng-repeat="item in quotaList">
  					<dt>{{item.name}}</dt>
  					<dd class="score-info">
  						{{item.desc}}
@@ -98,7 +98,7 @@
  					</dd>
  				</dl>
  					
- 				<dl class="content-summary"  ng-class="{hide:getMode() === 'my'}">
+ 				<dl class="content-summary"  ng-class="{hide:getMode() === 'my' || !getMode()}">
  					<dt>
  						<div class="title">{{myInfo.name}} 自评 {{nowDate | date:'M月' }} </div>
  						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
@@ -106,7 +106,7 @@
  						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
  					</dt>
  				</dl> 				
- 				<dl class="content-score"  ng-class="{hide:getMode() === 'my'}" ng-repeat="item in quotaList" ng-model="quotaList">
+ 				<dl class="content-score"  ng-class="{hide:getMode() === 'my' || !getMode()}" ng-repeat="item in quotaList" ng-model="quotaList">
  					<dt>{{item.name}}</dt>
  					<dd class="score-info">
  						{{item.desc}}
