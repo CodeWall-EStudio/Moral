@@ -48,25 +48,23 @@ module.exports = function upload(method) {
                                 });
 
                             } else if (req.body.type === 'teacher') {
-                                var teacherModel = db.getStudentModel();
-                                studentModel.remove({}, function(err) {
+                                var relationshipModel = db.getRelationshipModel();
+                                relationshipModel.remove({}, function(err) {
                                     if (err) {
                                         console.error(err);
                                     }
-                                    var students = new Array();
+                                    var relationships = new Array();
                                     for (var i = 0; i<data.length; i++) {
                                         if (i > 1) {
-                                            students.push({
-                                                id: data[i][5],
-                                                name: data[i][3],
-                                                number: data[i][6],
-                                                grade: data[i][0],
-                                                class: data[i][1],
-                                                pid: data[i][2],
-                                                sex: data[i][4] == '男' ? 1 : 0});
+                                            relationships.push({
+                                                id: data[i][0],
+                                                name: data[i][1],
+                                                grade: data[i][2],
+                                                class: data[i][3]
+                                            });
                                         }
                                     }
-                                    studentModel.create(students, function(err) {
+                                    relationshipModel.create(relationships, function(err) {
                                         if (err) {
                                             console.error(err);
                                         }
@@ -75,25 +73,23 @@ module.exports = function upload(method) {
                                 });
 
                             } else if (req.body.type === 'term') {
-                                var termModel = db.getStudentModel();
-                                studentModel.remove({}, function(err) {
+                                var termModel = db.getTermModel();
+                                termModel.remove({}, function(err) {
                                     if (err) {
                                         console.error(err);
                                     }
-                                    var students = new Array();
+                                    var terms = new Array();
                                     for (var i = 0; i<data.length; i++) {
                                         if (i > 1) {
-                                            students.push({
-                                                id: data[i][5],
-                                                name: data[i][3],
-                                                number: data[i][6],
-                                                grade: data[i][0],
-                                                class: data[i][1],
-                                                pid: data[i][2],
-                                                sex: data[i][4] == '男' ? 1 : 0});
+                                            relationships.push({
+                                                id: data[i][0],
+                                                name: data[i][1],
+                                                grade: data[i][2],
+                                                class: data[i][3]
+                                            });
                                         }
                                     }
-                                    studentModel.create(students, function(err) {
+                                    relationshipModel.create(relationships, function(err) {
                                         if (err) {
                                             console.error(err);
                                         }

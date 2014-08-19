@@ -57,15 +57,9 @@ var scoreSchema = new Schema({
     term: Schema.Types.ObjectId,
     year: Number,
     month: Number,
-    scores: Number,
-    selfScores: [
-        {indicator: String, score: Number}
-    ],
-    parentScores: [
-        {indicator: String, score: Number}
-    ],
-    teacherScores: [
-        {indicator: String, score: Number}
+    total: Number,
+    scores: [
+        {indicator: String, self: Number, parent:Number, teacher: Number}
     ]
 });
 

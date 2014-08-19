@@ -10,6 +10,7 @@ var url = require('url');
 var https = require('https');
 var http = require('http');
 
+// SSO解码
 var decode = function (skey, service, callback) {
 
     var service_info = url.parse(service);
@@ -94,7 +95,7 @@ module.exports = function auth(method, role) {
                 res.redirect(cas.login());
             } else if (method === 'out') {
                 req.session.destroy();
-		res.cookie('role', null, 60000);
+		        res.cookie('role', null, 60000);
                 res.redirect(cas.logout());
             } else if (method === 'validate') {
                 var ticket = req.param('ticket');
@@ -132,7 +133,7 @@ module.exports = function auth(method, role) {
                                                 sess.user.authority = teacher.authority;
                                             }
                                         }
-					res.cookie('role', role, 60000);
+					                    res.cookie('role', role, 60000);
                                         var reUrl = hostUrl + '/' + role;
                                         if (req.param('action')) {
                                             reUrl += '/' + req.param('action');
@@ -165,8 +166,7 @@ module.exports = function auth(method, role) {
                 res.render('login', {});
             } else if (method === 'out') {
                 req.session.destroy();
-		res.cookie['skey'] = null;
-		res.cookie['role'] = null;
+                res.cookie['role'] = null;
                 res.redirect(hostUrl + '/' + role + '.html');
             } else if (method === 'check') {
 
