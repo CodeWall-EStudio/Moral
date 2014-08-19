@@ -98,7 +98,7 @@
 
  			<div class="content-info" ng-controller="quotaController">
  				<!--年级概要-->
- 				<dl class="content-summary" ng-class="{hide:getMode() === 'record' || nowStudent.id}">
+ 				<dl class="content-summary" ng-class="{hide:getMode() === 'record' || nowStudent.id }">
  					<dt>1年级 4班 概要9月</dt>
  					<dd>
  						<ul>
@@ -112,7 +112,7 @@
  					</dd>
  				</dl>
 
- 				<div ng-class="{hide:!nowStudent.id}"> 
+ 				<div ng-class="{hide:!nowStudent.id || getMode() === 'record'}"> 
 	 				<dl class="content-summary">
 	 					<dt>
 	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: 98 全校排名 :1 </div>
