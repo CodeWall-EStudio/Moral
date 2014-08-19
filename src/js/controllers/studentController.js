@@ -107,6 +107,10 @@ angular.module('dy.controllers.student',[
 				Student.orderByStudent(type,Scope.order[type]);
 			}
 
+			Root.returnStudentList = function(){
+				Root.nowStudent = {};
+			}
+
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				//console.log(d.id,d.num);
 			});		

@@ -5,7 +5,7 @@ angular.module('dy.controllers.managehandernav',[
         'dy.services.student'
 	])
 	.controller('mHeaderNavController',[
-		'$rootScope', '$scope','Util','mGradeService','studentService',function(Root,Scope,Util,Mgrade,Student){
+		'$rootScope', '$scope','$location','Util','mGradeService','studentService',function(Root,Scope,Location,Util,Mgrade,Student){
 			console.log('load mheadercontroller');
 			var gradeList = [];
 			var classList = [];
@@ -71,6 +71,11 @@ angular.module('dy.controllers.managehandernav',[
 				Root.nowMonth = month;
 			};
 
-			//Mgrade.getTermList();
+			var url = Location.absUrl();
+			var fn = function(){};
+			if(url.indexOf('teacher.html') > 0){
+				Mgrade.getTermList();
+			}
+			//
 		}
 	]);
