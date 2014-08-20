@@ -308,7 +308,7 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							Root.myInfo = data.user;
 							Root.myInfo.score = data.score;
-							Root.myInfo.all = data.all;
+							Root.myInfo.total = data.total || 0;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
 							if(data.term){
@@ -953,6 +953,10 @@ angular.module('dy.controllers.student',[
 			Root.orderStudent = function(type){
 				Scope.order[type] = Scope.order[type]?0:1;
 				Student.orderByStudent(type,Scope.order[type]);
+			}
+
+			Root.returnStudentList = function(){
+				Root.nowStudent = {};
 			}
 
 			Root.$on(CMD_SET_QUOTA,function(e,d){

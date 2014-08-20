@@ -57,7 +57,7 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							Root.myInfo = data.user;
 							Root.myInfo.score = data.score;
-							Root.myInfo.all = data.all;
+							Root.myInfo.total = data.total || 0;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
 							if(data.term){

@@ -308,7 +308,7 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							Root.myInfo = data.user;
 							Root.myInfo.score = data.score;
-							Root.myInfo.all = data.all;
+							Root.myInfo.total = data.total || 0;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
 							if(data.term){
@@ -895,7 +895,7 @@ angular.module('dy.controllers.managehandernav',[
         'dy.services.student'
 	])
 	.controller('mHeaderNavController',[
-		'$rootScope', '$scope','Util','mGradeService','studentService',function(Root,Scope,Util,Mgrade,Student){
+		'$rootScope', '$scope','$location','Util','mGradeService','studentService',function(Root,Scope,Location,Util,Mgrade,Student){
 			console.log('load mheadercontroller');
 			var gradeList = [];
 			var classList = [];
@@ -961,7 +961,12 @@ angular.module('dy.controllers.managehandernav',[
 				Root.nowMonth = month;
 			};
 
-			//Mgrade.getTermList();
+			var url = Location.absUrl();
+			var fn = function(){};
+			if(url.indexOf('teacher.html') > 0){
+				Mgrade.getTermList();
+			}
+			//
 		}
 	]);
 angular.module('dy.controllers.student',[
@@ -1071,6 +1076,10 @@ angular.module('dy.controllers.student',[
 			Root.orderStudent = function(type){
 				Scope.order[type] = Scope.order[type]?0:1;
 				Student.orderByStudent(type,Scope.order[type]);
+			}
+
+			Root.returnStudentList = function(){
+				Root.nowStudent = {};
 			}
 
 			Root.$on(CMD_SET_QUOTA,function(e,d){
