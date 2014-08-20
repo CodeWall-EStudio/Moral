@@ -52,6 +52,7 @@ router.get('/essential', essential('teacher'));
 
 /* score */
 router.get('/score/:term?/:student?/:month?', score('get'));
+router.get('/scores/:term?/:month?/:grade?/:class?', score('list'));
 router.post('/score', score('post'));
 
 /* manage */

@@ -53,13 +53,12 @@ var indicatorSchema = new Schema({
 });
 // 评分
 var scoreSchema = new Schema({
-    student: String,
+    student: Schema.Types.ObjectId,
     term: Schema.Types.ObjectId,
-    year: Number,
     month: Number,
     total: Number,
     scores: [
-        {indicator: String, self: Number, parent:Number, teacher: Number}
+        {indicator: Schema.Types.ObjectId, self: Number, parent:Number, teacher: Number}
     ]
 });
 
