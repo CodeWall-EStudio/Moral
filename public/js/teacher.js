@@ -306,16 +306,17 @@ angular.module('dy.services.student', [
 				Http.get('/student/essential', {responseType:'json'})
 					.success(function(data,status){
 						if(data.code === 0){
-							Root.myInfo = data.user;
-							Root.myInfo.score = data.score;
+							Root.myInfo = data.user || {};
+							Root.myInfo.score = data.score || [];
 							Root.myInfo.total = data.total || 0;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
+							Root.myInfo.allscore = 15* data.indicator.length;
+							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
 							if(data.term){
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;
-							console.log(Root.myInfo);
 							console.log('拉取学生资料成功',data);
 						}else{
 							Root.Term  = false;
@@ -347,30 +348,22 @@ angular.module('dy.services.student', [
 				if(!data){
 					return;
 				}
-				var tmp = _.max([data.selfScores,data.parentScores,data.teacherScores],function(list){
-					return list.length;
-				})
+				var tmp = {};
 				var list = {};
+				var total = 0;
 				//先确保每个指标都保存了.
-				_.map(tmp,function(item,idx){
+				_.map(data.scores,function(item,idx){
 					list[item.indicator] = {
-						self : 0,
-						parent : 0,
-						teacher : 0
+						self : item.self || 0,
+						parent : item.parent || 0,
+						teacher : item.teacher || 0
 					};
+					total += list[item.indicator].self + list[item.indicator].teacher + list[item.indicator].parent;
 				});
-
-				_.each(data.selfScores,function(item,idx){
-					list[item.indicator].self = item.score;
-				});
-
-				_.each(data.parentScores,function(item,idx){
-					list[item.indicator].parent = item.score;
-				});
-				_.each(data.teacherScores,function(item,idx){
-					list[item.indicator].teacher = item.score;
-				});
-				return list;
+				return {
+					list : list,
+					total : total
+				}
 			}
 
 
@@ -390,14 +383,14 @@ angular.module('dy.services.student', [
 								return;
 							}
 							var score = convertOneScore(data.score[0]);
-
-							if(Root.nowStudent.id === data.score[0].student){
-								Root.nowStudent.scorelist[Root.nowMonth] = score;
-								Root.nowStudent.score[Root.nowMonth] = data.score[0].scores;
+							if(Root.nowStudent._id === data.score[0].student){
+								//Root.nowStudent.scorelist[Root.nowMonth] = score;
+								Root.nowStudent.score[Root.nowMonth] = score.list;
+								Root.nowStudent.total[Root.nowMonth] = score.total;
 							}
-							console.log('获取学生评分成功!',data);
+							console.log('获取学生评分成功!',data,Root.nowStudent);
 						}else{
-								Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
+								//Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
 								Root.nowStudent.score[Root.nowMonth] = 0;	
 								Root.$emit('msg.showcode',data.code);
 						}
@@ -876,12 +869,13 @@ angular.module('dy.controllers.indexnav',[
 			console.log('load termController');
 
 			Root.nowDate = +new Date();
+			Root.nowMonth = new Date().getMonth()+1;
 
 			Root.nowTrem = {
 				name : '2014 下学期',
 				id : 1,
 				month : [7,8,9,10,11],
-				nowmonth : 10,
+				nowmonth : Root.nowMonth,
 				status : true,
 				endtime : 1407590174026,
 				starttime : 1407590174026
@@ -1027,11 +1021,11 @@ angular.module('dy.controllers.student',[
 				Root.nowStudent = {};
 				var st = Root.studentList[id];
 				$.extend(Root.nowStudent,st);
-				Root.nowStudent.scorelist = {};
+				Root.nowStudent.total = {};
 				Root.nowStudent.score = {};
 				var param = {
 					term : Root.Term._id,
-					student : Root.nowStudent.id,
+					student : Root.nowStudent._id,
 					month : Root.nowMonth
 				}
 				Student.getScore(param);
@@ -1179,14 +1173,6 @@ angular.module('dy.controllers.quota',[
 				return aRec;
 			}
 
-			function getScoreList(data){
-				var list = [];
-				for(var i in data){
-					list.push(data[i]);
-				}
-				return list;
-			}
-
 			//后台变更指标
 			Scope.changeQuota = function(id){
 				Root.nowQuota = Root.quotaList[id];
@@ -1242,38 +1228,89 @@ angular.module('dy.controllers.quota',[
 				});
 			}			
 
+			//取学生本月的分数.并记总数
+			function getStudentNewQuota(type){
+				var list = [];
+				var total = 0;
+				var score;
+				if(Root.nowStudent._id){
+					score = Root.nowStudent.score[Root.nowMonth] || {
+						self : 0,
+						parent : 0,
+						teacher : 0
+					};
+				}else{
+					score = Root.myInfo.score;
+				}
+				_.each(Root.nowScore,function(item,idx){
+					var obj = {
+						indicator : idx,
+						self : score[idx].self || 0,
+						parent : score[idx].parent || 0,
+						teacher : score[idx].teacher || 0
+					}
+					obj[type]  = item
+					total += obj.self + obj.parent+ obj.teacher;
+					list.push(obj);
+				});
+				return {
+					total : total,
+					list : list
+				};
+			}
+
+			//计算分数
+			function getScoreList(data){
+				var list = [];
+				for(var i in data){
+					list.push(data[i]);
+				}
+				return list;
+			}
+
 			//给学生打分
 			Scope.saveStudentQuota = function(){
+				//不能对整个学期打分
+				if(!Root.nowMonth){
+					return;
+				}
 				//老师打分
 				var sid,tid,year,month
 				var param = {
 					month : Root.nowMonth || new Date().getMonth()+1,
 					scores : Scope.allScore
 				};
-				console.log(Root.myInfo);
 				if(!$.isEmptyObject(Root.nowStudent)){
-					param.student = Root.nowStudent.id;
+					param.student = Root.nowStudent._id;
 					param.term = Root.Term._id;
 					param.year = Root.Term.year;
-				}else{
-					param.student = Root.myInfo.id;
+				}else if(Root.myInfo._id){
+					param.student = Root.myInfo._id;
 					param.term = Root.myInfo.term._id;
 					param.year = Root.myInfo.term.year;
+				}else{
+					alert('还没有选择学生!');
+					return;
 				}
+				param.total = 0;
 				// var param = {
 				// 	teacherScores : getScoreList(Root.nowScore)
 				// }		
-				//console.log(Root.nowScore);		
+				var sp,type;
 				if(Root.isTeacher){
-					param.teacherScores = getScoreList(Root.nowScore);
+					type = 'teacher';
 				}else if(Root.getMode() === 'parent'){
-				//家长打分
-					param.parentScores = getScoreList(Root.nowScore);
+					type = 'parent';
 				}else{
-				//学生打分
-					param.selfScores	 = getScoreList(Root.nowScore);
+					type = 'self';
 				}
-				console.log(param);
+				sp = getStudentNewQuota(type);
+				param.scores = sp.list;
+				param.total = sp.total;
+				//console.log(param);
+				//return;
+				// console.log(Root.nowStudent);
+				//return;
 				Quota.saveStudentQuota({
 					score : JSON.stringify(param)
 				});
@@ -1293,15 +1330,11 @@ angular.module('dy.controllers.quota',[
 
 				nowRecord[id] = num;
 				Root.quotaList[id].now = num;
-				Root.nowScore[id] = {
-					indicator : id,
-					score : num
-				};
+				Root.nowScore[id] = num;
 
 				//console.log(Root.nowScore);
 				// //这里有问题..要修改下.
 				Scope.allScore = getEqua();
-
 				Root.$emit(CMD_SET_QUOTA,{ 
 					id : id,
 					num : num
