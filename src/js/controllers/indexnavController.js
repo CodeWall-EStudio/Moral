@@ -33,12 +33,13 @@ angular.module('dy.controllers.indexnav',[
 			console.log('load termController');
 
 			Root.nowDate = +new Date();
+			Root.nowMonth = Root.nowDate.getMonth()+1;
 
 			Root.nowTrem = {
 				name : '2014 下学期',
 				id : 1,
 				month : [7,8,9,10,11],
-				nowmonth : 10,
+				nowmonth : Root.nowMonth,
 				status : true,
 				endtime : 1407590174026,
 				starttime : 1407590174026
