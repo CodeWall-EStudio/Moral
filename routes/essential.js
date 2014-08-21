@@ -89,6 +89,7 @@ module.exports = function example(method, role) {
                 //指标返回
                 eq.on('getInd',function(doc){
                     inds = doc;
+                    console.log(sid);
                     var scoreModel = db.getScoreModel();
                     scoreModel.find({student:sid,term:term._id,month:nowmonth},eq.done('getScore'));
                 });
@@ -96,10 +97,12 @@ module.exports = function example(method, role) {
                 //评分返回
                 eq.on('getScore',function(doc){
                     var i2k = inds2Key(inds);
-                    var myscore = getScore(i2k,doc[0]);
+                    console.log(doc);
+                    console.log(sess.user);
+                    var myscore = [];//getScore(i2k,doc[0]);
                     res.json({
                         code : CONSTANTS.MSG_SUCC,
-                        user : sess.user,
+                        user : sess.user || sess.student,
                         term : term,
                         indicator : inds,
                         score : myscore.inds,

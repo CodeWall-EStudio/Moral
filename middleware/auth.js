@@ -178,11 +178,14 @@ module.exports = function auth(method, role) {
                     if (err) {
                         console.error(err);
                     }
-                    //console.log(studentEntity);
+                    console.log('student info',studentEntity);
                     if (studentEntity) {
                         if (req.body.number === studentEntity.number) {
                             sess.user = studentEntity;
-                            res.cookie('sid',sess.user.id,60000);
+                            //本地测试用。。。发布的时候可以去掉。。。
+                            sess.student = studentEntity;
+                            //
+                            res.cookie('sid',sess.user._id,60000);
                             //console.log(studentEntity);
                             res.cookie('role', role, 60000);
                             res.redirect(hostUrl + '/' + role+'.html');

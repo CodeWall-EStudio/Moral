@@ -115,7 +115,7 @@
  				<div ng-class="{hide:!nowStudent.id || getMode() === 'record'}"> 
 	 				<dl class="content-summary">
 	 					<dt>
-	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: 98 全校排名 :1 </div>
+	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: {{nowStudent.score[Root.nowMonth]}} 全校排名 :1 </div>
 	 						<button class="btn btn-default" ng-click="returnStudentList()">返回概要</button>
 	 					</dt>
 	 				</dl> 
@@ -137,7 +137,7 @@
 	 							</li>
 	 							<li>
 	 								家长
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.scorelist[nowMonth][item._id].teacher}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.scorelist[nowMonth][item._id].parent}}</div>
 	 							</li>
 	 						</ul>
 	 					</dd>

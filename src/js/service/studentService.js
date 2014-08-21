@@ -55,8 +55,8 @@ angular.module('dy.services.student', [
 				Http.get('/student/essential', {responseType:'json'})
 					.success(function(data,status){
 						if(data.code === 0){
-							Root.myInfo = data.user;
-							Root.myInfo.score = data.score;
+							Root.myInfo = data.user || {};
+							Root.myInfo.score = data.scores || [];
 							Root.myInfo.total = data.total || 0;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
@@ -96,29 +96,30 @@ angular.module('dy.services.student', [
 				if(!data){
 					return;
 				}
-				var tmp = _.max([data.selfScores,data.parentScores,data.teacherScores],function(list){
-					return list.length;
-				})
+				var tmp = {};
+				// var tmp = _.max([data.selfScores,data.parentScores,data.teacherScores],function(list){
+				// 	return list.length;
+				// })
 				var list = {};
 				//先确保每个指标都保存了.
-				_.map(tmp,function(item,idx){
+				_.map(data.scores,function(item,idx){
 					list[item.indicator] = {
-						self : 0,
-						parent : 0,
-						teacher : 0
+						self : item.self || 0,
+						parent : item.parent || 0,
+						teacher : item.teacher || 0
 					};
 				});
 
-				_.each(data.selfScores,function(item,idx){
-					list[item.indicator].self = item.score;
-				});
+				// _.each(data.selfScores,function(item,idx){
+				// 	list[item.indicator].self = item.score;
+				// });
 
-				_.each(data.parentScores,function(item,idx){
-					list[item.indicator].parent = item.score;
-				});
-				_.each(data.teacherScores,function(item,idx){
-					list[item.indicator].teacher = item.score;
-				});
+				// _.each(data.parentScores,function(item,idx){
+				// 	list[item.indicator].parent = item.score;
+				// });
+				// _.each(data.teacherScores,function(item,idx){
+				// 	list[item.indicator].teacher = item.score;
+				// });
 				return list;
 			}
 
@@ -139,10 +140,9 @@ angular.module('dy.services.student', [
 								return;
 							}
 							var score = convertOneScore(data.score[0]);
-
 							if(Root.nowStudent.id === data.score[0].student){
 								Root.nowStudent.scorelist[Root.nowMonth] = score;
-								Root.nowStudent.score[Root.nowMonth] = data.score[0].scores;
+								Root.nowStudent.score[Root.nowMonth] = data.score[0].total;
 							}
 							console.log('获取学生评分成功!',data);
 						}else{
