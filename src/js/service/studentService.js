@@ -61,7 +61,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
 							Root.myInfo.allscore = 15* data.indicator.length;
-							Root.myInfo.pre = data.total/Root.myInfo.allscore;
+							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
 							if(data.term){
 								Root.studentTerm = true;
 							}
