@@ -41,9 +41,9 @@
  				<div class="my-badge">
  					<img src="css/imgs/badge.png" />
  					<h1>我的徽章</h1>
- 					<p>应得总分: {{MyInfo.all}}</p>
- 					<p>实得总分: {{MyInfo.had}}</p>
- 					<p>（{{MyInfo.pre}}）</p>
+ 					<p>应得总分: {{myInfo.allscore}}</p>
+ 					<p>实得总分: {{myInfo.total}}</p>
+ 					<p>（{{myInfo.pre | number:2}}）</p>
  				</div>
 
  				<ul class="grade-badgeinfo">
@@ -108,7 +108,6 @@
  						<div class="title">{{myInfo.user.name}} 自评 {{nowDate | date:'M月' }}  总分：{{myInfo.total}}</div>
  					</dt>
  				</dl> 
-
  				<dl class="content-score"  ng-class="{hide:getMode() !== 'my' && getMode()}"  ng-repeat="item in quotaList">
  					<dt>{{item.name}}</dt>
  					<dd class="score-info">

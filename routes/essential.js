@@ -97,16 +97,26 @@ module.exports = function example(method, role) {
                 //评分返回
                 eq.on('getScore',function(doc){
                     var i2k = inds2Key(inds);
-                    console.log(doc);
-                    console.log(sess.user);
-                    var myscore = [];//getScore(i2k,doc[0]);
+                    var myscore = {};//getScore(i2k,doc[0]);
+                    var total = 0;
+                    for(var i in doc[0].scores){
+                        var item = doc[0].scores[i];
+                        if(item.indicator){
+                            myscore[item.indicator] = {
+                                self : item.self || 0,
+                                parent : item.parent || 0,
+                                teacher : item.teacher || 0
+                            }
+                            total += item.self + item.parent + item.teacher;
+                        }
+                    }
                     res.json({
                         code : CONSTANTS.MSG_SUCC,
                         user : sess.user || sess.student,
                         term : term,
                         indicator : inds,
-                        score : myscore.inds,
-                        all : myscore.all,
+                        score : myscore,
+                        total : total,
                         nowmonth : nowmonth
                     });
                 })
@@ -117,7 +127,7 @@ module.exports = function example(method, role) {
                 }else{
                     console.log( 'no session');
                     var studentModel = db.getStudentModel();
-                    studentModel.find({id:sid},eq.done('getStudent'));
+                    studentModel.find({_id:sid},eq.done('getStudent'));
                 }
                 //eq.done(eq.done('getTerm'));
                 /*
