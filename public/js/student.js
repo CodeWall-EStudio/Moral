@@ -367,7 +367,7 @@ angular.module('dy.services.student', [
 			}
 
 
-			//拉学生评分
+			//拉单个学生评分
 			function getScore(param,success,error){
 				var ts = new Date().getTime();
 				Http.get('/teacher/score?_='+ts,
@@ -378,8 +378,10 @@ angular.module('dy.services.student', [
 					.success(function(data,status){
 						if(data.code === 0){
 							if(data.score.length === 0){
-								Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
-								Root.nowStudent.score[Root.nowMonth] = 0;								
+								if(!Root.nowStudent.score){
+									Root.nowStudent.score = {};
+									Root.nowStudent.total = {};
+								}
 								return;
 							}
 							var score = convertOneScore(data.score[0]);
@@ -655,7 +657,7 @@ angular.module('dy.services.quota', [
                         Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		param._id = data.id;
-                    		Root.quotaList[data.id] = param;
+                    		//Root.quotaList[data.id] = param;
                     		console.log(param);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
@@ -1080,21 +1082,35 @@ angular.module('dy.controllers.quota',[
 				var total = 0;
 				var score;
 				if(Root.nowStudent._id){
-					score = Root.nowStudent.score[Root.nowMonth] || {
-						self : 0,
-						parent : 0,
-						teacher : 0
-					};
+					score = Root.nowStudent.score[Root.nowMonth] || {};
+					console.log(score)
 				}else{
 					score = Root.myInfo.score;
 				}
 				_.each(Root.nowScore,function(item,idx){
-					var obj = {
-						indicator : idx,
-						self : score[idx].self || 0,
-						parent : score[idx].parent || 0,
-						teacher : score[idx].teacher || 0
+					var self,parent,teacher;
+					if($.isEmptyObject(score)){
+						self = 0;
+						parent = 0;
+						teacher = 0;
+					}else{
+						self = score[idx].self || 0;
+						parent = score[idx].parent || 0;
+						teacher = score[idx].teacher || 0;
 					}
+					
+					var obj = {
+						indicator:idx,
+						self : self,
+						parent : parent,
+						teacher : teacher
+					}
+					// var obj = {
+					// 	indicator : idx,
+					// 	self : score[idx].self || 0,
+					// 	parent : score[idx].parent || 0,
+					// 	teacher : score[idx].teacher || 0
+					// }
 					obj[type]  = item
 					total += obj.self + obj.parent+ obj.teacher;
 					list.push(obj);
@@ -1153,8 +1169,8 @@ angular.module('dy.controllers.quota',[
 				sp = getStudentNewQuota(type);
 				param.scores = sp.list;
 				param.total = sp.total;
-				//console.log(param);
-				//return;
+				// console.log(param);
+				// return;
 				// console.log(Root.nowStudent);
 				//return;
 				Quota.saveStudentQuota({

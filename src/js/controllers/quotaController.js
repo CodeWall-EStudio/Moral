@@ -95,21 +95,35 @@ angular.module('dy.controllers.quota',[
 				var total = 0;
 				var score;
 				if(Root.nowStudent._id){
-					score = Root.nowStudent.score[Root.nowMonth] || {
-						self : 0,
-						parent : 0,
-						teacher : 0
-					};
+					score = Root.nowStudent.score[Root.nowMonth] || {};
+					console.log(score)
 				}else{
 					score = Root.myInfo.score;
 				}
 				_.each(Root.nowScore,function(item,idx){
-					var obj = {
-						indicator : idx,
-						self : score[idx].self || 0,
-						parent : score[idx].parent || 0,
-						teacher : score[idx].teacher || 0
+					var self,parent,teacher;
+					if($.isEmptyObject(score)){
+						self = 0;
+						parent = 0;
+						teacher = 0;
+					}else{
+						self = score[idx].self || 0;
+						parent = score[idx].parent || 0;
+						teacher = score[idx].teacher || 0;
 					}
+					
+					var obj = {
+						indicator:idx,
+						self : self,
+						parent : parent,
+						teacher : teacher
+					}
+					// var obj = {
+					// 	indicator : idx,
+					// 	self : score[idx].self || 0,
+					// 	parent : score[idx].parent || 0,
+					// 	teacher : score[idx].teacher || 0
+					// }
 					obj[type]  = item
 					total += obj.self + obj.parent+ obj.teacher;
 					list.push(obj);
@@ -168,8 +182,8 @@ angular.module('dy.controllers.quota',[
 				sp = getStudentNewQuota(type);
 				param.scores = sp.list;
 				param.total = sp.total;
-				//console.log(param);
-				//return;
+				// console.log(param);
+				// return;
 				// console.log(Root.nowStudent);
 				//return;
 				Quota.saveStudentQuota({
