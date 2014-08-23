@@ -33,19 +33,27 @@ angular.module('dy.controllers.managehandernav',[
 
 			Scope.selectTerm = function(id){
 				Root.Term = Root.termList[id];
+				changeScore();
 			}
 			
 			//变更年级
 			Scope.changeGrade = function(id){
 				Root.nowGrade = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				changeScore();
 			}
 
 			//变更班级
 			Scope.changeClass = function(id){
 				Root.nowClass = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				changeScore();
 			}
+
+			Scope.selectMonth = function(month){
+				Root.nowMonth = month;
+				changeScore();				
+			};
 
 			//变更年级
 			Scope.changeGradeTeacher = function(id){
@@ -55,7 +63,13 @@ angular.module('dy.controllers.managehandernav',[
 			//变更班级
 			Scope.changeClassTeacher = function(id){
 				Root.nowClass = id || '所有';
-			}			
+			}	
+
+			function changeScore(){
+				if(Root.teacherPage){
+
+				}
+			}		
 
 			//搜索
 			Scope.startSearch = function(e,d){
@@ -67,14 +81,30 @@ angular.module('dy.controllers.managehandernav',[
 				return new Date().getMonth();
 			}
 
-			Scope.selectMonth = function(month){
-				Root.nowMonth = month;
-			};
-
 			var url = Location.absUrl();
 			var fn = function(){};
+
+			Root.$on('status.term.load',function(){
+				var obj = {
+					term : Root.Term._id
+				}				
+				var tid,grade,cls,month;
+				if(Root.nowGrade !== '所有'){
+					obj.grade = Root.nowGrade;
+				}
+				if(Root.nowClass !== '所有'){
+					obj.class = Root.nowClass;
+				}
+				if(Root.nowMonth){
+					obj.month = Root.month;
+				}
+				Student.getScore(obj);
+			});
+
 			if(url.indexOf('teacher.html') > 0){
 				Mgrade.getTermList();
+
+
 			}
 			//
 		}

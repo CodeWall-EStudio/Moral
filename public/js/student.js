@@ -119,6 +119,7 @@ angular.module('dy.services.mgrade', [
 				}
 				if(data[no]){
 					Root.Term = data[no];
+					Root.$emit('status.term.load');
 				}
 			}
 
@@ -366,6 +367,17 @@ angular.module('dy.services.student', [
 				}
 			}
 
+			function convertScore(data){
+				var max = _.max(data,function(item){
+					return item.total;
+				});
+				var min = _.min(data,function(item){
+					return item.total;
+				});
+				Root.maxStudent = max;
+				Root.minStudent = min;
+			}
+
 
 			//拉单个学生评分
 			function getScore(param,success,error){
@@ -377,19 +389,25 @@ angular.module('dy.services.student', [
 					})
 					.success(function(data,status){
 						if(data.code === 0){
-							if(data.score.length === 0){
-								if(!Root.nowStudent.score){
-									Root.nowStudent.score = {};
-									Root.nowStudent.total = {};
+							//按学期拉的分数
+							if(!param.student){
+								convertScore(data.score);
+							}else{
+								if(data.score.length === 0){
+									if(!Root.nowStudent.score){
+										Root.nowStudent.score = {};
+										Root.nowStudent.total = {};
+									}
+									return;
 								}
-								return;
+								var score = convertOneScore(data.score[0]);
+								if(Root.nowStudent._id === data.score[0].student){
+									//Root.nowStudent.scorelist[Root.nowMonth] = score;
+									Root.nowStudent.score[Root.nowMonth] = score.list;
+									Root.nowStudent.total[Root.nowMonth] = score.total;
+								}
 							}
-							var score = convertOneScore(data.score[0]);
-							if(Root.nowStudent._id === data.score[0].student){
-								//Root.nowStudent.scorelist[Root.nowMonth] = score;
-								Root.nowStudent.score[Root.nowMonth] = score.list;
-								Root.nowStudent.total[Root.nowMonth] = score.total;
-							}
+
 							console.log('获取学生评分成功!',data,Root.nowStudent);
 						}else{
 								//Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
@@ -1010,6 +1028,9 @@ angular.module('dy.controllers.quota',[
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
+			Root.studentScoreList = {};
+			Root.maxStudent = {}; //最高分
+			Root.minStudent = {}; //最低分
 
 			function getEqua(){
 				var aRec = 0;

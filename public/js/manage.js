@@ -119,6 +119,7 @@ angular.module('dy.services.mgrade', [
 				}
 				if(data[no]){
 					Root.Term = data[no];
+					Root.$emit('status.term.load');
 				}
 			}
 
@@ -366,6 +367,17 @@ angular.module('dy.services.student', [
 				}
 			}
 
+			function convertScore(data){
+				var max = _.max(data,function(item){
+					return item.total;
+				});
+				var min = _.min(data,function(item){
+					return item.total;
+				});
+				Root.maxStudent = max;
+				Root.minStudent = min;
+			}
+
 
 			//拉单个学生评分
 			function getScore(param,success,error){
@@ -377,19 +389,25 @@ angular.module('dy.services.student', [
 					})
 					.success(function(data,status){
 						if(data.code === 0){
-							if(data.score.length === 0){
-								if(!Root.nowStudent.score){
-									Root.nowStudent.score = {};
-									Root.nowStudent.total = {};
+							//按学期拉的分数
+							if(!param.student){
+								convertScore(data.score);
+							}else{
+								if(data.score.length === 0){
+									if(!Root.nowStudent.score){
+										Root.nowStudent.score = {};
+										Root.nowStudent.total = {};
+									}
+									return;
 								}
-								return;
+								var score = convertOneScore(data.score[0]);
+								if(Root.nowStudent._id === data.score[0].student){
+									//Root.nowStudent.scorelist[Root.nowMonth] = score;
+									Root.nowStudent.score[Root.nowMonth] = score.list;
+									Root.nowStudent.total[Root.nowMonth] = score.total;
+								}
 							}
-							var score = convertOneScore(data.score[0]);
-							if(Root.nowStudent._id === data.score[0].student){
-								//Root.nowStudent.scorelist[Root.nowMonth] = score;
-								Root.nowStudent.score[Root.nowMonth] = score.list;
-								Root.nowStudent.total[Root.nowMonth] = score.total;
-							}
+
 							console.log('获取学生评分成功!',data,Root.nowStudent);
 						}else{
 								//Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
@@ -937,19 +955,27 @@ angular.module('dy.controllers.managehandernav',[
 
 			Scope.selectTerm = function(id){
 				Root.Term = Root.termList[id];
+				changeScore();
 			}
 			
 			//变更年级
 			Scope.changeGrade = function(id){
 				Root.nowGrade = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				changeScore();
 			}
 
 			//变更班级
 			Scope.changeClass = function(id){
 				Root.nowClass = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				changeScore();
 			}
+
+			Scope.selectMonth = function(month){
+				Root.nowMonth = month;
+				changeScore();				
+			};
 
 			//变更年级
 			Scope.changeGradeTeacher = function(id){
@@ -959,7 +985,13 @@ angular.module('dy.controllers.managehandernav',[
 			//变更班级
 			Scope.changeClassTeacher = function(id){
 				Root.nowClass = id || '所有';
-			}			
+			}	
+
+			function changeScore(){
+				if(Root.teacherPage){
+
+				}
+			}		
 
 			//搜索
 			Scope.startSearch = function(e,d){
@@ -971,14 +1003,30 @@ angular.module('dy.controllers.managehandernav',[
 				return new Date().getMonth();
 			}
 
-			Scope.selectMonth = function(month){
-				Root.nowMonth = month;
-			};
-
 			var url = Location.absUrl();
 			var fn = function(){};
+
+			Root.$on('status.term.load',function(){
+				var obj = {
+					term : Root.Term._id
+				}				
+				var tid,grade,cls,month;
+				if(Root.nowGrade !== '所有'){
+					obj.grade = Root.nowGrade;
+				}
+				if(Root.nowClass !== '所有'){
+					obj.class = Root.nowClass;
+				}
+				if(Root.nowMonth){
+					obj.month = Root.month;
+				}
+				Student.getScore(obj);
+			});
+
 			if(url.indexOf('teacher.html') > 0){
 				Mgrade.getTermList();
+
+
 			}
 			//
 		}
@@ -1130,10 +1178,11 @@ angular.module('dy.controllers.teacher',[
         'dy.constants',
         'dy.services.utils',
         'dy.services.mgrade',
-        'dy.services.teacher'	
+        'dy.services.teacher',	
+        'dy.services.student',
 	])
 	.controller('teacherController',[
-		'$rootScope', '$scope','Util','mGradeService','teacherService',function(Root,Scope,Util,Mgrade,Teacher){
+		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService',function(Root,Scope,Location,Util,Mgrade,Teacher){
 			console.log('load teachercontroller');
 
 			if(Util.cookie.get('role') !== 'teacher'){
@@ -1153,6 +1202,12 @@ angular.module('dy.controllers.teacher',[
 
 			});
 
+
+			var url = Location.absUrl();
+			var fn = function(){};
+			if(url.indexOf('teacher.html') > 0){
+				Root.teacherPage = true;
+			}
 			Teacher.getTeacherInfo();
 			//Student.getStudentList();
 		}
@@ -1182,6 +1237,9 @@ angular.module('dy.controllers.quota',[
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
+			Root.studentScoreList = {};
+			Root.maxStudent = {}; //最高分
+			Root.minStudent = {}; //最低分
 
 			function getEqua(){
 				var aRec = 0;

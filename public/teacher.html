@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1408722795608">
+  <link rel="stylesheet" href="css/main.css?t=1408755659864">
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -89,16 +89,18 @@
  			<div class="content-info" ng-controller="quotaController">
  				<!--年级概要-->
  				<dl class="content-summary" ng-class="{hide:getMode() === 'record' || nowStudent.id }">
- 					<dt>1年级 4班 概要9月</dt>
+ 					<dt>{{nowGrade}}年级 {{nowClass}}班 概要{{nowMonth}}月</dt>
  					<dd>
  						<ul>
- 							<li>1年级 4班 最高得分: xx 98分</li>
- 							<li>1年级 4班 最低得分: xx 98分</li>
+ 							<li>{{nowGrade}}年级 {{nowClass}}班 最高得分: {{studentList[maxStudent.student].name}} {{maxStudent.total}}分</li>
+ 							<li>{{nowGrade}}年级 {{nowClass}}班 最低得分: {{studentList[minStudent.student].name}} {{minStudent.total}}分</li>
  						</ul>
+ 						<!--
  						<ul>
  							<li>未参评学生数目: xxx <a>查看名单</a></li>
  							<li>未参评老师数目: xxx <a>查看名单</a></li>
  						</ul>
+ 						-->
  					</dd>
  				</dl>
 
@@ -169,7 +171,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/teacher.js?t=1408722795608"></script>
+	<script src="js/teacher.js?t=1408755659864"></script>
 
  </body>
  </html>
