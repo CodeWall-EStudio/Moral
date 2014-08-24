@@ -99,23 +99,25 @@
  			<div class="content-info" ng-controller="quotaController">
  				<!--年级概要-->
  				<dl class="content-summary" ng-class="{hide:getMode() === 'record' || nowStudent.id }">
- 					<dt>1年级 4班 概要9月</dt>
+ 					<dt>{{nowGrade}}年级 {{nowClass}}班 概要{{nowMonth}}月</dt>
  					<dd>
  						<ul>
- 							<li>1年级 4班 最高得分: xx 98分</li>
- 							<li>1年级 4班 最低得分: xx 98分</li>
+ 							<li>{{nowGrade}}年级 {{nowClass}}班 最高得分: {{studentList[maxStudent.student].name}} {{maxStudent.total}}分</li>
+ 							<li>{{nowGrade}}年级 {{nowClass}}班 最低得分: {{studentList[minStudent.student].name}} {{minStudent.total}}分</li>
  						</ul>
+ 						<!--
  						<ul>
  							<li>未参评学生数目: xxx <a>查看名单</a></li>
  							<li>未参评老师数目: xxx <a>查看名单</a></li>
  						</ul>
+ 						-->
  					</dd>
  				</dl>
 
  				<div ng-class="{hide:!nowStudent.id || getMode() === 'record'}"> 
 	 				<dl class="content-summary">
 	 					<dt>
-	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: 98 全校排名 :1 </div>
+	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: {{nowStudent.score[Root.nowMonth]}} 全校排名 :1 </div>
 	 						<button class="btn btn-default" ng-click="returnStudentList()">返回概要</button>
 	 					</dt>
 	 				</dl> 
@@ -129,15 +131,15 @@
 	 						<ul class="score-list">
 	 							<li>
 	 								教师
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.scorelist[nowMonth][item._id].teacher}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].teacher}}</div>
 	 							</li>
 	 							<li>
 	 								自评
-	 								<div ng-model="nowStudent.score.self">{{nowStudent.scorelist[nowMonth][item._id].self}}</div>
+	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth][item._id].self}}</div>
 	 							</li>
 	 							<li>
 	 								家长
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.scorelist[nowMonth][item._id].teacher}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].parent}}</div>
 	 							</li>
 	 						</ul>
 	 					</dd>

@@ -30,6 +30,7 @@ angular.module('dy.services.mgrade', [
 				}
 				if(data[no]){
 					Root.Term = data[no];
+					Root.$emit('status.term.load');
 				}
 			}
 

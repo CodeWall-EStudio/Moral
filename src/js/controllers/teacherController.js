@@ -2,10 +2,11 @@ angular.module('dy.controllers.teacher',[
         'dy.constants',
         'dy.services.utils',
         'dy.services.mgrade',
-        'dy.services.teacher'	
+        'dy.services.teacher',	
+        'dy.services.student',
 	])
 	.controller('teacherController',[
-		'$rootScope', '$scope','Util','mGradeService','teacherService',function(Root,Scope,Util,Mgrade,Teacher){
+		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService',function(Root,Scope,Location,Util,Mgrade,Teacher){
 			console.log('load teachercontroller');
 
 			if(Util.cookie.get('role') !== 'teacher'){
@@ -25,6 +26,12 @@ angular.module('dy.controllers.teacher',[
 
 			});
 
+
+			var url = Location.absUrl();
+			var fn = function(){};
+			if(url.indexOf('teacher.html') > 0){
+				Root.teacherPage = true;
+			}
 			Teacher.getTeacherInfo();
 			//Student.getStudentList();
 		}

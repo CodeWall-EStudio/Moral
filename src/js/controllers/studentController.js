@@ -56,11 +56,11 @@ angular.module('dy.controllers.student',[
 				Root.nowStudent = {};
 				var st = Root.studentList[id];
 				$.extend(Root.nowStudent,st);
-				Root.nowStudent.scorelist = {};
+				Root.nowStudent.total = {};
 				Root.nowStudent.score = {};
 				var param = {
 					term : Root.Term._id,
-					student : Root.nowStudent.id,
+					student : Root.nowStudent._id,
 					month : Root.nowMonth
 				}
 				Student.getScore(param);

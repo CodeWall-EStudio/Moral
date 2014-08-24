@@ -247,6 +247,7 @@ li{
 	height:66px;
 	line-height:22px;
 	padding-right:280px;
+	overflow:hidden;
 }
 .content-score .score-result{
 	position:absolute;

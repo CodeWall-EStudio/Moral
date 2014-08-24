@@ -55,16 +55,17 @@ angular.module('dy.services.student', [
 				Http.get('/student/essential', {responseType:'json'})
 					.success(function(data,status){
 						if(data.code === 0){
-							Root.myInfo = data.user;
-							Root.myInfo.score = data.score;
+							Root.myInfo = data.user || {};
+							Root.myInfo.score = data.score || [];
 							Root.myInfo.total = data.total || 0;
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
+							Root.myInfo.allscore = 15* data.indicator.length;
+							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
 							if(data.term){
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;
-							console.log(Root.myInfo);
 							console.log('拉取学生资料成功',data);
 						}else{
 							Root.Term  = false;
@@ -96,34 +97,37 @@ angular.module('dy.services.student', [
 				if(!data){
 					return;
 				}
-				var tmp = _.max([data.selfScores,data.parentScores,data.teacherScores],function(list){
-					return list.length;
-				})
+				var tmp = {};
 				var list = {};
+				var total = 0;
 				//先确保每个指标都保存了.
-				_.map(tmp,function(item,idx){
+				_.map(data.scores,function(item,idx){
 					list[item.indicator] = {
-						self : 0,
-						parent : 0,
-						teacher : 0
+						self : item.self || 0,
+						parent : item.parent || 0,
+						teacher : item.teacher || 0
 					};
+					total += list[item.indicator].self + list[item.indicator].teacher + list[item.indicator].parent;
 				});
+				return {
+					list : list,
+					total : total
+				}
+			}
 
-				_.each(data.selfScores,function(item,idx){
-					list[item.indicator].self = item.score;
+			function convertScore(data){
+				var max = _.max(data,function(item){
+					return item.total;
 				});
-
-				_.each(data.parentScores,function(item,idx){
-					list[item.indicator].parent = item.score;
+				var min = _.min(data,function(item){
+					return item.total;
 				});
-				_.each(data.teacherScores,function(item,idx){
-					list[item.indicator].teacher = item.score;
-				});
-				return list;
+				Root.maxStudent = max;
+				Root.minStudent = min;
 			}
 
 
-			//拉学生评分
+			//拉单个学生评分
 			function getScore(param,success,error){
 				var ts = new Date().getTime();
 				Http.get('/teacher/score?_='+ts,
@@ -133,20 +137,28 @@ angular.module('dy.services.student', [
 					})
 					.success(function(data,status){
 						if(data.code === 0){
-							if(data.score.length === 0){
-								Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
-								Root.nowStudent.score[Root.nowMonth] = 0;								
-								return;
+							//按学期拉的分数
+							if(!param.student){
+								convertScore(data.score);
+							}else{
+								if(data.score.length === 0){
+									if(!Root.nowStudent.score){
+										Root.nowStudent.score = {};
+										Root.nowStudent.total = {};
+									}
+									return;
+								}
+								var score = convertOneScore(data.score[0]);
+								if(Root.nowStudent._id === data.score[0].student){
+									//Root.nowStudent.scorelist[Root.nowMonth] = score;
+									Root.nowStudent.score[Root.nowMonth] = score.list;
+									Root.nowStudent.total[Root.nowMonth] = score.total;
+								}
 							}
-							var score = convertOneScore(data.score[0]);
 
-							if(Root.nowStudent.id === data.score[0].student){
-								Root.nowStudent.scorelist[Root.nowMonth] = score;
-								Root.nowStudent.score[Root.nowMonth] = data.score[0].scores;
-							}
-							console.log('获取学生评分成功!',data);
+							console.log('获取学生评分成功!',data,Root.nowStudent);
 						}else{
-								Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
+								//Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
 								Root.nowStudent.score[Root.nowMonth] = 0;	
 								Root.$emit('msg.showcode',data.code);
 						}

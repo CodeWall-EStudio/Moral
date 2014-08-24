@@ -125,7 +125,7 @@ angular.module('dy.services.quota', [
                         Root.$emit('msg.showcode',data.code);
                     	if(data.code === 0){
                     		param._id = data.id;
-                    		Root.quotaList[data.id] = param;
+                    		//Root.quotaList[data.id] = param;
                     		console.log(param);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
