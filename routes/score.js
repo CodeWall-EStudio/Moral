@@ -58,8 +58,14 @@ module.exports = function score(method) {
                     res.json({ code: CONSTANTS.MSG_ERR });
                 } else {
                     var sArr = new Array();
+                    var totalObj = new Object();
+                    var t_index;
                     for(var i = 0; i < students.length; i++) {
                         sArr.push(students[i]._id);
+                        t_index = 't_' + students[i].grade + '_' + students[i].class;
+                        if (!totalObj[t_index]) {
+                            totalObj[t_index] = 1;
+                        }
                     }
                     scoreModel.find(conn1).where('student').in(sArr).exec(function(err, scores) {
                         if (err) {
@@ -67,6 +73,8 @@ module.exports = function score(method) {
                             res.json({ code: CONSTANTS.MSG_ERR });
                         } else {
                             var sObj = new Object();
+                            var countObj = new Object();
+                            var index;
                             for(var i = 0; i < scores.length; i++) {
                                 if (m != '0') {
                                     sObj[scores[i].student] = scores[i];
@@ -78,8 +86,28 @@ module.exports = function score(method) {
                                     }
 
                                 }
+                                index = 'c_' + scores[i].grade + '_' + scores[i].class;
+                                if (countObj[index]) {
+                                    countObj[index] += 1;
+                                } else {
+                                    countObj[index] = 1;
+                                }
                             }
-                            res.json({ code: CONSTANTS.MSG_SUCC, score: sObj });
+                            var count = 1;
+                            var scount = 0;
+                            if (g && c) {
+                                if (scores.length != 0) {
+                                    if (students.length % scores.length == 0) {
+                                        count = 0;
+                                    }
+                                }
+                                if (m != '0') {
+                                    scount = students.length - scores.length;
+                                }
+                            } else {
+                                count = totalObj.length - countObj.length;
+                            }
+                            res.json({ code: CONSTANTS.MSG_SUCC, score: sObj, count: count, scount: scount });
                         }
                     });
                 }
