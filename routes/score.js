@@ -94,16 +94,20 @@ module.exports = function score(method) {
                                 }
                             }
                             var count = 1;
+                            var scount = 0;
                             if (g && c) {
                                 if (scores.length != 0) {
                                     if (students.length % scores.length == 0) {
                                         count = 0;
                                     }
                                 }
+                                if (m != '0') {
+                                    scount = students.length - scores.length;
+                                }
                             } else {
                                 count = totalObj.length - countObj.length;
                             }
-                            res.json({ code: CONSTANTS.MSG_SUCC, score: sObj, count: count });
+                            res.json({ code: CONSTANTS.MSG_SUCC, score: sObj, count: count, scount: scount });
                         }
                     });
                 }
