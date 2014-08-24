@@ -180,7 +180,7 @@ module.exports = function auth(method, role) {
                     }
                     console.log('student info',studentEntity);
                     if (studentEntity) {
-                        if (req.body.number === studentEntity.number) {
+                        if (req.body.number === studentEntity.id) {
                             sess.user = studentEntity;
                             //本地测试用。。。发布的时候可以去掉。。。
                             sess.student = studentEntity;
