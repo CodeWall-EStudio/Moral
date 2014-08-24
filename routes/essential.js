@@ -99,16 +99,19 @@ module.exports = function example(method, role) {
                     var i2k = inds2Key(inds);
                     var myscore = {};//getScore(i2k,doc[0]);
                     var total = 0;
-                    for(var i in doc[0].scores){
-                        var item = doc[0].scores[i];
-                        if(item.indicator){
-                            myscore[item.indicator] = {
-                                self : item.self || 0,
-                                parent : item.parent || 0,
-                                teacher : item.teacher || 0
+                    if(doc.length){
+                        for(var i in doc[0].scores){
+                            var item = doc[0].scores[i];
+                            if(item.indicator){
+                                myscore[item.indicator] = {
+                                    self : item.self || 0,
+                                    parent : item.parent || 0,
+                                    teacher : item.teacher || 0
+                                }
+                                total += item.self + item.parent + item.teacher;
                             }
-                            total += item.self + item.parent + item.teacher;
                         }
+
                     }
                     res.json({
                         code : CONSTANTS.MSG_SUCC,
