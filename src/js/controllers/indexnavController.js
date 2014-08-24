@@ -19,8 +19,17 @@ angular.module('dy.controllers.indexnav',[
 			Root.switchMode = function(mode){
                 if(mode !== Scope.getMode()){
                     $location.search('mode', mode);
+                    resetQuota();
+                    Root.$emit('status.student.quotacheng');
                 }
 			}	
+
+			function resetQuota(){
+				_.each(Root.quotaList,function(item){
+					delete item.now;
+				});
+				Root.allScore = 0;
+			}
 
 			//退出登录
 			Root.quitLogin = function(){

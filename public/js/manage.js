@@ -131,7 +131,7 @@ angular.module('dy.services.mgrade', [
 							conventTerm(data.term);
 							console.log('拉学期列表成功!', data);
 						}else{
-							Root.$emit('msg.showcode',data.code);
+							Root.$emit('msg.codeshow',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -152,7 +152,7 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
-                    	Root.$emit('msg.showcode',data.code);
+                    	Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		var tdata = JSON.parse(param.term);
                     		tdata._id = data.id;
@@ -183,7 +183,7 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
-                    	Root.$emit('msg.showcode',data.code);
+                    	Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		param._id = data.id;
                     		Root.termList[data.id] = param;
@@ -292,7 +292,7 @@ angular.module('dy.services.student', [
 							window.localStorage.setItem('student',JSON.stringify(sMap));
 							console.log('拉学生列表成功!', data);
 						}else{
-							Root.$emit('msg.showcode',data.code);
+							Root.$emit('msg.codeshow',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -321,7 +321,7 @@ angular.module('dy.services.student', [
 							console.log('拉取学生资料成功',data);
 						}else{
 							Root.Term  = false;
-							Root.$emit('msg.showcode',data.code);
+							Root.$emit('msg.codeshow',data.code);
 						}
 						if(success){
 							success(data);
@@ -412,7 +412,7 @@ angular.module('dy.services.student', [
 						}else{
 								//Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
 								Root.nowStudent.score[Root.nowMonth] = 0;	
-								Root.$emit('msg.showcode',data.code);
+								Root.$emit('msg.codeshow',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -431,7 +431,7 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							console.log('获取学生评分成功!',data);
 						}else{
-							Root.$emit('msg.showcode',data.code);
+							Root.$emit('msg.codeshow',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -456,10 +456,10 @@ angular.module('dy.services.student', [
                         }					
 					)
                     .success(function(data, status){
-                    	Root.$emit('msg.showcode',data.code);
+                    	Root.$emit('msg.codeshow',data.code);
                     	if(data.error === 'ok' || data.code === 0){
                     		var student = JSON.parse(param.student);
-                    		student.id = data.id;
+                    		//student.id = data.id;
                     		student._id = data.id;
                     		Root.studentList[data.id] = student;
                     		sMap[data.id] = student;
@@ -628,7 +628,7 @@ angular.module('dy.services.quota', [
 							conventQuota(data.indicator);
 							console.log('拉指标列表成功!', data);
 						}else{
-                            Root.$emit('msg.showcode',data.code);
+                            Root.$emit('msg.codeshow',data.code);
                         }
 						if(success) success(data, status);
 					})
@@ -653,7 +653,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                        Root.$emit('msg.showcode',data.code);
+                        Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
@@ -683,7 +683,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                        Root.$emit('msg.showcode',data.code);
+                        Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
@@ -714,16 +714,13 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                        Root.$emit('msg.showcode',data.code);
+                        Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		param._id = data.id;
                     		//Root.quotaList[data.id] = param;
-                    		console.log(param);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
-                    	console.log(Root.quotaList);
-
                         console.log('[quotaService] quota crate suc =', data);
                         if(success) success(data, status);
                     })
@@ -743,7 +740,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                        Root.$emit('msg.showcode',data.code);
+                        Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		delete Root.quotaList[params.id];
                     		Root.nowQuota = {};
@@ -1445,6 +1442,10 @@ angular.module('dy.controllers.quota',[
 				Scope.resetStudentQuota();
 			});
 
+
+			Root.$on('status.student.quotacheng',function(){
+				Scope.allScore = 0;
+			})
 			Quota.getQuotaList();
 		}
 	]);
@@ -1457,7 +1458,7 @@ angular.module('dy.controllers.gradepanel',[
 		'$rootScope', '$scope','Util','mGradeService',function(Root,Scope,Util,Mgrade){
 
 			var selectMonth = [];
-			var defMonthLength = 5
+			var defMonthLength = 4;
 
 			function checkMonth(idx){
 				var list = $('#gradePanelModal .select-month li');
@@ -1510,7 +1511,7 @@ angular.module('dy.controllers.gradepanel',[
 							return true;
 						}
 					}
-					return true;
+					return ret;
 
 				}else{
 					return false;

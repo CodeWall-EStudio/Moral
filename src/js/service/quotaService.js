@@ -36,7 +36,7 @@ angular.module('dy.services.quota', [
 							conventQuota(data.indicator);
 							console.log('拉指标列表成功!', data);
 						}else{
-                            Root.$emit('msg.showcode',data.code);
+                            Root.$emit('msg.codeshow',data.code);
                         }
 						if(success) success(data, status);
 					})
@@ -61,7 +61,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                        Root.$emit('msg.showcode',data.code);
+                        Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
@@ -91,7 +91,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                        Root.$emit('msg.showcode',data.code);
+                        Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		if(!Root.quotaList){
                     			Root.quotaList = {};
@@ -122,16 +122,13 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                        Root.$emit('msg.showcode',data.code);
+                        Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		param._id = data.id;
                     		//Root.quotaList[data.id] = param;
-                    		console.log(param);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
-                    	console.log(Root.quotaList);
-
                         console.log('[quotaService] quota crate suc =', data);
                         if(success) success(data, status);
                     })
@@ -151,7 +148,7 @@ angular.module('dy.services.quota', [
                         }					
 					)
                     .success(function(data, status){
-                        Root.$emit('msg.showcode',data.code);
+                        Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		delete Root.quotaList[params.id];
                     		Root.nowQuota = {};

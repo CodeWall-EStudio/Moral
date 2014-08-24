@@ -42,7 +42,7 @@ angular.module('dy.services.mgrade', [
 							conventTerm(data.term);
 							console.log('拉学期列表成功!', data);
 						}else{
-							Root.$emit('msg.showcode',data.code);
+							Root.$emit('msg.codeshow',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -63,7 +63,7 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
-                    	Root.$emit('msg.showcode',data.code);
+                    	Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		var tdata = JSON.parse(param.term);
                     		tdata._id = data.id;
@@ -94,7 +94,7 @@ angular.module('dy.services.mgrade', [
                         }					
 					)
                     .success(function(data, status){
-                    	Root.$emit('msg.showcode',data.code);
+                    	Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
                     		param._id = data.id;
                     		Root.termList[data.id] = param;

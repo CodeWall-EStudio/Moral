@@ -231,6 +231,10 @@ angular.module('dy.controllers.quota',[
 				Scope.resetStudentQuota();
 			});
 
+
+			Root.$on('status.student.quotacheng',function(){
+				Scope.allScore = 0;
+			})
 			Quota.getQuotaList();
 		}
 	]);

@@ -7,7 +7,7 @@ angular.module('dy.controllers.gradepanel',[
 		'$rootScope', '$scope','Util','mGradeService',function(Root,Scope,Util,Mgrade){
 
 			var selectMonth = [];
-			var defMonthLength = 5
+			var defMonthLength = 4;
 
 			function checkMonth(idx){
 				var list = $('#gradePanelModal .select-month li');
@@ -60,7 +60,7 @@ angular.module('dy.controllers.gradepanel',[
 							return true;
 						}
 					}
-					return true;
+					return ret;
 
 				}else{
 					return false;

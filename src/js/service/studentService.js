@@ -40,7 +40,7 @@ angular.module('dy.services.student', [
 							window.localStorage.setItem('student',JSON.stringify(sMap));
 							console.log('拉学生列表成功!', data);
 						}else{
-							Root.$emit('msg.showcode',data.code);
+							Root.$emit('msg.codeshow',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -69,7 +69,7 @@ angular.module('dy.services.student', [
 							console.log('拉取学生资料成功',data);
 						}else{
 							Root.Term  = false;
-							Root.$emit('msg.showcode',data.code);
+							Root.$emit('msg.codeshow',data.code);
 						}
 						if(success){
 							success(data);
@@ -160,7 +160,7 @@ angular.module('dy.services.student', [
 						}else{
 								//Root.nowStudent.scorelist[Root.nowMonth] = Root.defScore;
 								Root.nowStudent.score[Root.nowMonth] = 0;	
-								Root.$emit('msg.showcode',data.code);
+								Root.$emit('msg.codeshow',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -179,7 +179,7 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							console.log('获取学生评分成功!',data);
 						}else{
-							Root.$emit('msg.showcode',data.code);
+							Root.$emit('msg.codeshow',data.code);
 						}
 						if(success) success(data, status);
 					})
@@ -204,10 +204,10 @@ angular.module('dy.services.student', [
                         }					
 					)
                     .success(function(data, status){
-                    	Root.$emit('msg.showcode',data.code);
+                    	Root.$emit('msg.codeshow',data.code);
                     	if(data.error === 'ok' || data.code === 0){
                     		var student = JSON.parse(param.student);
-                    		student.id = data.id;
+                    		//student.id = data.id;
                     		student._id = data.id;
                     		Root.studentList[data.id] = student;
                     		sMap[data.id] = student;
