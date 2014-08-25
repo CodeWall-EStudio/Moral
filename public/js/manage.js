@@ -301,6 +301,17 @@ angular.module('dy.services.student', [
 					});
 			};
 
+			//判断是否可以评价
+			function checkMonth(month,tm){
+				var ret = false;
+				_.each(tm,function(item){
+					if((month-1) === item.s){
+						ret = true;
+					}
+				});
+				return ret;
+			}
+
 			//拉学生个人信息
 			function getStudentInfo(param,success,error){
 
@@ -314,7 +325,8 @@ angular.module('dy.services.student', [
 							Root.myInfo.quota = data.quota;
 							Root.myInfo.allscore = 15* data.indicator.length;
 							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
-							if(data.term){
+
+							if(data.term && checkMonth(data.nowMonth,data.term.month)){
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;
