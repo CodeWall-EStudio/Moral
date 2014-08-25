@@ -703,6 +703,32 @@ angular.module('dy.services.quota', [
                     });
 			}
 
+            function updateStudentData(param){
+                var pd = JSON.parse(param.score);
+                var obj = pd.scores;
+                //学生
+                if(Root.myInfo._id){
+                    Root.myInfo.total = pd.total;
+                    _.each(obj,function(item){
+                        Root.myInfo.score[item.indicator] = {
+                            self : item.self,
+                            teacher : item.teacher,
+                            parent : item.parent
+                        }
+                    });
+                //老师
+                }else{
+                    Root.studentList[obj.student].total = obj.total;
+                    _.each(obj.scores,function(item){
+                        Root.studentList[pd.student].score[item.indicator] = {
+                            self : item.self,
+                            teacher : item.teacher,
+                            parent : item.parent
+                        }
+                    });                    
+                }
+            }
+
 			function saveStudentQuota(param,success,error){
 				var ts = new Date().getTime();
 				var body = Util.object.toUrlencodedString(param);
@@ -720,6 +746,9 @@ angular.module('dy.services.quota', [
                     		//Root.quotaList[data.id] = param;
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
+                            //更新分数
+
+                            updateStudentData(param);
                     	}
                         console.log('[quotaService] quota crate suc =', data);
                         if(success) success(data, status);
@@ -1442,9 +1471,25 @@ angular.module('dy.controllers.quota',[
 				Scope.resetStudentQuota();
 			});
 
+			function getOneScores(type){
+				var total = 0;
+				_.each(Root.myInfo.score,function(item,idx){
+					Root.nowScore[idx] = item[type];
+					total += item[type];
+				});
+				Scope.allScore = total;
+			}
+
 
 			Root.$on('status.student.quotacheng',function(){
 				Scope.allScore = 0;
+				//家长
+				if(Root.getMode() === 'parent'){
+					getOneScores('parent');
+				//学生
+				}else{
+					getOneScores('self');
+				}
 			})
 			Quota.getQuotaList();
 		}

@@ -231,9 +231,25 @@ angular.module('dy.controllers.quota',[
 				Scope.resetStudentQuota();
 			});
 
+			function getOneScores(type){
+				var total = 0;
+				_.each(Root.myInfo.score,function(item,idx){
+					Root.nowScore[idx] = item[type];
+					total += item[type];
+				});
+				Scope.allScore = total;
+			}
+
 
 			Root.$on('status.student.quotacheng',function(){
 				Scope.allScore = 0;
+				//家长
+				if(Root.getMode() === 'parent'){
+					getOneScores('parent');
+				//学生
+				}else{
+					getOneScores('self');
+				}
 			})
 			Quota.getQuotaList();
 		}

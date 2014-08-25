@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统</title>
-  <link rel="stylesheet" href="css/manage.css?t=1408895509297">
+  <link rel="stylesheet" href="css/manage.css?t=1408978933172">
  </head>
 
 <body ng-controller="manageController">
@@ -20,7 +20,7 @@
  						<a class="act" ng-click="closeTerm(item.id)" ng-show="item.active === true">关闭</a>
  						<a class="act" ng-click="modifyTerm(item.id)">编辑</a>
  					</li>
- 					<li><a data-type="create" ng-click="createGrade($event)">添加</a></li>
+ 					<li><a data-type="create" ng-click="createGrade($event)">新建学期</a></li>
  				</ul> 				
  			</li>
  			<li ng-class="{active:getMode()==='student'}" ng-click="switchMode('student')"><a ng-click="studentShow()">学生信息管理</a></li>
@@ -331,7 +331,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/manage.js?t=1408895509297"></script>
+	<script src="js/manage.js?t=1408978933172"></script>
 
 
 </body>
