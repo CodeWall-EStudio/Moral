@@ -19,7 +19,8 @@ angular.module('dy.controllers.quota',[
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
-			Root.quotaList = {}; //指标列表
+			Root.quotaList = []; //指标列表
+			Root.quotaMap = {};
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
@@ -39,11 +40,12 @@ angular.module('dy.controllers.quota',[
 
 			//后台变更指标
 			Scope.changeQuota = function(id){
-				Root.nowQuota = Root.quotaList[id];
+				Root.nowQuota = Root.quotaMap[id];
 			}	
 
 			//后台创建指标
 			Scope.createQuota = function(){
+				Root.nowQuota = {};
 			};	
 
 			Scope.resetQuota = function(){
@@ -105,7 +107,7 @@ angular.module('dy.controllers.quota',[
 				}
 				_.each(Root.nowScore,function(item,idx){
 					var self,parent,teacher;
-					if($.isEmptyObject(score)){
+					if($.isEmptyObject(score) || !score[idx]){
 						self = 0;
 						parent = 0;
 						teacher = 0;
@@ -197,8 +199,8 @@ angular.module('dy.controllers.quota',[
 			//重置学生分数
 			Scope.resetStudentQuota = function(){
 				Scope.allScore = 0;
-				for(var i in Root.quotaList){
-					Root.quotaList[i].now = 0;
+				for(var i in Root.quotaMap){
+					Root.quotaMap[i].now = 0;
 				}
 			}
 
@@ -207,7 +209,7 @@ angular.module('dy.controllers.quota',[
 			Scope.setStudentQuota = function(id,num){
 
 				nowRecord[id] = num;
-				Root.quotaList[id].now = num;
+				Root.quotaMap[id].now = num;
 				Root.nowScore[id] = num;
 
 				//console.log(Root.nowScore);

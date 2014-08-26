@@ -304,8 +304,8 @@ angular.module('dy.services.student', [
 			//判断是否可以评价
 			function checkMonth(month,tm){
 				var ret = false;
-				_.each(tm,function(item){
-					if((month-1) === item.s){
+				_.each(tm,function(item,idx){
+					if(month === item.e){
 						ret = true;
 					}
 				});
@@ -326,7 +326,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.allscore = 15* data.indicator.length;
 							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
 
-							if(data.term && checkMonth(data.nowMonth,data.term.month)){
+							if(data.term && checkMonth(data.nowmonth,data.term.months)){
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;
@@ -575,9 +575,11 @@ angular.module('dy.services.quota', [
 
 			function conventQuota(data){
 				//if(!Root.quotaList){
-					Root.quotaList = {};
+					Root.quotaList = [];
+                    Root.quotaMap = {};
 				//}
 				Root.defScore = {};
+                Root.quotaList = data;
 				for(var i in data){
 					data[i].id = data[i]._id;
 					Root.defScore[data[i]._id] = {
@@ -585,8 +587,10 @@ angular.module('dy.services.quota', [
 						parent : 0,
 						teacher: 0
 					};
-					Root.quotaList[data[i]._id] = data[i];
+					//Root.quotaList[data[i]._id] = data[i];
+                    Root.quotaMap[data[i]._id] = data[i];
 				}
+                orderByQuota('order');
 			}
 
 			function getQuotaList(params,success,error){
@@ -630,7 +634,8 @@ angular.module('dy.services.quota', [
                     		}
                     		var d = JSON.parse(param.indicator);
                     		d._id = data.id;
-                    		Root.quotaList[data.id] = d;
+                    		Root.quotaMap[data.id] = d;
+                            Root.quotaList.push(d);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
@@ -661,7 +666,8 @@ angular.module('dy.services.quota', [
                     		var d = JSON.parse(param.indicator);
                     		console.log(d,data.id);
                     		d._id = data.id;
-                    		Root.quotaList[data.id] = d;
+                            Root.quotaMap[data.id] = d;
+                            Root.quotaList.push(d);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
@@ -741,7 +747,8 @@ angular.module('dy.services.quota', [
                     .success(function(data, status){
                         Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
-                    		delete Root.quotaList[params.id];
+                    		delete Root.quotaMap[params.id];
+
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
@@ -939,6 +946,7 @@ angular.module('dy.controllers.student',[
 
 			Root.rStudent = {};
 			Root.studentList = {};
+			Root.studentMap = {};
 			Root.nowStudent = {};
 
 			Scope.order = {
@@ -1071,7 +1079,8 @@ angular.module('dy.controllers.quota',[
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
-			Root.quotaList = {}; //指标列表
+			Root.quotaList = []; //指标列表
+			Root.quotaMap = {};
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
@@ -1091,11 +1100,12 @@ angular.module('dy.controllers.quota',[
 
 			//后台变更指标
 			Scope.changeQuota = function(id){
-				Root.nowQuota = Root.quotaList[id];
+				Root.nowQuota = Root.quotaMap[id];
 			}	
 
 			//后台创建指标
 			Scope.createQuota = function(){
+				Root.nowQuota = {};
 			};	
 
 			Scope.resetQuota = function(){
@@ -1157,7 +1167,7 @@ angular.module('dy.controllers.quota',[
 				}
 				_.each(Root.nowScore,function(item,idx){
 					var self,parent,teacher;
-					if($.isEmptyObject(score)){
+					if($.isEmptyObject(score) || !score[idx]){
 						self = 0;
 						parent = 0;
 						teacher = 0;
@@ -1249,8 +1259,8 @@ angular.module('dy.controllers.quota',[
 			//重置学生分数
 			Scope.resetStudentQuota = function(){
 				Scope.allScore = 0;
-				for(var i in Root.quotaList){
-					Root.quotaList[i].now = 0;
+				for(var i in Root.quotaMap){
+					Root.quotaMap[i].now = 0;
 				}
 			}
 
@@ -1259,7 +1269,7 @@ angular.module('dy.controllers.quota',[
 			Scope.setStudentQuota = function(id,num){
 
 				nowRecord[id] = num;
-				Root.quotaList[id].now = num;
+				Root.quotaMap[id].now = num;
 				Root.nowScore[id] = num;
 
 				//console.log(Root.nowScore);

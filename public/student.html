@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-学生/家长</title>
-  <link rel="stylesheet" href="css/main.css?t=1408979670589">
+  <link rel="stylesheet" href="css/main.css?t=1409072777249">
  </head>
 <body ng-controller="studentController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -104,18 +104,19 @@
  						{{item.desc}}
  					</dd>
  					<dd class="score-result">
+
  						<ul class="score-list">
  							<li>
  								教师
- 								<div>{{myInfo.score[item.id].teacher}}</div>
+ 								<div>{{myInfo.score[item._id].teacher}}</div>
  							</li>
  							<li>
  								自评
- 								<div>{{myInfo.score[item.id].self}}</div>
+ 								<div>{{myInfo.score[item._id].self}}</div>
  							</li>
  							<li>
  								家长
- 								<div>{{myInfo.score[item.id].parent}}</div>
+ 								<div>{{myInfo.score[item._id].parent}}</div>
  							</li>
  						</ul>
  					</dd>
@@ -156,7 +157,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/student.js?t=1408979670589"></script>
+	<script src="js/student.js?t=1409072777249"></script>
 
 
 </body>

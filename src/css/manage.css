@@ -106,6 +106,7 @@ li{
 }
 .top-nav .dropdown-menu a.act{
 	padding:3px;
+	text-decoration: underline;
 }
 .top-nav>li.active>a{
 	background-color:#04386d;

@@ -30,6 +30,7 @@ angular.module('dy.controllers.student',[
 
 			Root.rStudent = {};
 			Root.studentList = {};
+			Root.studentMap = {};
 			Root.nowStudent = {};
 
 			Scope.order = {

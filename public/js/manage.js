@@ -304,8 +304,8 @@ angular.module('dy.services.student', [
 			//判断是否可以评价
 			function checkMonth(month,tm){
 				var ret = false;
-				_.each(tm,function(item){
-					if((month-1) === item.s){
+				_.each(tm,function(item,idx){
+					if(month === item.e){
 						ret = true;
 					}
 				});
@@ -326,7 +326,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.allscore = 15* data.indicator.length;
 							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
 
-							if(data.term && checkMonth(data.nowMonth,data.term.month)){
+							if(data.term && checkMonth(data.nowmonth,data.term.months)){
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;
@@ -617,9 +617,11 @@ angular.module('dy.services.quota', [
 
 			function conventQuota(data){
 				//if(!Root.quotaList){
-					Root.quotaList = {};
+					Root.quotaList = [];
+                    Root.quotaMap = {};
 				//}
 				Root.defScore = {};
+                Root.quotaList = data;
 				for(var i in data){
 					data[i].id = data[i]._id;
 					Root.defScore[data[i]._id] = {
@@ -627,8 +629,10 @@ angular.module('dy.services.quota', [
 						parent : 0,
 						teacher: 0
 					};
-					Root.quotaList[data[i]._id] = data[i];
+					//Root.quotaList[data[i]._id] = data[i];
+                    Root.quotaMap[data[i]._id] = data[i];
 				}
+                orderByQuota('order');
 			}
 
 			function getQuotaList(params,success,error){
@@ -672,7 +676,8 @@ angular.module('dy.services.quota', [
                     		}
                     		var d = JSON.parse(param.indicator);
                     		d._id = data.id;
-                    		Root.quotaList[data.id] = d;
+                    		Root.quotaMap[data.id] = d;
+                            Root.quotaList.push(d);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
@@ -703,7 +708,8 @@ angular.module('dy.services.quota', [
                     		var d = JSON.parse(param.indicator);
                     		console.log(d,data.id);
                     		d._id = data.id;
-                    		Root.quotaList[data.id] = d;
+                            Root.quotaMap[data.id] = d;
+                            Root.quotaList.push(d);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
@@ -783,7 +789,8 @@ angular.module('dy.services.quota', [
                     .success(function(data, status){
                         Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
-                    		delete Root.quotaList[params.id];
+                    		delete Root.quotaMap[params.id];
+
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
@@ -1101,6 +1108,7 @@ angular.module('dy.controllers.student',[
 
 			Root.rStudent = {};
 			Root.studentList = {};
+			Root.studentMap = {};
 			Root.nowStudent = {};
 
 			Scope.order = {
@@ -1271,7 +1279,8 @@ angular.module('dy.controllers.quota',[
 			var allRecord = 0;//总分
 			var nowRecord = {};//当前指标打分列表
 
-			Root.quotaList = {}; //指标列表
+			Root.quotaList = []; //指标列表
+			Root.quotaMap = {};
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
@@ -1291,11 +1300,12 @@ angular.module('dy.controllers.quota',[
 
 			//后台变更指标
 			Scope.changeQuota = function(id){
-				Root.nowQuota = Root.quotaList[id];
+				Root.nowQuota = Root.quotaMap[id];
 			}	
 
 			//后台创建指标
 			Scope.createQuota = function(){
+				Root.nowQuota = {};
 			};	
 
 			Scope.resetQuota = function(){
@@ -1357,7 +1367,7 @@ angular.module('dy.controllers.quota',[
 				}
 				_.each(Root.nowScore,function(item,idx){
 					var self,parent,teacher;
-					if($.isEmptyObject(score)){
+					if($.isEmptyObject(score) || !score[idx]){
 						self = 0;
 						parent = 0;
 						teacher = 0;
@@ -1449,8 +1459,8 @@ angular.module('dy.controllers.quota',[
 			//重置学生分数
 			Scope.resetStudentQuota = function(){
 				Scope.allScore = 0;
-				for(var i in Root.quotaList){
-					Root.quotaList[i].now = 0;
+				for(var i in Root.quotaMap){
+					Root.quotaMap[i].now = 0;
 				}
 			}
 
@@ -1459,7 +1469,7 @@ angular.module('dy.controllers.quota',[
 			Scope.setStudentQuota = function(id,num){
 
 				nowRecord[id] = num;
-				Root.quotaList[id].now = num;
+				Root.quotaMap[id].now = num;
 				Root.nowScore[id] = num;
 
 				//console.log(Root.nowScore);
@@ -1519,22 +1529,32 @@ angular.module('dy.controllers.gradepanel',[
 
 			function checkMonth(idx){
 				var list = $('#gradePanelModal .select-month li');
+				selectMonth = [];
 				list.each(function(i){
 					if(i >= idx-1 && i < idx+defMonthLength-1){
-						$(this).addClass('active').removeClass('disabled');
+						$(this).addClass('active').removeClass('disabled').removeAttr('title');
 						selectMonth.push({
 							's' : i+1>12?1:i+1,
 							'e' : i+2>12?1:i+2
 						});						
 					}else{
-						$(this).removeClass('active').addClass('disabled');
-
+						$(this).removeClass('active').addClass('disabled').removeAttr('title');
 					}
 					if(!Root.Term.months){
 						Root.Term.months = {};
 					}
-					Root.Term.months = selectMonth;
 				});
+				if(selectMonth.length < defMonthLength){
+					var l = defMonthLength - selectMonth.length;
+					for(var i = 0;i<l;i++){
+						selectMonth.push({
+							s : i+1,
+							e : i+2
+						});
+						list.eq(i).addClass('active').removeClass('disabled').attr('title','下一年');
+					}
+				}
+				Root.Term.months = selectMonth;
 			}
 
 			Root.createGrade = function(e){
@@ -1585,6 +1605,19 @@ angular.module('dy.controllers.gradepanel',[
 			}
 
 			Scope.createTerm = function(){
+				if(!Root.nowTerm.name || (Root.nowTerm.name && Root.nowTerm.name === '')){
+					alert('学期名称必填');
+					return;
+				}
+				if(!Root.nowTerm.day ){
+					alert('还没有选结束日期');
+					return;
+				}				
+
+				if($.isEmptyObject(Root.nowTerm.months)){
+					alert('还没有选择月份!')
+					return;
+				}
 				var param = {
 					name : Root.nowTerm.name,
 					active : false,
@@ -1648,6 +1681,8 @@ angular.module('dy.controllers.gradepanel',[
 					month.push(i);
 				}
 
+
+				$('#gradePanelModal .select-month li').removeClass('disabled').removeClass('active').removeAttr('title');
 				Scope.daylist = list;
 				Scope.monthlist = month;
 

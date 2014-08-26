@@ -52,8 +52,8 @@ angular.module('dy.services.student', [
 			//判断是否可以评价
 			function checkMonth(month,tm){
 				var ret = false;
-				_.each(tm,function(item){
-					if((month-1) === item.s){
+				_.each(tm,function(item,idx){
+					if(month === item.e){
 						ret = true;
 					}
 				});
@@ -74,7 +74,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.allscore = 15* data.indicator.length;
 							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
 
-							if(data.term && checkMonth(data.nowMonth,data.term.month)){
+							if(data.term && checkMonth(data.nowmonth,data.term.months)){
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;

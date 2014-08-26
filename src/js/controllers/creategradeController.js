@@ -11,22 +11,32 @@ angular.module('dy.controllers.gradepanel',[
 
 			function checkMonth(idx){
 				var list = $('#gradePanelModal .select-month li');
+				selectMonth = [];
 				list.each(function(i){
 					if(i >= idx-1 && i < idx+defMonthLength-1){
-						$(this).addClass('active').removeClass('disabled');
+						$(this).addClass('active').removeClass('disabled').removeAttr('title');
 						selectMonth.push({
 							's' : i+1>12?1:i+1,
 							'e' : i+2>12?1:i+2
 						});						
 					}else{
-						$(this).removeClass('active').addClass('disabled');
-
+						$(this).removeClass('active').addClass('disabled').removeAttr('title');
 					}
 					if(!Root.Term.months){
 						Root.Term.months = {};
 					}
-					Root.Term.months = selectMonth;
 				});
+				if(selectMonth.length < defMonthLength){
+					var l = defMonthLength - selectMonth.length;
+					for(var i = 0;i<l;i++){
+						selectMonth.push({
+							s : i+1,
+							e : i+2
+						});
+						list.eq(i).addClass('active').removeClass('disabled').attr('title','下一年');
+					}
+				}
+				Root.Term.months = selectMonth;
 			}
 
 			Root.createGrade = function(e){
@@ -77,6 +87,19 @@ angular.module('dy.controllers.gradepanel',[
 			}
 
 			Scope.createTerm = function(){
+				if(!Root.nowTerm.name || (Root.nowTerm.name && Root.nowTerm.name === '')){
+					alert('学期名称必填');
+					return;
+				}
+				if(!Root.nowTerm.day ){
+					alert('还没有选结束日期');
+					return;
+				}				
+
+				if($.isEmptyObject(Root.nowTerm.months)){
+					alert('还没有选择月份!')
+					return;
+				}
 				var param = {
 					name : Root.nowTerm.name,
 					active : false,
@@ -140,6 +163,8 @@ angular.module('dy.controllers.gradepanel',[
 					month.push(i);
 				}
 
+
+				$('#gradePanelModal .select-month li').removeClass('disabled').removeClass('active').removeAttr('title');
 				Scope.daylist = list;
 				Scope.monthlist = month;
 

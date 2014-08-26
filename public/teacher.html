@@ -5,13 +5,13 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1408979670589">
+  <link rel="stylesheet" href="css/main.css?t=1409072777249">
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
  		<ul class="nav nav-tabs top-nav">
  			<li ng-class="{hide:User.auth === 0,active:getMode() === 'result'}"><a ng-click="switchMode('result')">评价统计</a></li>
- 			<li ng-class="{active:getMode() === 'record'}"><a ng-click="switchMode('record')">评价</a></li> 			
+ 			<li ng-class="{active:getMode() === 'record',hide:!studentTerm}"><a ng-click="switchMode('record')">评价</a></li> 			
  		</ul>
  		<div class="userinfo">
  			<span>{{Teacher.cnname}}</span>
@@ -171,7 +171,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/teacher.js?t=1408979670589"></script>
+	<script src="js/teacher.js?t=1409072777249"></script>
 
  </body>
  </html>

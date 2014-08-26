@@ -13,9 +13,11 @@ angular.module('dy.services.quota', [
 
 			function conventQuota(data){
 				//if(!Root.quotaList){
-					Root.quotaList = {};
+					Root.quotaList = [];
+                    Root.quotaMap = {};
 				//}
 				Root.defScore = {};
+                Root.quotaList = data;
 				for(var i in data){
 					data[i].id = data[i]._id;
 					Root.defScore[data[i]._id] = {
@@ -23,8 +25,10 @@ angular.module('dy.services.quota', [
 						parent : 0,
 						teacher: 0
 					};
-					Root.quotaList[data[i]._id] = data[i];
+					//Root.quotaList[data[i]._id] = data[i];
+                    Root.quotaMap[data[i]._id] = data[i];
 				}
+                orderByQuota('order');
 			}
 
 			function getQuotaList(params,success,error){
@@ -68,7 +72,8 @@ angular.module('dy.services.quota', [
                     		}
                     		var d = JSON.parse(param.indicator);
                     		d._id = data.id;
-                    		Root.quotaList[data.id] = d;
+                    		Root.quotaMap[data.id] = d;
+                            Root.quotaList.push(d);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
@@ -99,7 +104,8 @@ angular.module('dy.services.quota', [
                     		var d = JSON.parse(param.indicator);
                     		console.log(d,data.id);
                     		d._id = data.id;
-                    		Root.quotaList[data.id] = d;
+                            Root.quotaMap[data.id] = d;
+                            Root.quotaList.push(d);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}
@@ -179,7 +185,8 @@ angular.module('dy.services.quota', [
                     .success(function(data, status){
                         Root.$emit('msg.codeshow',data.code);
                     	if(data.code === 0){
-                    		delete Root.quotaList[params.id];
+                    		delete Root.quotaMap[params.id];
+
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}

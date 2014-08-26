@@ -21,7 +21,7 @@
  	<div class="header-blue" ng-controller="indexnavController">
  		<ul class="nav nav-tabs top-nav">
  			<li ng-class="{hide:User.auth === 0,active:getMode() === 'result'}"><a ng-click="switchMode('result')">评价统计</a></li>
- 			<li ng-class="{active:getMode() === 'record'}"><a ng-click="switchMode('record')">评价</a></li> 			
+ 			<li ng-class="{active:getMode() === 'record',hide:!studentTerm}"><a ng-click="switchMode('record')">评价</a></li> 			
  		</ul>
  		<div class="userinfo">
  			<span>{{Teacher.cnname}}</span>
