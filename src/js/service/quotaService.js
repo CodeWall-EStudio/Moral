@@ -25,12 +25,15 @@ angular.module('dy.services.quota', [
 						parent : 0,
 						teacher: 0
 					};
+                    var obj = {};
+                    _.extend(obj,data[i]);
 					//Root.quotaList[data[i]._id] = data[i];
-                    Root.quotaMap[data[i]._id] = data[i];
+                    Root.quotaMap[obj._id] = obj;
 				}
                 orderByQuota('order');
 			}
 
+            //去指标列表
 			function getQuotaList(params,success,error){
 				var ts = new Date().getTime();
 				params = params || {};
@@ -85,6 +88,15 @@ angular.module('dy.services.quota', [
                     });				
 			};
 
+            function updateQuota(obj){
+                _.each(Root.quotaList,function(item){
+                    if(item._id === obj._id){
+                        _.extend(item,obj);
+                    }
+                });
+            }
+
+            //修改指标
 			function modifyQuota(param,success,error){
 				var ts = new Date().getTime();
 				var body = Util.object.toUrlencodedString(param);
@@ -102,10 +114,9 @@ angular.module('dy.services.quota', [
                     			Root.quotaList = {};
                     		}
                     		var d = JSON.parse(param.indicator);
-                    		console.log(d,data.id);
                     		d._id = data.id;
                             Root.quotaMap[data.id] = d;
-                            Root.quotaList.push(d);
+                            updateQuota(d);
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                     	}

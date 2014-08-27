@@ -24,6 +24,7 @@ angular.module('dy.controllers.student',[
 
 			Root.myInfo = {};
 			Root.studentTerm = false;
+			Root.studentMap = {};
 
 			var userList = {};
 			var gradeList = [];
@@ -49,7 +50,7 @@ angular.module('dy.controllers.student',[
 
 			Root.changeStudent = function(id){
 				Root.nowStudent = {};
-				var st = Root.studentList[id];
+				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);				
 			}
 		
