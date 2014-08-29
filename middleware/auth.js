@@ -158,6 +158,11 @@ module.exports = function auth(method, role) {
                     sess.user = {};
                 }
                 next();
+                /*var termModel = db.getTermModel();
+                termModel.find(function(err, terms) {
+                    console.log(terms);
+                    next();
+                });*/
             }
         }  else if (role === 'student') {
             var hostUrl = req.protocol + '://' + req.headers.host;

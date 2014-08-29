@@ -4,107 +4,105 @@
 
 var db = require('../middleware/db');
 var CONSTANTS = require('../config/constants');
-var fs = require('fs');
-var csv = require('csv');
+var XLS = require('xlsjs');
 
 // the middleware function
 module.exports = function upload(method) {
     return function (req, res, next) {
         if (method === 'post') {
-            fs.readFile('./' + req.files.thumbnail.path, 'utf-8', function(err, data){
-                if(err) {
-                    res.render('error', {message: '读取上传文件出错', error: err});
+            var workbook = XLS.readFile('./' + req.files.thumbnail.path);
+            var sheet_name_list = workbook.SheetNames;
+            var data = XLS.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+            var termModel = db.getTermModel();
+            termModel.findOne({'status': 0}, function(err, term) {
+                if (err && !term) {
+                    console.error(err);
+                    res.render('error', {message: '获取学期出错', error: err});
                 } else {
-                    csv.parse(data, function(err, data){
-                        if (err) {
-                            res.render('error', {message: '解析文件出错', error: err});
-                            console.error(err);
-                        } else {
-                            if (req.body.type === 'student') {
-                                var studentModel = db.getStudentModel();
-                                studentModel.remove({}, function(err) {
-                                    if (err) {
-                                        console.error(err);
-                                    }
-                                    var students = new Array();
-                                    for (var i = 0; i<data.length; i++) {
-                                        if (i > 1) {
-                                            students.push({
-                                                id: data[i][5],
-                                                name: data[i][3],
-                                                number: data[i][6],
-                                                grade: data[i][0],
-                                                class: data[i][1],
-                                                pid: data[i][2],
-                                                sex: data[i][4] == '男' ? 1 : 0});
-                                        }
-                                    }
-                                    studentModel.create(students, function(err) {
-                                        if (err) {
-                                            console.error(err);
-                                        }
-                                        res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
-                                    });
-                                });
-
-                            } else if (req.body.type === 'teacher') {
-                                var relationshipModel = db.getRelationshipModel();
-                                relationshipModel.remove({}, function(err) {
-                                    if (err) {
-                                        console.error(err);
-                                    }
-                                    var relationships = new Array();
-                                    for (var i = 0; i<data.length; i++) {
-                                        if (i > 1) {
-                                            relationships.push({
-                                                id: data[i][0],
-                                                name: data[i][1],
-                                                grade: data[i][2],
-                                                class: data[i][3]
-                                            });
-                                        }
-                                    }
-                                    relationshipModel.create(relationships, function(err) {
-                                        if (err) {
-                                            console.error(err);
-                                        }
-                                        res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
-                                    });
-                                });
-
-                            } else if (req.body.type === 'term') {
-                                var termModel = db.getTermModel();
-                                termModel.remove({}, function(err) {
-                                    if (err) {
-                                        console.error(err);
-                                    }
-                                    var terms = new Array();
-                                    for (var i = 0; i<data.length; i++) {
-                                        if (i > 1) {
-                                            relationships.push({
-                                                id: data[i][0],
-                                                name: data[i][1],
-                                                grade: data[i][2],
-                                                class: data[i][3]
-                                            });
-                                        }
-                                    }
-                                    relationshipModel.create(relationships, function(err) {
-                                        if (err) {
-                                            console.error(err);
-                                        }
-                                        res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
-                                    });
-                                });
-
-                            } else if (req.body.type === 'indicator') {
-
-                            } else {
-
+                    var termid = term._id;
+                    if (req.body.type === 'student') {
+                        var studentModel = db.getStudentModel();
+                        studentModel.remove({term: termid}, function(err) {
+                            if (err) {
+                                console.error(err);
                             }
-                        }
-                    });
-                    // res.json({body: req.body});
+                            var students = new Array();
+                            for (var i = 0; i<data.length; i++) {
+                                if (i > 0) {
+                                    students.push({
+                                        term: termid,
+                                        id: data[i]['s_baseinfo_cardid'],
+                                        name: data[i]['s_baseinfo_name'],
+                                        number: data[i]['s_beadroll_studentno'],
+                                        grade: data[i]['e_grade_gradenum'],
+                                        class: data[i]['e_class_serial'],
+                                        pid: data[i]['p_id'],
+                                        sex: data[i]['s_baseinfo_sex'] == '男' ? 1 : 0,
+                                        eid: data[i]['s_educationid_edu_id']
+                                    });
+                                }
+                            }
+                            studentModel.create(students, function(err) {
+                                if (err) {
+                                    console.error(err);
+                                }
+                                res.redirect(req.protocol + '://' + req.headers.host + '/teacher/manage.html');
+                            });
+                        });
+
+                    } else if (req.body.type === 'teacher') {
+                        var relationshipModel = db.getRelationshipModel();
+                        relationshipModel.remove({term: termid}, function(err) {
+                            if (err) {
+                                console.error(err);
+                            }
+                            var relationships = new Array();
+                            for (var i = 0; i<data.length; i++) {
+                                if (i > 0) {
+                                    relationships.push({
+                                        term: termid,
+                                        id: data[i]['t_baseinfo_id'],
+                                        name: data[i]['t_baseinfo_name'],
+                                        grade: data[i]['e_grade_gradenum'],
+                                        class: data[i]['e_class_serial']
+                                    });
+                                }
+                            }
+                            relationshipModel.create(relationships, function(err) {
+                                if (err) {
+                                    console.error(err);
+                                }
+                                res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
+                            });
+                        });
+                    } else if (req.body.type === 'indicator') {
+                        var indicatorModel = db.getIndicatorModel();
+                        indicatorModel.remove({term: termid}, function(err) {
+                            if (err) {
+                                console.error(err);
+                            }
+                            var indicators = new Array();
+                            for (var i = 0; i<data.length; i++) {
+                                if (i > 0) {
+                                    indicators.push({
+                                        term: termid,
+                                        name: data[i]['i_baseinfo_name'],
+                                        desc: data[i]['i_baseinfo_desc'],
+                                        order: data[i]['i_baseinfo_order'],
+                                        score: data[i]['i_baseinfo_score']
+                                    });
+                                }
+                            }
+                            indicatorModel.create(indicators, function(err) {
+                                if (err) {
+                                    console.error(err);
+                                }
+                                res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
+                            });
+                        });
+                    } else {
+
+                    }
                 }
             });
         } else {

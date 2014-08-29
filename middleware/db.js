@@ -14,6 +14,7 @@ var Schema = mongoose.Schema;
 // 学生
 var studentSchema = new Schema({
     id: String,
+    term: Schema.Types.ObjectId,
     name: String,
     number: String,
     grade: Number,
@@ -24,11 +25,13 @@ var studentSchema = new Schema({
 // 老师
 var teacherSchema = new Schema({
     id: String,
+    term: Schema.Types.ObjectId,
     authority: Number /* 0 普通 1 数据管理 2 系统管理 3 校长*/
 });
 // 关系
 var relationshipSchema = new Schema({
     id: String,
+    term: Schema.Types.ObjectId,
     name: String,
     grade: Number,
     class: Number
@@ -36,7 +39,7 @@ var relationshipSchema = new Schema({
 // 学期
 var termSchema = new Schema({
     name: String,
-    active: Boolean,
+    status: Number, /* 0：当前编辑状态，1：关闭状态，2：激活状态 */
     year: Number,
     day: Number,
     months: [
