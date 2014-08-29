@@ -1684,7 +1684,7 @@ angular.module('dy.controllers.gradepanel',[
 				}
 				var param = {
 					name : Root.nowTerm.name,
-					active : false,
+					status : 0,
 					year : new Date().getFullYear(),
 					day : Root.nowTerm.day,
 					months : Root.nowTerm.months
@@ -1710,17 +1710,18 @@ angular.module('dy.controllers.gradepanel',[
 				var param = Root.termList[id];
 				Mgrade.setActTerm({
 					id : param._id,
-					active : true
+					status : 1
 				});
 				console.log(param);
 			}
 
-			Root.closeTerm = function(id){
+			Root.closeTerm = function(id,type){
 				var param = Root.termList[id];
+				var status = type || 0;
 				param.active = false;
 				Mgrade.setActTerm({
 					id : param._id,
-					active : false
+					status : type
 				});
 			}			
 

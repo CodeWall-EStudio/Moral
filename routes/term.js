@@ -49,10 +49,10 @@ module.exports = function term(method) {
         } else if( method ==='setact'){
             try{
                 var id = req.body.id;
-                var active = req.body.active;
+                var status = req.body.status;
 
-                if(active){
-                    termModel.update({active:true},{active:false},{multi:true},function(err,raw){
+                if(status == 1){
+                    termModel.update({status:1},{status:2},{multi:true},function(err,raw){
 
                         if(err){
                             res.json({ code: CONSTANTS.MSG_PARAM });
@@ -60,7 +60,7 @@ module.exports = function term(method) {
                         }
                         console.log('set act numb:',raw,id);
 
-                        termModel.update({_id:id},{$set:{active:true}},function(err,raw){
+                        termModel.update({_id:id},{$set:{status:1}},function(err,raw){
                             if (err) return console.error(err);
                             console.log('update suc!');
                             res.json({ code: CONSTANTS.MSG_SUCC});
@@ -68,7 +68,7 @@ module.exports = function term(method) {
                     });
 
                 }else{
-                    termModel.update({_id:id},{$set:{active:false}},function(err,raw){
+                    termModel.update({_id:id},{$set:{status:status}},function(err,raw){
                         console.log(raw);
                         if (err) return console.error(err);
                         res.json({ code: CONSTANTS.MSG_SUCC});
