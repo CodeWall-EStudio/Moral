@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统</title>
-  <link rel="stylesheet" href="css/manage.css?t=1409351367075">
+  <link rel="stylesheet" href="css/manage.css?t=1409354262839">
  </head>
 
 <body ng-controller="manageController">
@@ -16,8 +16,10 @@
  				<ul class="dropdown-menu" role="menu">
  					<li ng-repeat="item in termList">
  						<a ng-click="showGrade(item.id)">{{item.name}}</a>
- 						<a class="act" ng-click="setActiveTerm(item.id)" ng-show="item.active === false">激活</a> 
- 						<a class="act" ng-click="closeTerm(item.id)" ng-show="item.active === true">关闭</a>
+ 						<a class="act" ng-click="setActiveTerm(item.id)" ng-show="item.status != 1">激活</a> 
+ 						<a class="act" ng-click="closeTerm(item.id，2)" ng-show="item.status === 1">非激活</a>
+ 						<a class="act" ng-click="closeTerm(item.id)" >关闭</a>
+
  						<a class="act" ng-click="modifyTerm(item.id)">编辑</a>
  					</li>
  					<li><a data-type="create" ng-click="createGrade($event)">新建学期</a></li>
@@ -346,7 +348,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/manage.js?t=1409351367075"></script>
+	<script src="js/manage.js?t=1409354262839"></script>
 
 
 </body>
