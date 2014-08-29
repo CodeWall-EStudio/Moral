@@ -1546,13 +1546,44 @@ angular.module('dy.controllers.gradepanel',[
         'dy.services.utils',
         'dy.services.mgrade'	
 	])
+	.directive("fileread", [function () {
+	    return {
+	        scope: {
+	            fileread: "="
+	        },
+	        link: function (scope, element, attributes) {
+	        	console.log(scope,element,attributes);
+	            element.bind("change", function (changeEvent) {
+	                scope.$apply(function () {
+	                	console.log(changeEvent);
+	                    scope.fileread = changeEvent.target.files[0];
+	                    // or all selected files:
+	                    // scope.fileread = changeEvent.target.files;
+	                });
+	            });
+	        }
+	    }
+	}])
 	.controller('GradePanelController',[
 		'$rootScope', '$scope','Util','mGradeService',function(Root,Scope,Util,Mgrade){
 
 			var selectMonth = [];
 			var defMonthLength = 4;
 
+			window.uploadTeacher = function(){
+				$('#teacherFrom').submit();
+			}
+
+			window.uploadStudent = function(){
+				$('#studentFrom').submit();
+			}
+
+			window.uploadQuota = function(){
+				$('#quotaFrom').submit();
+			}
+
 			function checkMonth(idx){
+
 				var list = $('#gradePanelModal .select-month li');
 				selectMonth = [];
 				list.each(function(i){
@@ -1579,7 +1610,9 @@ angular.module('dy.controllers.gradepanel',[
 						list.eq(i).addClass('active').removeClass('disabled').attr('title','下一年');
 					}
 				}
-				Root.Term.months = selectMonth;
+				console.log(idx);
+				console.log(selectMonth);
+				Root.nowTerm.months = selectMonth;
 			}
 
 			Root.createGrade = function(e){
@@ -1603,6 +1636,10 @@ angular.module('dy.controllers.gradepanel',[
 					val = target.data('value');
 
 				checkMonth(val);
+			}
+
+			Root.importTeacher = function(){
+				console.log(1234);
 			}
 
 			Scope.checkTremMonth = function(month){
@@ -1639,6 +1676,8 @@ angular.module('dy.controllers.gradepanel',[
 					return;
 				}				
 
+
+				console.log(Root.nowTerm.months);
 				if($.isEmptyObject(Root.nowTerm.months)){
 					alert('还没有选择月份!')
 					return;

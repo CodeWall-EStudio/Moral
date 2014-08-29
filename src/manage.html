@@ -75,11 +75,11 @@
 	 			</div>
 
 	 			<div class="content-insert-bar">
-                    <form method="post" enctype="multipart/form-data" action="/teacher/upload">
+                    <form method="post" enctype="multipart/form-data" action="/teacher/upload" id="studentFrom">
                     	<a>下载当前列表</a>
                         <input type="hidden" name="type" value="student">
-                        <input class="btn btn-primary" value="导入CMIS数据" type="submit" >
-                        <input type="file" name="thumbnail" class="btn hide-input hide-input-student">
+                        <button class="btn btn-primary">导入CMIS数据</button>
+                        <input type="file" name="thumbnail" onchange="uploadStudent()" class="btn hide-input hide-input-student">
                     </form>	 				
 	 			</div>
 			</div>
@@ -107,21 +107,22 @@
 	 			</div>
 
 	 			<div class="content-insert-bar">
-                    <form method="post" enctype="multipart/form-data" action="/manage/upload">
+                    <form method="post" enctype="multipart/form-data" action="/teacher/upload" id="teacherFrom">
                     	<a>下载含年级班级数据的模板</a>
+                    	<input type="hidden" value="teacher" name='type' />
                         <button class="btn btn-primary">导入班主任数据</button>
-                        <input type="file" name="thumbnail" class="btn hide-input hide-input-teacher">
+                        <input type="file" name="thumbnail" onchange="uploadTeacher()" class="btn hide-input hide-input-teacher">
                     </form>	 
 	 			</div>
 			</div>
 
 			<div class="content-header quota-header hide"  ng-class="{hide:getMode()!=='quota'}">
 	 			<div class="content-insert-bar">
-                    <form method="post" enctype="multipart/form-data" action="/indicator/upload">
+                    <form method="post" enctype="multipart/form-data" action="/teacher/upload" id="quotaFrom">
 	   	 				<a>下载当前指标</a>
 		 				<a>下载模板</a>
                         <button class="btn btn-primary">从文件导入</button>
-                        <input type="file" name="thumbnail" class="btn hide-input hide-input-quota">
+                        <input type="file" name="thumbnail" onchange="uploadQuota()" class="btn hide-input hide-input-quota">
                     </form>	 	 				
 	 			</div>
 			</div>
