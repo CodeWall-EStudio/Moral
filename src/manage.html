@@ -27,7 +27,7 @@
  					<li ng-repeat="item in termList">
  						<a ng-click="showGrade(item.id)">{{item.name}}</a>
  						<a class="act" ng-click="setActiveTerm(item.id)" ng-show="item.status != 1">激活</a> 
- 						<a class="act" ng-click="closeTerm(item.id，2)" ng-show="item.status === 1">非激活</a>
+ 						<a class="act" ng-click="closeTerm(item.id,2)" ng-show="item.status === 1">非激活</a>
  						<a class="act" ng-click="closeTerm(item.id)" >关闭</a>
 
  						<a class="act" ng-click="modifyTerm(item.id)">编辑</a>
