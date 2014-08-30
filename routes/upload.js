@@ -19,6 +19,8 @@ module.exports = function upload(method) {
                     console.error(err);
                     res.render('error', {message: '获取学期出错', error: err});
                 } else {
+                    console.log(term);
+                    console.log(req.body.type);
                     var termid = term._id;
                     if (req.body.type === 'student') {
                         var studentModel = db.getStudentModel();

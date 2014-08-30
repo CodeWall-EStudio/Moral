@@ -11,6 +11,19 @@ angular.module('dy.services.mgrade', [
 				onegrade : ''     //一个学期的信息
 			};
 
+			//判断是否可以评价
+			function checkMonth(month,tm){
+				var ret = false;
+				_.each(tm,function(item,idx){
+					if(month === item.e){
+						ret = true;
+					}
+				});
+				//console.log(month);
+				//return true;
+				return ret;
+			}
+
 			function conventTerm(data){
 				if(!Root.termList){
 					Root.termList = {};
@@ -23,15 +36,24 @@ angular.module('dy.services.mgrade', [
 				for(var i in data){
 					data[i].id = data[i]._id;
 					Root.termList[data[i]._id] = data[i];
-					if(data[i].active && !first){
+					if(data[i].status === 1 && !first){
 						first = true;
 						no = i;
 					}
 				}
 				if(data[no]){
 					Root.Term = data[no];
-					Root.$emit('status.term.load');
+					setTimeout(function(){
+						Root.$emit('status.term.load.mh');
+						Root.$emit('status.term.load.student');
+						Root.$emit('status.term.load.quota');
+					},500);
+
 				}
+
+				if(checkMonth(Root.nowMonth,Root.Term.months)){
+					Root.studentTerm = true;
+				}				
 			}
 
 			function getTermList(param,success,error){
@@ -40,6 +62,7 @@ angular.module('dy.services.mgrade', [
 					.success(function(data,status){
 						if(data.code === 0){
 							conventTerm(data.term);
+							Root.nowMonth = data.nowmonth;
 							console.log('拉学期列表成功!', data);
 						}else{
 							Root.$emit('msg.codeshow',data.code);

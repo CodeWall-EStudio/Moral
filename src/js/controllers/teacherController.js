@@ -26,6 +26,9 @@ angular.module('dy.controllers.teacher',[
 
 			});
 
+			Root.$on('status.term.load',function(){
+
+			});
 
 			var url = Location.absUrl();
 			var fn = function(){};

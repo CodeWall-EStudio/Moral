@@ -84,7 +84,8 @@ module.exports = function term(method) {
                 if (err) {
                    //return console.error(err);
                 };
-                res.json({ code: CONSTANTS.MSG_SUCC, term: terms });
+                var month = new Date().getMonth()+1;
+                res.json({ code: CONSTANTS.MSG_SUCC, term: terms ,nowmonth : month});
             });
 
         }

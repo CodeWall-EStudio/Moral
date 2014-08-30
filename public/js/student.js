@@ -100,6 +100,19 @@ angular.module('dy.services.mgrade', [
 				onegrade : ''     //一个学期的信息
 			};
 
+			//判断是否可以评价
+			function checkMonth(month,tm){
+				var ret = false;
+				_.each(tm,function(item,idx){
+					if(month === item.e){
+						ret = true;
+					}
+				});
+				//console.log(month);
+				//return true;
+				return ret;
+			}
+
 			function conventTerm(data){
 				if(!Root.termList){
 					Root.termList = {};
@@ -112,15 +125,24 @@ angular.module('dy.services.mgrade', [
 				for(var i in data){
 					data[i].id = data[i]._id;
 					Root.termList[data[i]._id] = data[i];
-					if(data[i].active && !first){
+					if(data[i].status === 1 && !first){
 						first = true;
 						no = i;
 					}
 				}
 				if(data[no]){
 					Root.Term = data[no];
-					Root.$emit('status.term.load');
+					setTimeout(function(){
+						Root.$emit('status.term.load.mh');
+						Root.$emit('status.term.load.student');
+						Root.$emit('status.term.load.quota');
+					},500);
+
 				}
+
+				if(checkMonth(Root.nowMonth,Root.Term.months)){
+					Root.studentTerm = true;
+				}				
 			}
 
 			function getTermList(param,success,error){
@@ -129,6 +151,7 @@ angular.module('dy.services.mgrade', [
 					.success(function(data,status){
 						if(data.code === 0){
 							conventTerm(data.term);
+							Root.nowMonth = data.nowmonth;
 							console.log('拉学期列表成功!', data);
 						}else{
 							Root.$emit('msg.codeshow',data.code);
@@ -153,6 +176,7 @@ angular.module('dy.services.mgrade', [
 					)
                     .success(function(data, status){
                     	Root.$emit('msg.codeshow',data.code);
+                    	Root.$emit('status.grade.created');
                     	if(data.code === 0){
                     		var tdata = JSON.parse(param.term);
                     		tdata._id = data.id;
@@ -165,6 +189,8 @@ angular.module('dy.services.mgrade', [
                         if(success) success(data, status);
                     })
                     .error(function(data, status){
+                    	                    	Root.$emit('status.grade.created');
+
                     	//需要加上失败的逻辑
                         if(error) error(data, status);
                     });				
@@ -184,6 +210,7 @@ angular.module('dy.services.mgrade', [
 					)
                     .success(function(data, status){
                     	Root.$emit('msg.codeshow',data.code);
+                    	Root.$emit('status.grade.created');
                     	if(data.code === 0){
                     		param._id = data.id;
                     		Root.termList[data.id] = param;
@@ -192,6 +219,7 @@ angular.module('dy.services.mgrade', [
                         if(success) success(data, status);
                     })
                     .error(function(data, status){
+                    	                    	Root.$emit('status.grade.created');
                     	//需要加上失败的逻辑
                         if(error) error(data, status);
                     });					
@@ -219,6 +247,7 @@ angular.module('dy.services.mgrade', [
 					)
                     .success(function(data, status){
                     	Root.$emit('msg.codeshow',data.code);
+                    	Root.$emit('status.grade.created');
 						var d = Root.termList[param.id];
                     	if(data.code === 0){
                     		d.active = param.active;
@@ -234,6 +263,7 @@ angular.module('dy.services.mgrade', [
                     })
                     .error(function(data, status){
                     	//需要加上失败的逻辑
+                    	                    	Root.$emit('status.grade.created');
                         if(error) error(data, status);
                     });					
 			}	
@@ -267,6 +297,7 @@ angular.module('dy.services.student', [
 					_.extend(obj,item);
 					Root.studentMap[obj._id] = obj;
 				});
+				console.log(Root.studentMap);
 			}
 
 			//拉学生列表
@@ -277,13 +308,15 @@ angular.module('dy.services.student', [
 					sList = JSON.parse(window.localStorage.getItem('student'));
 					conventStudent(list);
 					//sMap = list;
-					console.log('拉缓存学生列表成功!',list);
+					console.log('拉缓存学生列表成功!');
 					if(success) success(list);
-					return;
+					//return;
 				}
 
 				var ts = new Date().getTime();
-				Http.get('/teacher/student?_='+ts,null,{responseType:'json'})
+				var body = Util.object.toUrlencodedString(param);
+
+				Http.get('/teacher/student?_='+ts+'&term='+param.term,null,{responseType:'json'})
 					.success(function(data,status){
 						//conventStudent(data.student);
 						if(data.code === 0){
@@ -310,6 +343,8 @@ angular.module('dy.services.student', [
 						ret = true;
 					}
 				});
+				//console.log(month);
+				//return true;
 				return ret;
 			}
 
@@ -718,9 +753,10 @@ angular.module('dy.services.quota', [
                     });
                 //老师
                 }else{
-                    Root.studentList[obj.student].total = obj.total;
+
+                    Root.studentMap[pd.student].total = pd.total;
                     _.each(obj.scores,function(item){
-                        Root.studentList[pd.student].score[item.indicator] = {
+                        Root.studentMap[pd.student].score[item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
                             parent : item.parent
@@ -950,7 +986,7 @@ angular.module('dy.controllers.student',[
 			console.log('load studentcontroller');
 			var url = Location.absUrl();
 
-			console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
+			//console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
 			if(url.indexOf('student.html') > 0 && Util.cookie.get('role') !== 'student'){
 				// window.location.href="/student/login";
 				// return;
@@ -996,10 +1032,11 @@ angular.module('dy.controllers.student',[
 		
 			Root.selectStudent = function(id){
 				Root.nowStudent = {};
-				var st = Root.studentList[id];
+				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);
 				Root.nowStudent.total = {};
 				Root.nowStudent.score = {};
+				console.log(Root.nowStudent);
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
@@ -1056,7 +1093,8 @@ angular.module('dy.controllers.student',[
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				//console.log(d.id,d.num);
 			});		
-			
+
+			Root.$on('status.term.load.student',function(){
 			var url = Location.absUrl();
 			var fn = function(){};
 			if(url.indexOf('student.html') > 0){
@@ -1069,7 +1107,6 @@ angular.module('dy.controllers.student',[
 					if(d.code !== 0){
 						console.log('拉数据失败');
 						Root.studentTerm = false;
-//top-nav .scores').remove();
 					}
 				});
 			//如果是老师或管理,需要再把分数拉一下.
@@ -1077,8 +1114,12 @@ angular.module('dy.controllers.student',[
 				fn = function(data){
 					Root.$emit('status.student.loaded',true);
 				}
-				Student.getStudentList(null,fn);
+				Student.getStudentList({
+					term : Root.Term._id
+				},fn);
 			}
+			});			
+			
 
 
 		}
@@ -1337,8 +1378,14 @@ angular.module('dy.controllers.quota',[
 				}else{
 					getOneScores('self');
 				}
-			})
-			Quota.getQuotaList();
+			});
+
+			Root.$on('status.term.load.quota',function(){
+				var param = {
+					term : Root.Term._id
+				}
+				Quota.getQuotaList(param);
+			});			
 		}
 	]);
 ;(function(){

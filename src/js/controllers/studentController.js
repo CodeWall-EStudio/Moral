@@ -10,7 +10,7 @@ angular.module('dy.controllers.student',[
 			console.log('load studentcontroller');
 			var url = Location.absUrl();
 
-			console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
+			//console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
 			if(url.indexOf('student.html') > 0 && Util.cookie.get('role') !== 'student'){
 				// window.location.href="/student/login";
 				// return;
@@ -56,10 +56,11 @@ angular.module('dy.controllers.student',[
 		
 			Root.selectStudent = function(id){
 				Root.nowStudent = {};
-				var st = Root.studentList[id];
+				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);
 				Root.nowStudent.total = {};
 				Root.nowStudent.score = {};
+				console.log(Root.nowStudent);
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
@@ -116,7 +117,8 @@ angular.module('dy.controllers.student',[
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				//console.log(d.id,d.num);
 			});		
-			
+
+			Root.$on('status.term.load.student',function(){
 			var url = Location.absUrl();
 			var fn = function(){};
 			if(url.indexOf('student.html') > 0){
@@ -129,7 +131,6 @@ angular.module('dy.controllers.student',[
 					if(d.code !== 0){
 						console.log('拉数据失败');
 						Root.studentTerm = false;
-//top-nav .scores').remove();
 					}
 				});
 			//如果是老师或管理,需要再把分数拉一下.
@@ -137,8 +138,12 @@ angular.module('dy.controllers.student',[
 				fn = function(data){
 					Root.$emit('status.student.loaded',true);
 				}
-				Student.getStudentList(null,fn);
+				Student.getStudentList({
+					term : Root.Term._id
+				},fn);
 			}
+			});			
+			
 
 
 		}

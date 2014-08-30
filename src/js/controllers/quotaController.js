@@ -252,7 +252,13 @@ angular.module('dy.controllers.quota',[
 				}else{
 					getOneScores('self');
 				}
-			})
-			Quota.getQuotaList();
+			});
+
+			Root.$on('status.term.load.quota',function(){
+				var param = {
+					term : Root.Term._id
+				}
+				Quota.getQuotaList(param);
+			});			
 		}
 	]);

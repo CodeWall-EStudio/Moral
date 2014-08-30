@@ -15,6 +15,7 @@ angular.module('dy.services.student', [
 					_.extend(obj,item);
 					Root.studentMap[obj._id] = obj;
 				});
+				console.log(Root.studentMap);
 			}
 
 			//拉学生列表
@@ -25,13 +26,15 @@ angular.module('dy.services.student', [
 					sList = JSON.parse(window.localStorage.getItem('student'));
 					conventStudent(list);
 					//sMap = list;
-					console.log('拉缓存学生列表成功!',list);
+					console.log('拉缓存学生列表成功!');
 					if(success) success(list);
-					return;
+					//return;
 				}
 
 				var ts = new Date().getTime();
-				Http.get('/teacher/student?_='+ts,null,{responseType:'json'})
+				var body = Util.object.toUrlencodedString(param);
+
+				Http.get('/teacher/student?_='+ts+'&term='+param.term,null,{responseType:'json'})
 					.success(function(data,status){
 						//conventStudent(data.student);
 						if(data.code === 0){
@@ -58,6 +61,8 @@ angular.module('dy.services.student', [
 						ret = true;
 					}
 				});
+				//console.log(month);
+				//return true;
 				return ret;
 			}
 

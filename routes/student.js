@@ -54,10 +54,16 @@ module.exports = function student(method) {
             }
         } else if (method === 'list') {
             var con = {};
+            var t = req.param('term');
             var g = req.param('grade');
             var c = req.param('class');
+            if(t){
+                con.term = t;
+            }
             if (g && c) {
-               con = {grade: g, class: c};
+               con.grade = g;
+               con.class = c;
+               //con = {grade: g, class: c};
             }
             studentModel.find(con, function (err, students) {
                 if (err) {
