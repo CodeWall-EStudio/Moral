@@ -123,12 +123,6 @@ angular.module('dy.controllers.quota',[
 						parent : parent,
 						teacher : teacher
 					}
-					// var obj = {
-					// 	indicator : idx,
-					// 	self : score[idx].self || 0,
-					// 	parent : score[idx].parent || 0,
-					// 	teacher : score[idx].teacher || 0
-					// }
 					obj[type]  = item
 					total += obj.self + obj.parent+ obj.teacher;
 					list.push(obj);

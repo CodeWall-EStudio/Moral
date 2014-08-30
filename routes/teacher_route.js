@@ -13,6 +13,7 @@ var score = require('./score');
 var essential = require('./essential');
 var manage = require('./manage');
 var upload = require('./upload');
+var relat = require('./relationship');
 
 var role = 'teacher';
 
@@ -42,6 +43,9 @@ router.post('/indicator', indicator('post'));
 /* teacher */
 router.get('/teacher', teacher('list'));
 router.post('/teacher', teacher('post'));
+
+/* relationship*/
+router.get('/teacherlist', relat('list'));
 
 /* student */
 router.get('/student/:grade?/:class?', student('list'));
