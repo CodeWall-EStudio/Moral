@@ -26,6 +26,7 @@ angular.module('dy.controllers.gradepanel',[
 
 			var selectMonth = [];
 			var defMonthLength = 4;
+			var selectMonth = [];
 
 			window.uploadTeacher = function(){
 				$('#teacherFrom').submit();
@@ -94,24 +95,7 @@ angular.module('dy.controllers.gradepanel',[
 			}
 
 			Root.importTeacher = function(){
-				console.log(1234);
 			}
-
-			Scope.checkTremMonth = function(month){
-				if(Root.Term && Root.Term.months){
-					var ret = false;
-					for(var i in Root.Term.months){
-						if(month === Root.Term.months[i].s){
-							return true;
-						}
-					}
-					return ret;
-
-				}else{
-					return false;
-				}
-			}
-
 
 			Scope.handleConfirmBtnClick = function(){
 				if(Root.Term._id){
@@ -183,13 +167,24 @@ angular.module('dy.controllers.gradepanel',[
 
 			});
 
+			Scope.checkTremMonth = function(month){
+				if($.inArray(month,selectMonth)>=0){
+					return true;
+				}
+				return false;
+			}
+
 
 			Root.$on('create.grade.show',function(e,d){
 				if(!d){
 					Scope.panelTitle = '新建学期';
 					Root.nowTerm = {};
+					selectMonth = [];
 				}else{
 					Scope.panelTitle = '修改学期';
+					_.each(Root.nowTerm.months,function(item){
+						selectMonth.push(item.s);
+					});
 				}
 				Scope.confirmBtnTitle = '保存';
 				Scope.cancelBtnTitle = '取消';
@@ -207,7 +202,6 @@ angular.module('dy.controllers.gradepanel',[
 				$('#gradePanelModal .select-month li').removeClass('disabled').removeClass('active').removeAttr('title');
 				Scope.daylist = list;
 				Scope.monthlist = month;
-
 
 				Root.showGradePanel();
 			});
