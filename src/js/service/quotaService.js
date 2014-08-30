@@ -143,9 +143,10 @@ angular.module('dy.services.quota', [
                     });
                 //老师
                 }else{
-                    Root.studentList[obj.student].total = obj.total;
+
+                    Root.studentMap[pd.student].total = pd.total;
                     _.each(obj.scores,function(item){
-                        Root.studentList[pd.student].score[item.indicator] = {
+                        Root.studentMap[pd.student].score[item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
                             parent : item.parent

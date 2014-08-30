@@ -66,14 +66,10 @@ angular.module('dy.controllers.managehandernav',[
 			}	
 
 			function changeScore(){
-				if(Root.teacherPage){
-
-				}
 			}		
 
 			//搜索
 			Scope.startSearch = function(e,d){
-				console.log(d,Scope.searchKeyWord);
 				Student.searchStudent(Scope.searchKeyWord);
 			}
 
@@ -84,7 +80,7 @@ angular.module('dy.controllers.managehandernav',[
 			var url = Location.absUrl();
 			var fn = function(){};
 
-			Root.$on('status.term.load',function(){
+			Root.$on('status.term.load.mh',function(){
 				var obj = {
 					term : Root.Term._id
 				}				

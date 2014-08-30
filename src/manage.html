@@ -28,7 +28,7 @@
  						<a ng-click="showGrade(item.id)">{{item.name}}</a>
  						<a class="act" ng-click="setActiveTerm(item.id)" ng-show="item.status != 1">激活</a> 
  						<a class="act" ng-click="closeTerm(item.id,2)" ng-show="item.status === 1">非激活</a>
- 						<a class="act" ng-click="closeTerm(item.id)" >关闭</a>
+ 						<a class="act" ng-click="closeTerm(item.id,0)" >关闭</a>
 
  						<a class="act" ng-click="modifyTerm(item.id)">编辑</a>
  					</li>
@@ -123,6 +123,7 @@
                     <form method="post" enctype="multipart/form-data" action="/teacher/upload" id="quotaFrom">
 	   	 				<a>下载当前指标</a>
 		 				<a>下载模板</a>
+						<input type="hidden" value="indicator" name='type' />
                         <button class="btn btn-primary">从文件导入</button>
                         <input type="file" name="thumbnail" onchange="uploadQuota()" class="btn hide-input hide-input-quota">
                     </form>	 	 				

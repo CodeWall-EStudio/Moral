@@ -12,6 +12,8 @@ angular.module('dy.services.teacher', [
 						Root.Teacher = data.teacher.info;
 						//conventStudent(data.student);
 						console.log('拉老师资料成功!', data);
+						//老师资料加载完成
+						Root.$emit('status.teacher.load');
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -22,9 +24,11 @@ angular.module('dy.services.teacher', [
 			function getTeacherList(param,success,error){
 				Http.get('/teacher?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
-						Root.Teacher = data.teacher.info;
-						//conventStudent(data.student);
-						console.log('拉老师资料成功!', data);
+						Root.Teacher = data.teacher.info
+						Root.Teacher.grade = data.relationship[0].grade;
+						Root.Teacher.class = data.relationship[0].class;
+						console.log(Root.Teacher);
+						console.log('拉老师资料成功! 11', data);
 						if(success) success(data, status);
 					})
 					.error(function(data,status){

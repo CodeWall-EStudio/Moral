@@ -67,8 +67,6 @@ angular.module('dy.controllers.gradepanel',[
 						list.eq(i).addClass('active').removeClass('disabled').attr('title','下一年');
 					}
 				}
-				console.log(idx);
-				console.log(selectMonth);
 				Root.nowTerm.months = selectMonth;
 			}
 
