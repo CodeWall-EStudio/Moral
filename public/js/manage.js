@@ -622,7 +622,6 @@ angular.module('dy.services.teacher', [
 				Http.get('/teacher?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
 						Root.Teacher = data.teacher.info;
-						//conventStudent(data.student);
 						console.log('拉老师资料成功!', data);
 						//老师资料加载完成
 						Root.$emit('status.teacher.load');
@@ -640,7 +639,7 @@ angular.module('dy.services.teacher', [
 						Root.Teacher.grade = data.relationship[0].grade;
 						Root.Teacher.class = data.relationship[0].class;
 						console.log(Root.Teacher);
-						console.log('拉老师资料成功! 11', data);
+						console.log('拉老师列表成功! ', data);
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -1058,6 +1057,7 @@ angular.module('dy.controllers.managehandernav',[
 			// Root.nowClass = 1;
 
 			Root.nowMonth = new Date().getMonth()+1;
+			Root.nowDay = 0;
 			Scope.searchKeyWord = '';
 
 			//Root.termList = {};
