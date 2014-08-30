@@ -1191,7 +1191,6 @@ angular.module('dy.controllers.student',[
 				$.extend(Root.nowStudent,st);
 				Root.nowStudent.total = {};
 				Root.nowStudent.score = {};
-				console.log(Root.nowStudent);
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
