@@ -57,11 +57,12 @@ angular.module('dy.services.student', [
 			function checkMonth(month,tm){
 				var ret = false;
 				_.each(tm,function(item,idx){
+					console.log(typeof month,typeof item.e,month,item.e)
 					if(month === item.e){
 						ret = true;
 					}
 				});
-				//console.log(month);
+				console.log(month,tm,ret);
 				//return true;
 				return ret;
 			}

@@ -254,6 +254,13 @@ angular.module('dy.controllers.quota',[
 				}
 			});
 
+			Root.$on('status.myinfo.load',function(){
+				var param = {
+					term : Root.Term._id
+				}
+				Quota.getQuotaList(param);
+			});
+
 			Root.$on('status.term.load.quota',function(){
 				var param = {
 					term : Root.Term._id

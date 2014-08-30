@@ -75,7 +75,7 @@ module.exports = function example(method, role) {
                 eq.on('getStudent',function(doc){
                     user = doc[0];
                     sess.user = user;
-                    termModel.find({active:true},eq.done('getTerm'));
+                    termModel.find({status:1},eq.done('getTerm'));
                 });
 
                 //学期返回
