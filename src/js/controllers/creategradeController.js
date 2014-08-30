@@ -131,8 +131,6 @@ angular.module('dy.controllers.gradepanel',[
 					return;
 				}				
 
-
-				console.log(Root.nowTerm.months);
 				if($.isEmptyObject(Root.nowTerm.months)){
 					alert('还没有选择月份!')
 					return;

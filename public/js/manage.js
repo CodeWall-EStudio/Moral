@@ -140,7 +140,7 @@ angular.module('dy.services.mgrade', [
 
 				}
 
-				if(checkMonth(Root.nowMonth,Root.Term.months)){
+				if(checkMonth(Root.nowMonth,Root.Term.months) && Root.nowDay <= Root.Term.day){
 					Root.studentTerm = true;
 				}				
 			}
@@ -152,6 +152,7 @@ angular.module('dy.services.mgrade', [
 						if(data.code === 0){
 							conventTerm(data.term);
 							Root.nowMonth = data.nowmonth;
+							Root.nowDay = data.day;
 							console.log('拉学期列表成功!', data);
 						}else{
 							Root.$emit('msg.codeshow',data.code);
@@ -297,7 +298,6 @@ angular.module('dy.services.student', [
 					_.extend(obj,item);
 					Root.studentMap[obj._id] = obj;
 				});
-				console.log(Root.studentMap);
 			}
 
 			//拉学生列表
@@ -339,11 +339,11 @@ angular.module('dy.services.student', [
 			function checkMonth(month,tm){
 				var ret = false;
 				_.each(tm,function(item,idx){
+					console.log(typeof month,typeof item.e,month,item.e)
 					if(month === item.e){
 						ret = true;
 					}
 				});
-				//console.log(month);
 				//return true;
 				return ret;
 			}
@@ -362,10 +362,12 @@ angular.module('dy.services.student', [
 							Root.myInfo.allscore = 15* data.indicator.length;
 							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
 
-							if(data.term && checkMonth(data.nowmonth,data.term.months)){
+							Root.nowDay = data.day;
+							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;
+							Root.$emit('status.myinfo.load');
 							console.log('拉取学生资料成功',data);
 						}else{
 							Root.Term  = false;
@@ -622,6 +624,8 @@ angular.module('dy.services.teacher', [
 						Root.Teacher = data.teacher.info;
 						//conventStudent(data.student);
 						console.log('拉老师资料成功!', data);
+						//老师资料加载完成
+						Root.$emit('status.teacher.load');
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -1095,9 +1099,6 @@ angular.module('dy.controllers.managehandernav',[
 			}	
 
 			function changeScore(){
-				if(Root.teacherPage){
-
-				}
 			}		
 
 			//搜索
@@ -1257,7 +1258,17 @@ angular.module('dy.controllers.student',[
 				//console.log(d.id,d.num);
 			});		
 
+			//老师页.等有学期之后再拉.
 			Root.$on('status.term.load.student',function(){
+				fn = function(data){
+					Root.$emit('status.student.loaded',true);
+				}
+				Student.getStudentList({
+					term : Root.Term._id
+				},fn);
+			});		
+
+			//学生页,直接拉
 			var url = Location.absUrl();
 			var fn = function(){};
 			if(url.indexOf('student.html') > 0){
@@ -1265,25 +1276,14 @@ angular.module('dy.controllers.student',[
 				if(!Util.cookie.get('skey')){
 					// window.location.href="/student/login";
 					// return;
-				}				
+				}			
 				Student.getStudentInfo(null,function(d){
 					if(d.code !== 0){
 						console.log('拉数据失败');
 						Root.studentTerm = false;
 					}
 				});
-			//如果是老师或管理,需要再把分数拉一下.
-			}else{
-				fn = function(data){
-					Root.$emit('status.student.loaded',true);
-				}
-				Student.getStudentList({
-					term : Root.Term._id
-				},fn);
 			}
-			});			
-			
-
 
 		}
 	]);
@@ -1584,6 +1584,13 @@ angular.module('dy.controllers.quota',[
 				}
 			});
 
+			Root.$on('status.myinfo.load',function(){
+				var param = {
+					term : Root.Term._id
+				}
+				Quota.getQuotaList(param);
+			});
+
 			Root.$on('status.term.load.quota',function(){
 				var param = {
 					term : Root.Term._id
@@ -1725,15 +1732,13 @@ angular.module('dy.controllers.gradepanel',[
 					return;
 				}				
 
-
-				console.log(Root.nowTerm.months);
 				if($.isEmptyObject(Root.nowTerm.months)){
 					alert('还没有选择月份!')
 					return;
 				}
 				var param = {
 					name : Root.nowTerm.name,
-					status : 0,
+					status : Root.nowTerm.status || 0,
 					year : new Date().getFullYear(),
 					day : Root.nowTerm.day,
 					months : Root.nowTerm.months

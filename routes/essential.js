@@ -121,7 +121,8 @@ module.exports = function example(method, role) {
                         indicator : inds,
                         score : myscore,
                         total : total,
-                        nowmonth : nowmonth
+                        nowmonth : nowmonth,
+						day : nowday
                     });
                 })
 

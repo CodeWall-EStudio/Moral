@@ -15,7 +15,6 @@ angular.module('dy.services.student', [
 					_.extend(obj,item);
 					Root.studentMap[obj._id] = obj;
 				});
-				console.log(Root.studentMap);
 			}
 
 			//拉学生列表
@@ -80,6 +79,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.allscore = 15* data.indicator.length;
 							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
 
+							Root.nowDay = data.day;
 							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){
 								Root.studentTerm = true;
 							}
