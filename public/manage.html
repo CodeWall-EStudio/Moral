@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统</title>
-  <link rel="stylesheet" href="css/manage.css?t=1409405921649">
+  <link rel="stylesheet" href="css/manage.css?t=1409406074361">
  </head>
 
 <body ng-controller="manageController">
@@ -26,7 +26,7 @@
  				</ul> 				
  			</li>
  			<li ng-class="{active:getMode()==='student'}" ng-click="switchMode('student')"><a ng-click="studentShow()">学生信息管理</a></li>
- 			<li ng-class="{active:getMode()==='teacher'}" ng-click="switchMode('teacher')"><a ng-click="teacherShow()">班主任管理</a></li>
+ 			<li ng-class="{active:getMode()==='teacher'}" ng-click="switchMode('teacher')"><a ng-click="teacherShow()">班主任导入</a></li>
  			<li  ng-class="{active:getMode()==='quota'}" ng-click="switchMode('quota')"><a ng-click="quotaShow()">指标管理</a></li>
  		</ul>
  		<div class="userinfo">
@@ -68,7 +68,7 @@
 
 	 			<div class="content-insert-bar">
                     <form method="post" enctype="multipart/form-data" action="/teacher/upload" id="studentFrom">
-                    	<a>下载当前列表</a>
+                    	<!--<a>下载当前列表</a>-->
                         <input type="hidden" name="type" value="student">
                         <button class="btn btn-primary">导入CMIS数据</button>
                         <input type="file" name="thumbnail" onchange="uploadStudent()" class="btn hide-input hide-input-student">
@@ -100,7 +100,7 @@
 
 	 			<div class="content-insert-bar">
                     <form method="post" enctype="multipart/form-data" action="/teacher/upload" id="teacherFrom">
-                    	<a>下载含年级班级数据的模板</a>
+                    	<!--<a>下载含年级班级数据的模板</a>-->
                     	<input type="hidden" value="teacher" name='type' />
                         <button class="btn btn-primary">导入班主任数据</button>
                         <input type="file" name="thumbnail" onchange="uploadTeacher()" class="btn hide-input hide-input-teacher">
@@ -111,8 +111,10 @@
 			<div class="content-header quota-header hide"  ng-class="{hide:getMode()!=='quota'}">
 	 			<div class="content-insert-bar">
                     <form method="post" enctype="multipart/form-data" action="/teacher/upload" id="quotaFrom">
+	   	 				<!--
 	   	 				<a>下载当前指标</a>
 		 				<a>下载模板</a>
+		 				-->
 						<input type="hidden" value="indicator" name='type' />
                         <button class="btn btn-primary">从文件导入</button>
                         <input type="file" name="thumbnail" onchange="uploadQuota()" class="btn hide-input hide-input-quota">
@@ -202,6 +204,7 @@
  			</div>
 
  			<!--老师列表-->
+ 			<!--
  			<div class="content-controller teacher-controller hide"  ng-class="{hide:getMode()!=='teacher'}" ng-controller="teacherController">
 	 			<div class="content-list">
 	 				<table class="table table-striped table-hover" ng-model="teacherList">
@@ -229,6 +232,7 @@
 		 			</form>
 		 		</div>				
  			</div>
+ 		-->
 
  			<!--指标管理-->
  			<div class="content-controller quota-controller hide" ng-class="{hide:getMode()!=='quota'}" ng-controller="quotaController">
@@ -349,7 +353,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/manage.js?t=1409405921649"></script>
+	<script src="js/manage.js?t=1409406074361"></script>
 
 
 </body>
