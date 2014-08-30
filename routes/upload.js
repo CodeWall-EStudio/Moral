@@ -46,7 +46,7 @@ module.exports = function upload(method) {
                                 if (err) {
                                     console.error(err);
                                 }
-                                res.redirect(req.protocol + '://' + req.headers.host + '/teacher/manage.html');
+                                res.redirect(req.protocol + '://' + req.headers.host + '/manage.html');
                             });
                         });
 
@@ -72,7 +72,7 @@ module.exports = function upload(method) {
                                 if (err) {
                                     console.error(err);
                                 }
-                                res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
+                                res.redirect(req.protocol + '://' + req.headers.host + '/manage.html');
                             });
                         });
                     } else if (req.body.type === 'indicator') {
@@ -97,7 +97,7 @@ module.exports = function upload(method) {
                                 if (err) {
                                     console.error(err);
                                 }
-                                res.redirect(req.protocol + '://' + req.headers.host + '/teacher/login/manage');
+                                res.redirect(req.protocol + '://' + req.headers.host + '/manage.html');
                             });
                         });
                     } else {

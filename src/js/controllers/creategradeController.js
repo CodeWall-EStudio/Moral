@@ -182,6 +182,10 @@ angular.module('dy.controllers.gradepanel',[
 				});
 			}			
 
+			Root.$on('status.grade.created',function(e,d){
+				$('#gradePanelModal .select-month li').removeClass('active').removeClass('disabled').removeAttr('title');
+
+			});
 
 
 			Root.$on('create.grade.show',function(e,d){

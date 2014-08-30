@@ -64,6 +64,7 @@ angular.module('dy.services.mgrade', [
 					)
                     .success(function(data, status){
                     	Root.$emit('msg.codeshow',data.code);
+                    	Root.$emit('status.grade.created');
                     	if(data.code === 0){
                     		var tdata = JSON.parse(param.term);
                     		tdata._id = data.id;
@@ -76,6 +77,8 @@ angular.module('dy.services.mgrade', [
                         if(success) success(data, status);
                     })
                     .error(function(data, status){
+                    	                    	Root.$emit('status.grade.created');
+
                     	//需要加上失败的逻辑
                         if(error) error(data, status);
                     });				
@@ -95,6 +98,7 @@ angular.module('dy.services.mgrade', [
 					)
                     .success(function(data, status){
                     	Root.$emit('msg.codeshow',data.code);
+                    	Root.$emit('status.grade.created');
                     	if(data.code === 0){
                     		param._id = data.id;
                     		Root.termList[data.id] = param;
@@ -103,6 +107,7 @@ angular.module('dy.services.mgrade', [
                         if(success) success(data, status);
                     })
                     .error(function(data, status){
+                    	                    	Root.$emit('status.grade.created');
                     	//需要加上失败的逻辑
                         if(error) error(data, status);
                     });					
@@ -130,6 +135,7 @@ angular.module('dy.services.mgrade', [
 					)
                     .success(function(data, status){
                     	Root.$emit('msg.codeshow',data.code);
+                    	Root.$emit('status.grade.created');
 						var d = Root.termList[param.id];
                     	if(data.code === 0){
                     		d.active = param.active;
@@ -145,6 +151,7 @@ angular.module('dy.services.mgrade', [
                     })
                     .error(function(data, status){
                     	//需要加上失败的逻辑
+                    	                    	Root.$emit('status.grade.created');
                         if(error) error(data, status);
                     });					
 			}	
