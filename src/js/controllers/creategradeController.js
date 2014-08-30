@@ -191,7 +191,7 @@ angular.module('dy.controllers.gradepanel',[
 
 				var list = [];
 				var month = [];
-				for(var i = 1;i<31;i++){
+				for(var i = 1;i<32;i++){
 					list.push(i);
 				}
 				for(var i = 1;i<13;i++){
