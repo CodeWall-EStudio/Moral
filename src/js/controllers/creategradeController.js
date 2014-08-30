@@ -139,7 +139,7 @@ angular.module('dy.controllers.gradepanel',[
 				}
 				var param = {
 					name : Root.nowTerm.name,
-					status : Root.nowTerm.status : 0,
+					status : Root.nowTerm.status || 0,
 					year : new Date().getFullYear(),
 					day : Root.nowTerm.day,
 					months : Root.nowTerm.months

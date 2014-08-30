@@ -85,7 +85,8 @@ module.exports = function term(method) {
                    //return console.error(err);
                 };
                 var month = new Date().getMonth()+1;
-                res.json({ code: CONSTANTS.MSG_SUCC, term: terms ,nowmonth : month});
+				var nowday = new Date().getDate();
+                res.json({ code: CONSTANTS.MSG_SUCC, term: terms ,nowmonth : month,day:nowday});
             });
 
         }

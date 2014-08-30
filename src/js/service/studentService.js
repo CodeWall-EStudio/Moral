@@ -62,7 +62,6 @@ angular.module('dy.services.student', [
 						ret = true;
 					}
 				});
-				console.log(month,tm,ret);
 				//return true;
 				return ret;
 			}
@@ -81,7 +80,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.allscore = 15* data.indicator.length;
 							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
 
-							if(data.term && checkMonth(data.nowmonth,data.term.months)){
+							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;

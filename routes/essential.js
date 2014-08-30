@@ -60,6 +60,7 @@ module.exports = function example(method, role) {
             if ((sess.user && sess.user.id) || sid) {
                 var termModel = db.getTermModel();
                 var nowmonth = new Date().getMonth()+1;
+				var nowday = new Date().getDate();
 
                 var eq = new EventProxy();
 
@@ -75,7 +76,7 @@ module.exports = function example(method, role) {
                 eq.on('getStudent',function(doc){
                     user = doc[0];
                     sess.user = user;
-                    termModel.find({status:1},eq.done('getTerm'));
+                    termModel.find({status:true},eq.done('getTerm'));
                 });
 
                 //学期返回
@@ -91,7 +92,7 @@ module.exports = function example(method, role) {
                     inds = doc;
                     console.log(sid);
                     var scoreModel = db.getScoreModel();
-                    scoreModel.find({student:sid,term:term._id,month:nowmonth},eq.done('getScore'));
+                    scoreModel.find({student:sid,term:term._id,month:nowmonth,day:nowday},eq.done('getScore'));
                 });
 
                 //评分返回
