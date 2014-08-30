@@ -45,7 +45,7 @@ router.get('/teacher', teacher('list'));
 router.post('/teacher', teacher('post'));
 
 /* relationship*/
-router.get('/teacherlist', relat('list'));
+router.get('/teacherlist/:term?', relat('list'));
 
 /* student */
 router.get('/student/:grade?/:class?', student('list'));

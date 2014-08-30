@@ -39,8 +39,13 @@ module.exports = function relationship(method) {
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
         } else {
-			var relModel = db.getRelationshipModel();
-            relModel.find(function (err, scores) {
+			var term = req.param('term');
+			var con = {};
+			if(term){
+				con.term = term;
+			}
+
+            relationshipModel.find(con,function (err, scores) {
                 if (err) {
                     console.error(err);
                     res.json({ code: CONSTANTS.MSG_ERR });
