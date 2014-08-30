@@ -126,7 +126,7 @@ module.exports = function example(method, role) {
 
                 //先取学期
                 if(sess.user && sess.user.id){
-                    termModel.find({active:true},eq.done('getTerm'));
+                    termModel.find({status:1},eq.done('getTerm'));
                 }else{
                     console.log( 'no session');
                     var studentModel = db.getStudentModel();

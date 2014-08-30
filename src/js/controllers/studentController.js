@@ -118,7 +118,17 @@ angular.module('dy.controllers.student',[
 				//console.log(d.id,d.num);
 			});		
 
+			//老师页.等有学期之后再拉.
 			Root.$on('status.term.load.student',function(){
+				fn = function(data){
+					Root.$emit('status.student.loaded',true);
+				}
+				Student.getStudentList({
+					term : Root.Term._id
+				},fn);
+			});		
+
+			//学生页,直接拉
 			var url = Location.absUrl();
 			var fn = function(){};
 			if(url.indexOf('student.html') > 0){
@@ -126,25 +136,14 @@ angular.module('dy.controllers.student',[
 				if(!Util.cookie.get('skey')){
 					// window.location.href="/student/login";
 					// return;
-				}				
+				}			
 				Student.getStudentInfo(null,function(d){
 					if(d.code !== 0){
 						console.log('拉数据失败');
 						Root.studentTerm = false;
 					}
 				});
-			//如果是老师或管理,需要再把分数拉一下.
-			}else{
-				fn = function(data){
-					Root.$emit('status.student.loaded',true);
-				}
-				Student.getStudentList({
-					term : Root.Term._id
-				},fn);
 			}
-			});			
-			
-
 
 		}
 	]);
