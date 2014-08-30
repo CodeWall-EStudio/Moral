@@ -66,7 +66,7 @@ angular.module('dy.services.mgrade', [
 							if($.cookie('test-month')){
 								Root.nowMonth = $.cookie('test-month');
 							}else{
-								Root.nowMonth = data.nowmonth;	
+								Root.nowMonth = 0;//data.nowmonth;	
 							}
 							Root.defMonth = data.nowmonth;
 							Root.nowDay = data.day;

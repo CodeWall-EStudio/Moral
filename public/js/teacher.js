@@ -155,7 +155,7 @@ angular.module('dy.services.mgrade', [
 							if($.cookie('test-month')){
 								Root.nowMonth = $.cookie('test-month');
 							}else{
-								Root.nowMonth = data.nowmonth;	
+								Root.nowMonth = 0;//data.nowmonth;	
 							}
 							Root.defMonth = data.nowmonth;
 							Root.nowDay = data.day;
@@ -330,7 +330,9 @@ angular.module('dy.services.student', [
 							sList = data.student;
 							Root.studentMap = {};
 							_.each(data.student,function(item){
-
+								if(!item.totals){
+									item.totals = {};
+								}
 								Root.studentMap[item._id] = item;
 							});
 							window.localStorage.setItem('student',JSON.stringify(sList));
@@ -2034,7 +2036,7 @@ angular.module('dy.controllers.quota',[
 			//给学生打分
 			Scope.saveStudentQuota = function(){
 				//不能对整个学期打分
-				if(!Root.nowMonth){
+				if(!Root.defMonth){
 					return;
 				}
 				//老师打分

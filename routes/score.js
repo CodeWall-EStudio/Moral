@@ -53,6 +53,9 @@ module.exports = function score(method) {
             if (g && c) {
                 conn2 = {grade: g, class: c};
             }
+            conn2.term = t;
+            console.log(conn1);
+            console.log(conn2);
             var studentModel = db.getStudentModel();
             studentModel.find(conn2, function(err, students) {
                 if (err) {
@@ -121,8 +124,11 @@ module.exports = function score(method) {
             var t = req.param('term');
             var s = req.param('student');
             var m = req.param('month');
-            if (t && s && m) {
-                conn = {student: s, term: t, month: m}
+            if (t && s) {
+                conn = {student: s, term: t}
+            }
+            if(parseInt(m)){
+                conn.month = m;
             }
             scoreModel.find(conn, function (err, scores) {
                 if (err) {
@@ -130,7 +136,49 @@ module.exports = function score(method) {
                     res.json({ code: CONSTANTS.MSG_ERR });
                 } else {
 
-                    res.json({ code: CONSTANTS.MSG_SUCC, score: scores });
+                    if(parseInt(m)){
+                        res.json({ code: CONSTANTS.MSG_SUCC, score: scores });
+                    }else{
+                        var obj = {
+                            term : t,
+                            student : s,
+                            month : 0,
+                            scores : []
+                        }
+                        var qlist = {};
+                        var total = 0;
+                        for(var i in scores){
+                            var item = scores[i];
+                            for(var j in item.scores){
+                                var row = item.scores[j];
+                                
+                                if(qlist[row.indicator]){
+                                    qlist[row.indicator].self += row.self;
+                                    qlist[row.indicator].parent += row.parent;
+                                    qlist[row.indicator].teacher += row.teacher;
+                                }else if(row.indicator){
+                                    qlist[row.indicator] = {
+                                        self : row.self,
+                                        teacher : row.teacher,
+                                        parent : row.parent
+                                    }
+                                }
+                                if(row.indicator){
+                                    total += row.self+row.teacher+row.parent;
+                                }
+                            }
+                        }
+                        for(var i in qlist){
+                            obj.scores.push({
+                                'indicator' : i,
+                                'self' : qlist[i].self,
+                                'parent' : qlist[i].parent,
+                                'teacher' : qlist[i].teacher
+                            });
+                        }
+                        res.json({ code: CONSTANTS.MSG_SUCC, score: [obj] });
+
+                    }
                 }
             });
         }

@@ -147,7 +147,7 @@ angular.module('dy.controllers.quota',[
 			//给学生打分
 			Scope.saveStudentQuota = function(){
 				//不能对整个学期打分
-				if(!Root.nowMonth){
+				if(!Root.defMonth){
 					return;
 				}
 				//老师打分

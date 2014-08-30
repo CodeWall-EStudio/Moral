@@ -41,7 +41,9 @@ angular.module('dy.services.student', [
 							sList = data.student;
 							Root.studentMap = {};
 							_.each(data.student,function(item){
-
+								if(!item.totals){
+									item.totals = {};
+								}
 								Root.studentMap[item._id] = item;
 							});
 							window.localStorage.setItem('student',JSON.stringify(sList));
