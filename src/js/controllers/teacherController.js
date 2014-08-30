@@ -26,6 +26,7 @@ angular.module('dy.controllers.teacher',[
 
 			});
 
+			//学期已经 加载
 			Root.$on('status.term.load',function(){
 
 			});
