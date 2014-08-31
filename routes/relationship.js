@@ -50,7 +50,7 @@ module.exports = function relationship(method) {
                     console.error(err);
                     res.json({ code: CONSTANTS.MSG_ERR });
                 } else {
-                    res.json({ code: CONSTANTS.MSG_SUCC, score: scores });
+                    res.json({ code: CONSTANTS.MSG_SUCC, teacher: scores });
                 }
             });
         }

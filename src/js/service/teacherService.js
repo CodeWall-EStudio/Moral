@@ -5,6 +5,10 @@ angular.module('dy.services.teacher', [
 	.service('teacherService', [
 		'$rootScope','$location','$http','Util',function(Root,location,Http,Util){
 
+			function convertTeacher(list){
+
+			}
+
 			function getTeacherInfo(param,success,error){
 				var ts = new Date().getTime();
 				Http.get('/teacher?_='+ts,null,{responseType:'json'})
@@ -21,19 +25,22 @@ angular.module('dy.services.teacher', [
 			}
 
 			function getTeacherList(param,success,error){
-				Http.get('/teacher?_='+ts,null,{responseType:'json'})
+				var ts = new Date().getTime();
+				Http.get('/teacher/teacherlist?_='+ts,{responseType:'json',params:param})
 					.success(function(data,status){
-						Root.Teacher = data.teacher.info
-						Root.Teacher.grade = data.relationship[0].grade;
-						Root.Teacher.class = data.relationship[0].class;
-						console.log(Root.Teacher);
-						console.log('拉老师列表成功! ', data);
+						if(data.code === 0){
+							Root.teacherList = data.teacher;
+							convertTeacher(data.teacher);
+							console.log('拉老师列表成功!', data);
+						}else{
+							Root.$emit('msg.codeshow',data.code);
+						}
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
 						if(error) error(data, status);
 					});				
-			}
+			};
 
 
 			return {

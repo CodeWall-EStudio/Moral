@@ -43,10 +43,14 @@ angular.module('dy.services.mgrade', [
 				}
 				if(data[no]){
 					Root.Term = data[no];
+					console.log(Root.Term);
 					setTimeout(function(){
 						Root.$emit('status.term.load.mh');
+						Root.$emit('status.term.load.teacher');
 						Root.$emit('status.term.load.student');
 						Root.$emit('status.term.load.quota');
+
+						console.log(Root);
 					},500);
 
 				}

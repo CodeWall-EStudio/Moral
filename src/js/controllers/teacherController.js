@@ -15,21 +15,26 @@ angular.module('dy.controllers.teacher',[
 			}
 
 			if(Root.isManage){
-				return;
+				//return;
 			}
 
 			Root.isTeacher = true;
 			Root.Teacher = {};
+			Root.teacherMap = {};
+			Root.teacherList = [];
 
 			//学生列表拉完了.继续拉分数
 			Root.$on('status.student.loaded',function(){
 
 			});
 
-			//学期已经 加载
-			Root.$on('status.term.load',function(){
-
-			});
+			//学期已经 加载 
+			Root.$on('status.term.load.teacher',function(){
+				var param = {
+					term : Root.Term._id
+				}
+				Teacher.getTeacherList(param);
+			});	
 
 			var url = Location.absUrl();
 			var fn = function(){};
