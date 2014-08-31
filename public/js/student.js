@@ -134,6 +134,7 @@ angular.module('dy.services.mgrade', [
 					Root.Term = data[no];
 					setTimeout(function(){
 						Root.$emit('status.term.load.mh');
+						Root.$emit('status.term.load.teacher');
 						Root.$emit('status.term.load.student');
 						Root.$emit('status.term.load.quota');
 					},500);
@@ -325,6 +326,7 @@ angular.module('dy.services.student', [
 							Root.studentMap = data.studentList;
 							window.localStorage.setItem('student',JSON.stringify(sList));
 							console.log('拉学生列表成功!', data);
+							Root.$emit('status.student.load');
 						}else{
 							Root.$emit('msg.codeshow',data.code);
 						}
@@ -537,6 +539,12 @@ angular.module('dy.services.student', [
                     });	
 			}
 
+			function filterStudentByTeacher(){
+				Root.studentList = _.filter(sList,function(item){
+					return _.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0
+				});
+			}
+
 			//选择一个指定学期的学生
 			function filterStudent(gid,cid){
 				var list = {};
@@ -605,7 +613,8 @@ angular.module('dy.services.student', [
 				orderByStudent : orderByStudent,
 				searchStudent : searchStudent,
 				getScore : getScore,
-				getScoreList : getScoreList
+				getScoreList : getScoreList,
+				filterStudentByTeacher : filterStudentByTeacher
 			}
 
 		}
@@ -1249,12 +1258,6 @@ angular.module('dy.controllers.quota',[
 						parent : parent,
 						teacher : teacher
 					}
-					// var obj = {
-					// 	indicator : idx,
-					// 	self : score[idx].self || 0,
-					// 	parent : score[idx].parent || 0,
-					// 	teacher : score[idx].teacher || 0
-					// }
 					obj[type]  = item
 					total += obj.self + obj.parent+ obj.teacher;
 					list.push(obj);

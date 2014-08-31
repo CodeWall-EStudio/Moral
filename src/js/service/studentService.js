@@ -42,6 +42,7 @@ angular.module('dy.services.student', [
 							Root.studentMap = data.studentList;
 							window.localStorage.setItem('student',JSON.stringify(sList));
 							console.log('拉学生列表成功!', data);
+							Root.$emit('status.student.load');
 						}else{
 							Root.$emit('msg.codeshow',data.code);
 						}
@@ -254,6 +255,12 @@ angular.module('dy.services.student', [
                     });	
 			}
 
+			function filterStudentByTeacher(){
+				Root.studentList = _.filter(sList,function(item){
+					return _.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0
+				});
+			}
+
 			//选择一个指定学期的学生
 			function filterStudent(gid,cid){
 				var list = {};
@@ -322,7 +329,8 @@ angular.module('dy.services.student', [
 				orderByStudent : orderByStudent,
 				searchStudent : searchStudent,
 				getScore : getScore,
-				getScoreList : getScoreList
+				getScoreList : getScoreList,
+				filterStudentByTeacher : filterStudentByTeacher
 			}
 
 		}

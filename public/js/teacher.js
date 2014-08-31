@@ -134,6 +134,7 @@ angular.module('dy.services.mgrade', [
 					Root.Term = data[no];
 					setTimeout(function(){
 						Root.$emit('status.term.load.mh');
+						Root.$emit('status.term.load.teacher');
 						Root.$emit('status.term.load.student');
 						Root.$emit('status.term.load.quota');
 					},500);
@@ -325,6 +326,7 @@ angular.module('dy.services.student', [
 							Root.studentMap = data.studentList;
 							window.localStorage.setItem('student',JSON.stringify(sList));
 							console.log('拉学生列表成功!', data);
+							Root.$emit('status.student.load');
 						}else{
 							Root.$emit('msg.codeshow',data.code);
 						}
@@ -537,6 +539,12 @@ angular.module('dy.services.student', [
                     });	
 			}
 
+			function filterStudentByTeacher(){
+				Root.studentList = _.filter(sList,function(item){
+					return _.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0
+				});
+			}
+
 			//选择一个指定学期的学生
 			function filterStudent(gid,cid){
 				var list = {};
@@ -605,7 +613,8 @@ angular.module('dy.services.student', [
 				orderByStudent : orderByStudent,
 				searchStudent : searchStudent,
 				getScore : getScore,
-				getScoreList : getScoreList
+				getScoreList : getScoreList,
+				filterStudentByTeacher : filterStudentByTeacher
 			}
 
 		}
@@ -617,11 +626,41 @@ angular.module('dy.services.teacher', [
 	.service('teacherService', [
 		'$rootScope','$location','$http','Util',function(Root,location,Http,Util){
 
+			var tList = [];
+			function convertTeacher(list){
+				_.each(list,function(item){
+					var obj = {};
+					_.extend(obj,item);
+					Root.teacherMap[obj._id] = obj;					
+				});
+			}
+
+			function getTeacherGrade(glist){
+				var grade = [];
+				var clist = [];
+				_.each(glist,function(item){
+					grade.push(item.grade);
+					clist.push(item.class);
+					// Root.gradeList.push(item.class);
+				});
+				grade = _.uniq(_.sortBy(grade));
+				clist = _.uniq(_.sortBy(clist));
+				return {
+					grade : grade,
+					class : clist
+				}
+			}
+
 			function getTeacherInfo(param,success,error){
 				var ts = new Date().getTime();
 				Http.get('/teacher?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
 						Root.Teacher = data.teacher.info;
+						var gclist = getTeacherGrade(data.relationship);
+						Root.gradeList = gclist.grade;
+						Root.classList = gclist.class;
+						// Root.gradeList = gclist.grade;
+						// Root.classList = gclist.clist;
 						console.log('拉老师资料成功!', data);
 						//老师资料加载完成
 						Root.$emit('status.teacher.load');
@@ -633,13 +672,17 @@ angular.module('dy.services.teacher', [
 			}
 
 			function getTeacherList(param,success,error){
-				Http.get('/teacher?_='+ts,null,{responseType:'json'})
+				var ts = new Date().getTime();
+				Http.get('/teacher/teacherlist?_='+ts,{responseType:'json',params:param})
 					.success(function(data,status){
-						Root.Teacher = data.teacher.info
-						Root.Teacher.grade = data.relationship[0].grade;
-						Root.Teacher.class = data.relationship[0].class;
-						console.log(Root.Teacher);
-						console.log('拉老师列表成功! ', data);
+						if(data.code === 0){
+							tList = data.teacher;
+							Root.teacherList = data.teacher;
+							convertTeacher(data.teacher);
+							console.log('拉老师列表成功!', data);
+						}else{
+							Root.$emit('msg.codeshow',data.code);
+						}
 						if(success) success(data, status);
 					})
 					.error(function(data,status){
@@ -648,9 +691,40 @@ angular.module('dy.services.teacher', [
 			}
 
 
+			function filterTeacher(gid,cid){
+				var list = {};
+				if(gid === '所有'){
+					gid = 0;
+				}
+				if(cid === '所有'){
+					cid = 0;
+				}
+
+				if(!gid && !cid){
+					return;
+				}else{
+					_.each(tList,function(item){
+						if(gid && cid){
+							Root.teacherList = _.filter(tList,function(item){
+								return item.grade===gid && item.class===cid;
+							});
+						}else if(gid){
+							Root.studentList = _.filter(tList,function(item){
+								return item.grade===gid;
+							});
+						}else{
+							Root.studentList = _.filter(tList,function(item){
+								return item.class===cid;
+							});
+						}
+					});
+				}
+			}
+
 			return {
 				getTeacherInfo : getTeacherInfo,
-				getTeacherList : getTeacherList
+				getTeacherList : getTeacherList,
+				filterTeacher : filterTeacher
 			}
 
 		}
@@ -1025,10 +1099,11 @@ angular.module('dy.controllers.managehandernav',[
         'dy.constants',
         'dy.services.utils',
         'dy.services.mgrade',
-        'dy.services.student'
+        'dy.services.student',
+        'dy.services.teacher',
 	])
 	.controller('mHeaderNavController',[
-		'$rootScope', '$scope','$location','Util','mGradeService','studentService',function(Root,Scope,Location,Util,Mgrade,Student){
+		'$rootScope', '$scope','$location','Util','mGradeService','studentService','teacherService',function(Root,Scope,Location,Util,Mgrade,Student,Teacher){
 			console.log('load mheadercontroller');
 			var gradeList = [];
 			var classList = [];
@@ -1064,6 +1139,7 @@ angular.module('dy.controllers.managehandernav',[
 			Scope.changeGrade = function(id){
 				Root.nowGrade = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				Teacher.filterTeacher(Root.nowGrade,Root.nowClass);
 				changeScore();
 			}
 
@@ -1071,6 +1147,7 @@ angular.module('dy.controllers.managehandernav',[
 			Scope.changeClass = function(id){
 				Root.nowClass = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				Teacher.filterTeacher(Root.nowGrade,Root.nowClass);
 				changeScore();
 			}
 
@@ -1122,9 +1199,7 @@ angular.module('dy.controllers.managehandernav',[
 			});
 
 			if(url.indexOf('teacher.html') > 0){
-				Mgrade.getTermList();
-
-
+				//Mgrade.getTermList();
 			}
 			//
 		}
@@ -1285,8 +1360,9 @@ angular.module('dy.controllers.teacher',[
         'dy.services.student',
 	])
 	.controller('teacherController',[
-		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService',function(Root,Scope,Location,Util,Mgrade,Teacher){
+		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService',function(Root,Scope,Location,Util,Mgrade,Teacher,Student){
 			console.log('load teachercontroller');
+			
 
 			if(Util.cookie.get('role') !== 'teacher'){
 				// window.location.href="/teacher/login";
@@ -1294,21 +1370,30 @@ angular.module('dy.controllers.teacher',[
 			}
 
 			if(Root.isManage){
-				return;
+				//return;
 			}
 
 			Root.isTeacher = true;
 			Root.Teacher = {};
+			Root.teacherMap = {};
+			Root.teacherList = [];
 
-			//学生列表拉完了.继续拉分数
-			Root.$on('status.student.loaded',function(){
-
+			Root.$on('status.student.load',function(){
+				Student.filterStudentByTeacher();
 			});
 
-			//学期已经 加载
-			Root.$on('status.term.load',function(){
-
+			//老师资料拉完了.继续拉分数
+			Root.$on('status.teacher.load',function(){
+				Mgrade.getTermList();
 			});
+
+			//学期已经 加载 
+			Root.$on('status.term.load.teacher',function(){
+				var param = {
+					term : Root.Term._id
+				}
+				Teacher.getTeacherList(param);
+			});	
 
 			var url = Location.absUrl();
 			var fn = function(){};
@@ -1444,12 +1529,6 @@ angular.module('dy.controllers.quota',[
 						parent : parent,
 						teacher : teacher
 					}
-					// var obj = {
-					// 	indicator : idx,
-					// 	self : score[idx].self || 0,
-					// 	parent : score[idx].parent || 0,
-					// 	teacher : score[idx].teacher || 0
-					// }
 					obj[type]  = item
 					total += obj.self + obj.parent+ obj.teacher;
 					list.push(obj);

@@ -2,10 +2,11 @@ angular.module('dy.controllers.managehandernav',[
         'dy.constants',
         'dy.services.utils',
         'dy.services.mgrade',
-        'dy.services.student'
+        'dy.services.student',
+        'dy.services.teacher',
 	])
 	.controller('mHeaderNavController',[
-		'$rootScope', '$scope','$location','Util','mGradeService','studentService',function(Root,Scope,Location,Util,Mgrade,Student){
+		'$rootScope', '$scope','$location','Util','mGradeService','studentService','teacherService',function(Root,Scope,Location,Util,Mgrade,Student,Teacher){
 			console.log('load mheadercontroller');
 			var gradeList = [];
 			var classList = [];
@@ -41,6 +42,7 @@ angular.module('dy.controllers.managehandernav',[
 			Scope.changeGrade = function(id){
 				Root.nowGrade = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				Teacher.filterTeacher(Root.nowGrade,Root.nowClass);
 				changeScore();
 			}
 
@@ -48,6 +50,7 @@ angular.module('dy.controllers.managehandernav',[
 			Scope.changeClass = function(id){
 				Root.nowClass = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				Teacher.filterTeacher(Root.nowGrade,Root.nowClass);
 				changeScore();
 			}
 
@@ -99,9 +102,7 @@ angular.module('dy.controllers.managehandernav',[
 			});
 
 			if(url.indexOf('teacher.html') > 0){
-				Mgrade.getTermList();
-
-
+				//Mgrade.getTermList();
 			}
 			//
 		}

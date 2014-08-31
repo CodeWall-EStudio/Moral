@@ -6,8 +6,9 @@ angular.module('dy.controllers.teacher',[
         'dy.services.student',
 	])
 	.controller('teacherController',[
-		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService',function(Root,Scope,Location,Util,Mgrade,Teacher){
+		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService',function(Root,Scope,Location,Util,Mgrade,Teacher,Student){
 			console.log('load teachercontroller');
+			
 
 			if(Util.cookie.get('role') !== 'teacher'){
 				// window.location.href="/teacher/login";
@@ -23,9 +24,13 @@ angular.module('dy.controllers.teacher',[
 			Root.teacherMap = {};
 			Root.teacherList = [];
 
-			//学生列表拉完了.继续拉分数
-			Root.$on('status.student.loaded',function(){
+			Root.$on('status.student.load',function(){
+				Student.filterStudentByTeacher();
+			});
 
+			//老师资料拉完了.继续拉分数
+			Root.$on('status.teacher.load',function(){
+				Mgrade.getTermList();
 			});
 
 			//学期已经 加载 
