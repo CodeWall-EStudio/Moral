@@ -53,7 +53,8 @@ angular.module('dy.controllers.student',[
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);				
 			}
-		
+			
+			//选中一个学生
 			Root.selectStudent = function(id){
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];

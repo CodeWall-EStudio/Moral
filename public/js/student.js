@@ -458,6 +458,7 @@ angular.module('dy.services.student', [
 									Root.nowStudent.score[Root.nowMonth] = score.list;
 									Root.nowStudent.total[Root.nowMonth] = score.total;
 								}
+								Root.$emit('status.student.scoreload')
 							}
 
 							console.log('获取学生评分成功!',data,Root.nowStudent);
@@ -844,13 +845,76 @@ angular.module('dy.services.quota', [
             }
 
 
+            function getScores(params,success,error){
+                var ts = new Date().getTime();
+                params = params || {};
+                Http.get('/teacher/scores?_='+ts,{responseType:'json',params:params})
+                    .success(function(data,status){
+                        if(data.code === 0){
+                            Root.scoreMap = data.score;
+                            getScoreStatus();
+                            console.log('拉学生分数列表成功!', data);
+                        }else{
+                            Root.$emit('msg.codeshow',data.code);
+                        }
+                        if(success) success(data, status);
+                    })
+                    .error(function(data,status){
+                        if(error) error(data, status);
+                    }); 
+            }
+
+            function getScoreStatus(){
+                Root.studentScoreList = [];
+                _.each(Root.scoreMap,function(item,idx){
+                    var otmp = _.find(Root.studentList,function(obj){
+                        return obj._id === item.student;
+                    });
+                    if(otmp){
+                        Root.studentScoreList.push(item);
+                    }
+                });
+                Root.scoreStatus = {
+                    have : Root.studentScoreList.length
+                }
+                var th = 0,
+                    mh = 0,
+                    ph = 0;
+                _.each(Root.studentScoreList,function(item){
+                    var l = item.scores.length;
+                    var tmp = _.filter(item.scores,function(item){
+                        return !item.teacher
+                    });
+                    if(tmp.length != l){
+                        th++
+                    }
+                    var tmp = _.filter(item.scores,function(item){
+                        return !item.self
+                    });
+                    if(tmp.length != l){
+                        mh++
+                    }          
+                    var tmp = _.filter(item.scores,function(item){
+                        return !item.parent
+                    });                    
+                    if(tmp.length != l){
+                        ph++
+                    } 
+                });
+                    Root.scoreStatus.self = mh;
+                    Root.scoreStatus.parent = ph;
+                    Root.scoreStatus.teacher = th;
+            }
+
+
 			return {
 				getQuotaList : getQuotaList,
 				createQuota : createQuota,
 				modifyQuota : modifyQuota,
 				saveStudentQuota : saveStudentQuota,
 				delQuota : delQuota,
-                orderByQuota : orderByQuota
+                orderByQuota : orderByQuota,
+                getScores : getScores
 			}
 
 		}
@@ -1040,7 +1104,8 @@ angular.module('dy.controllers.student',[
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);				
 			}
-		
+			
+			//选中一个学生
 			Root.selectStudent = function(id){
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
@@ -1159,7 +1224,9 @@ angular.module('dy.controllers.quota',[
 			Root.nowQuota = {}; //当前指标
 			Root.nowScore = {}; //当前评分
 			Root.defScore = false; //默认的评分指标
-			Root.studentScoreList = {};
+			Root.studentScoreList = [];
+			Root.scoreStatus = {};//评分状态
+			Root.scoreMap = {};
 			Root.maxStudent = {}; //最高分
 			Root.minStudent = {}; //最低分
 
@@ -1340,8 +1407,6 @@ angular.module('dy.controllers.quota',[
 				nowRecord[id] = num;
 				Root.quotaMap[id].now = num;
 				Root.nowScore[id] = num;
-
-				//console.log(Root.nowScore);
 				// //这里有问题..要修改下.
 				Scope.allScore = getEqua();
 				Root.$emit(CMD_SET_QUOTA,{ 
@@ -1349,6 +1414,13 @@ angular.module('dy.controllers.quota',[
 					num : num
 				});
 			}
+
+			Root.$on('status.student.scoreload',function(){
+				Scope.allScore = Root.nowStudent.total[Root.nowMonth];
+				_.each(Root.nowStudent.score[Root.nowMonth],function(item,idx){
+					Root.nowScore[idx] = item.teacher;
+				});
+			});
 
 			Root.$on('status.grade.change',function(){
 				//重新拉学期单指标

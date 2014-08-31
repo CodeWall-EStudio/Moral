@@ -4,9 +4,10 @@ angular.module('dy.controllers.teacher',[
         'dy.services.mgrade',
         'dy.services.teacher',	
         'dy.services.student',
+        'dy.services.quota'
 	])
 	.controller('teacherController',[
-		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService',function(Root,Scope,Location,Util,Mgrade,Teacher,Student){
+		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService','quotaService',function(Root,Scope,Location,Util,Mgrade,Teacher,Student,Quota){
 			console.log('load teachercontroller');
 			
 
@@ -23,6 +24,20 @@ angular.module('dy.controllers.teacher',[
 			Root.Teacher = {};
 			Root.teacherMap = {};
 			Root.teacherList = [];
+
+			Root.$on('status.grade.change',function(){
+				var param = {
+					term : Root.Term._id,
+					month : Root.nowMonth
+				}
+				if(Root.nowGrade !== '所有'){
+					param.grade = Root.nowGrade;
+				}
+				if(Root.nowClass !== '所有'){
+					param.class = Root.nowClass;	
+				}		
+				Quota.getScores(param);
+			});
 
 			Root.$on('status.student.load',function(){
 				Student.filterStudentByTeacher();

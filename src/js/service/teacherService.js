@@ -88,11 +88,11 @@ angular.module('dy.services.teacher', [
 								return item.grade===gid && item.class===cid;
 							});
 						}else if(gid){
-							Root.studentList = _.filter(tList,function(item){
+							Root.teacherList = _.filter(tList,function(item){
 								return item.grade===gid;
 							});
 						}else{
-							Root.studentList = _.filter(tList,function(item){
+							Root.teacherList = _.filter(tList,function(item){
 								return item.class===cid;
 							});
 						}

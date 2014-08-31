@@ -43,6 +43,7 @@ angular.module('dy.controllers.managehandernav',[
 				Root.nowGrade = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
 				Teacher.filterTeacher(Root.nowGrade,Root.nowClass);
+				Root.$emit('status.grade.change');
 				changeScore();
 			}
 
@@ -51,6 +52,7 @@ angular.module('dy.controllers.managehandernav',[
 				Root.nowClass = id || '所有';
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
 				Teacher.filterTeacher(Root.nowGrade,Root.nowClass);
+				Root.$emit('status.grade.change');
 				changeScore();
 			}
 

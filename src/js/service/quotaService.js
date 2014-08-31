@@ -223,13 +223,76 @@ angular.module('dy.services.quota', [
             }
 
 
+            function getScores(params,success,error){
+                var ts = new Date().getTime();
+                params = params || {};
+                Http.get('/teacher/scores?_='+ts,{responseType:'json',params:params})
+                    .success(function(data,status){
+                        if(data.code === 0){
+                            Root.scoreMap = data.score;
+                            getScoreStatus();
+                            console.log('拉学生分数列表成功!', data);
+                        }else{
+                            Root.$emit('msg.codeshow',data.code);
+                        }
+                        if(success) success(data, status);
+                    })
+                    .error(function(data,status){
+                        if(error) error(data, status);
+                    }); 
+            }
+
+            function getScoreStatus(){
+                Root.studentScoreList = [];
+                _.each(Root.scoreMap,function(item,idx){
+                    var otmp = _.find(Root.studentList,function(obj){
+                        return obj._id === item.student;
+                    });
+                    if(otmp){
+                        Root.studentScoreList.push(item);
+                    }
+                });
+                Root.scoreStatus = {
+                    have : Root.studentScoreList.length
+                }
+                var th = 0,
+                    mh = 0,
+                    ph = 0;
+                _.each(Root.studentScoreList,function(item){
+                    var l = item.scores.length;
+                    var tmp = _.filter(item.scores,function(item){
+                        return !item.teacher
+                    });
+                    if(tmp.length != l){
+                        th++
+                    }
+                    var tmp = _.filter(item.scores,function(item){
+                        return !item.self
+                    });
+                    if(tmp.length != l){
+                        mh++
+                    }          
+                    var tmp = _.filter(item.scores,function(item){
+                        return !item.parent
+                    });                    
+                    if(tmp.length != l){
+                        ph++
+                    } 
+                });
+                    Root.scoreStatus.self = mh;
+                    Root.scoreStatus.parent = ph;
+                    Root.scoreStatus.teacher = th;
+            }
+
+
 			return {
 				getQuotaList : getQuotaList,
 				createQuota : createQuota,
 				modifyQuota : modifyQuota,
 				saveStudentQuota : saveStudentQuota,
 				delQuota : delQuota,
-                orderByQuota : orderByQuota
+                orderByQuota : orderByQuota,
+                getScores : getScores
 			}
 
 		}
