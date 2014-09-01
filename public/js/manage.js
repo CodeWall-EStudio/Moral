@@ -622,6 +622,12 @@ angular.module('dy.services.student', [
 				});				
 			}
 
+			function noScore(list){
+				Root.noList = _.filter(Root.studentMap,function(item){
+					return $.inArray(item._id,list) <0;
+				});
+			}
+
 			return {
 				createStudent : createStudent, //添加学生
 				getStudentList : getStudentList, //拉学生列表
@@ -632,7 +638,8 @@ angular.module('dy.services.student', [
 				searchStudent : searchStudent,
 				getScore : getScore,
 				getScoreList : getScoreList,
-				filterStudentByTeacher : filterStudentByTeacher
+				filterStudentByTeacher : filterStudentByTeacher,
+				noScore : noScore
 			}
 
 		}
@@ -1016,24 +1023,28 @@ angular.module('dy.services.quota', [
                         return !item.teacher
                     });
                     if(tmp.length != l){
-                        th++
+                        th++;
+                        Root.noTeacher.push(item.student);
                     }
                     var tmp = _.filter(item.scores,function(item){
                         return !item.self
                     });
                     if(tmp.length != l){
-                        mh++
+                        mh++;
+                        Root.noSelf.push(item.student);
                     }          
                     var tmp = _.filter(item.scores,function(item){
                         return !item.parent
                     });                    
                     if(tmp.length != l){
-                        ph++
-                    } 
+                        ph++;
+                        Root.noParent.push(item.student);
+                    }
                 });
-                    Root.scoreStatus.self = mh;
-                    Root.scoreStatus.parent = ph;
-                    Root.scoreStatus.teacher = th;
+                Root.scoreStatus.self = mh;
+                Root.scoreStatus.parent = ph;
+                Root.scoreStatus.teacher = th;
+                console.log(Root.noTeacher);
             }
 
 
@@ -1475,6 +1486,32 @@ angular.module('dy.controllers.teacher',[
 			Root.teacherMap = {};
 			Root.teacherList = [];
 
+			Root.noSelf = [];
+			Root.noParent = [];
+			Root.noTeacher = [];
+			Root.noList = [];
+			Root.panelTit = '';
+
+			Root.showNoList = function(type){
+				var list;
+				switch(type){
+					case 'self':
+						list = Root.noSelf;
+						Root.panelTit = '未自评学生';
+						break;
+					case 'parent':
+						Root.panelTit = '未家长评价的学生';
+						list = Root.noParent;
+						break;
+					case 'teacher':
+						Root.panelTit = '未老师评价的学生';
+						list = Root.noTeacher;
+						break;
+				}
+				Student.noScore(list);
+				$('#noScoreModal').modal('show');
+			}
+
 			Root.$on('status.grade.change',function(){
 				var param = {
 					term : Root.Term._id,
@@ -1495,15 +1532,22 @@ angular.module('dy.controllers.teacher',[
 
 			//老师资料拉完了.继续拉分数
 			Root.$on('status.teacher.load',function(){
-				Mgrade.getTermList();
+				Mgrade.getTermList();				
 			});
 
 			//学期已经 加载 
 			Root.$on('status.term.load.teacher',function(){
-				var param = {
-					term : Root.Term._id
+				if(Root.Teacher.auth===3){
+					var param = {
+						term : Root.Term._id
+					}
+					Teacher.getTeacherList(param);
 				}
-				Teacher.getTeacherList(param);
+				var param = {
+					term : Root.Term._id,
+					month : Root.nowMonth
+				}
+				Quota.getScores(param);	
 			});	
 
 			var url = Location.absUrl();

@@ -622,6 +622,12 @@ angular.module('dy.services.student', [
 				});				
 			}
 
+			function noScore(list){
+				Root.noList = _.filter(Root.studentMap,function(item){
+					return $.inArray(item._id,list) <0;
+				});
+			}
+
 			return {
 				createStudent : createStudent, //添加学生
 				getStudentList : getStudentList, //拉学生列表
@@ -632,7 +638,8 @@ angular.module('dy.services.student', [
 				searchStudent : searchStudent,
 				getScore : getScore,
 				getScoreList : getScoreList,
-				filterStudentByTeacher : filterStudentByTeacher
+				filterStudentByTeacher : filterStudentByTeacher,
+				noScore : noScore
 			}
 
 		}
@@ -903,24 +910,28 @@ angular.module('dy.services.quota', [
                         return !item.teacher
                     });
                     if(tmp.length != l){
-                        th++
+                        th++;
+                        Root.noTeacher.push(item.student);
                     }
                     var tmp = _.filter(item.scores,function(item){
                         return !item.self
                     });
                     if(tmp.length != l){
-                        mh++
+                        mh++;
+                        Root.noSelf.push(item.student);
                     }          
                     var tmp = _.filter(item.scores,function(item){
                         return !item.parent
                     });                    
                     if(tmp.length != l){
-                        ph++
-                    } 
+                        ph++;
+                        Root.noParent.push(item.student);
+                    }
                 });
-                    Root.scoreStatus.self = mh;
-                    Root.scoreStatus.parent = ph;
-                    Root.scoreStatus.teacher = th;
+                Root.scoreStatus.self = mh;
+                Root.scoreStatus.parent = ph;
+                Root.scoreStatus.teacher = th;
+                console.log(Root.noTeacher);
             }
 
 

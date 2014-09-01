@@ -366,3 +366,8 @@ i.copper{
 th{
 	cursor:pointer;
 }
+
+.no-list{
+	max-height:800px;
+	overflow-y:auto;
+}

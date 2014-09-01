@@ -338,6 +338,12 @@ angular.module('dy.services.student', [
 				});				
 			}
 
+			function noScore(list){
+				Root.noList = _.filter(Root.studentMap,function(item){
+					return $.inArray(item._id,list) <0;
+				});
+			}
+
 			return {
 				createStudent : createStudent, //添加学生
 				getStudentList : getStudentList, //拉学生列表
@@ -348,7 +354,8 @@ angular.module('dy.services.student', [
 				searchStudent : searchStudent,
 				getScore : getScore,
 				getScoreList : getScoreList,
-				filterStudentByTeacher : filterStudentByTeacher
+				filterStudentByTeacher : filterStudentByTeacher,
+				noScore : noScore
 			}
 
 		}

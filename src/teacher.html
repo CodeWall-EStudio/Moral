@@ -78,7 +78,7 @@
  						<th ng-click="orderStudent('sex')" width="60">性别<span class="caret" ng-class="{uaret:order['sex']}"></span></th>
  						<th ng-click="orderStudent('grade')" width="60">年级<span class="caret" ng-class="{uaret:order['grade']}"></span></th>
  						<th ng-click="orderStudent('class')" width="60">班级<span class="caret" ng-class="{uaret:order['class']}"></span></th>
- 						<th ng-click="orderStudent('scores')" width="60">得分<span class="caret" ng-class="{uaret:order['scores']}"></span></th>
+ 						<th ng-click="orderStudent('scores')" width="60">得分<span class="caret" ng-class="{hide:Teacher.auth!==3,uaret:order['scores']}"></span></th>
  					</tr>
  					<tr ng-repeat="item in studentList" ng-click="selectStudent(item._id)">
  						<td>{{item.name}}</td>
@@ -103,10 +103,10 @@
  							<li>{{nowGrade}}年级 {{nowClass}}班 最低得分: {{studentList[minStudent.student].name}} {{minStudent.total}}分</li>
  						</ul>
 
- 						<ul>
- 							<li>已自评学生数目: {{scoreStatus.self}}</li>
- 							<li>家长已评价学生数目: {{scoreStatus.parent}}</li>
- 							<li>老师已经评价学生数目: {{scoreStatus.teacher}}</li>
+ 						<ul ng-class="{hide:Teacher.auth<3}">
+ 							<li>已自评学生数目: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:hadSelf.length == 0}" ng-click="showNoList('self')">查看名单</a></li>
+ 							<li>家长已评价学生数目: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:hadParent.length == 0}" ng-click="showNoList('parent')">查看名单</a></li>
+ 							<li>老师已经评价学生数目: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:hadTeacher.length == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
  						</ul>
  					</dd>
  				</dl>
@@ -175,6 +175,36 @@
  				</dl> 							
  			</div> 			
 	 	</div>	
+ 	</div>
+ 	<div class="modal fade" id="noScoreModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{panelTit}}</h4>
+                </div>
+                <div class="model-body"> 
+	                <div class="no-list">		
+		 				<table class="table table-striped table-hover" ng-model='studentList'>
+		 					<tr>
+		 						<th width="60">姓名</th>
+		 						<th width="60">性别</th>
+		 						<th width="60">年级</th>
+		 						<th width="60">班级</th>
+		 					</tr>
+		 					<tr ng-repeat="item in noList">
+		 						<td>{{item.name}}</td>
+		 						<td>
+		 							<span ng-hide="item.sex">女</span>
+		 							<span ng-show="item.sex">男</span>
+		 						</td>
+		 						<td>{{item.grade}}年级</td>
+		 						<td>{{item.class}}班</td>
+		 					</tr>
+		 				</table> 
+	 				</div>
+ 				</div>
+ 			</div>
+ 		</div>		
  	</div>
 	<div ng-controller="msgController"></div>
 

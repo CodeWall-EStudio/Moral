@@ -264,24 +264,28 @@ angular.module('dy.services.quota', [
                         return !item.teacher
                     });
                     if(tmp.length != l){
-                        th++
+                        th++;
+                        Root.noTeacher.push(item.student);
                     }
                     var tmp = _.filter(item.scores,function(item){
                         return !item.self
                     });
                     if(tmp.length != l){
-                        mh++
+                        mh++;
+                        Root.noSelf.push(item.student);
                     }          
                     var tmp = _.filter(item.scores,function(item){
                         return !item.parent
                     });                    
                     if(tmp.length != l){
-                        ph++
-                    } 
+                        ph++;
+                        Root.noParent.push(item.student);
+                    }
                 });
-                    Root.scoreStatus.self = mh;
-                    Root.scoreStatus.parent = ph;
-                    Root.scoreStatus.teacher = th;
+                Root.scoreStatus.self = mh;
+                Root.scoreStatus.parent = ph;
+                Root.scoreStatus.teacher = th;
+                console.log(Root.noTeacher);
             }
 
 
