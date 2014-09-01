@@ -157,7 +157,7 @@ module.exports = function auth(method, role) {
 														reUrl += '.html';
 													}
 													res.redirect(reUrl);
-												}
+												});
 											}
                                         }
 
