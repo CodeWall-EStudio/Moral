@@ -35,9 +35,12 @@ angular.module('dy.services.teacher', [
 				Http.get('/teacher?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
 						Root.Teacher = data.teacher.info;
-						var gclist = getTeacherGrade(data.relationship);
-						Root.gradeList = gclist.grade;
-						Root.classList = gclist.class;
+						Root.Teacher.auth = data.teacher.authority;
+						if(!Root.Teacher.auth){
+							var gclist = getTeacherGrade(data.relationship);
+							Root.gradeList = gclist.grade;
+							Root.classList = gclist.class;
+						}
 						// Root.gradeList = gclist.grade;
 						// Root.classList = gclist.clist;
 						console.log('拉老师资料成功!', data);

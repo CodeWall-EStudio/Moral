@@ -257,6 +257,9 @@ angular.module('dy.services.student', [
 			}
 
 			function filterStudentByTeacher(){
+				if(Root.Teacher.auth){
+					return;
+				}
 				var list = [];
 				_.each(Root.studentMap,function(item,idx){
 					if(_.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0){

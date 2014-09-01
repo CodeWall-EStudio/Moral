@@ -541,9 +541,22 @@ angular.module('dy.services.student', [
 			}
 
 			function filterStudentByTeacher(){
-				Root.studentList = _.filter(sList,function(item){
+				if(Root.Teacher.auth){
+					return;
+				}
+				var list = [];
+				_.each(Root.studentMap,function(item,idx){
+					if(_.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0){
+						list.push(item);
+					}else{
+						delete Root.studentMap[idx];
+					}
+				});
+				Root.studentList = list;
+				/*_.filter(sList,function(item){
 					return _.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0
 				});
+				*/
 			}
 
 			//选择一个指定学期的学生
@@ -559,6 +572,10 @@ angular.module('dy.services.student', [
 
 				if(!gid && !cid){
 					//$.extend(list,sList);
+					Root.studentList = [];
+					_.each(Root.studentMap,function(item){
+						Root.studentList.push(item);
+					});
 					//Root.studentList = sList;
 					return;
 				}else{
@@ -657,9 +674,12 @@ angular.module('dy.services.teacher', [
 				Http.get('/teacher?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
 						Root.Teacher = data.teacher.info;
-						var gclist = getTeacherGrade(data.relationship);
-						Root.gradeList = gclist.grade;
-						Root.classList = gclist.class;
+						Root.Teacher.auth = data.teacher.authority;
+						if(!Root.Teacher.auth){
+							var gclist = getTeacherGrade(data.relationship);
+							Root.gradeList = gclist.grade;
+							Root.classList = gclist.class;
+						}
 						// Root.gradeList = gclist.grade;
 						// Root.classList = gclist.clist;
 						console.log('拉老师资料成功!', data);
