@@ -257,9 +257,19 @@ angular.module('dy.services.student', [
 			}
 
 			function filterStudentByTeacher(){
-				Root.studentList = _.filter(sList,function(item){
+				var list = [];
+				_.each(Root.studentMap,function(item,idx){
+					if(_.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0){
+						list.push(item);
+					}else{
+						delete Root.studentMap[idx];
+					}
+				});
+				Root.studentList = list;
+				/*_.filter(sList,function(item){
 					return _.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0
 				});
+				*/
 			}
 
 			//选择一个指定学期的学生
@@ -275,6 +285,10 @@ angular.module('dy.services.student', [
 
 				if(!gid && !cid){
 					//$.extend(list,sList);
+					Root.studentList = [];
+					_.each(Root.studentMap,function(item){
+						Root.studentList.push(item);
+					});
 					//Root.studentList = sList;
 					return;
 				}else{
