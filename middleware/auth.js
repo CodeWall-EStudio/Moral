@@ -141,7 +141,7 @@ module.exports = function auth(method, role) {
 												}
 												res.redirect(reUrl);
                                             }else{
-												teacherModel.update({ id: sess.user.id }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
+												teacherModel.update({ id: sess.user.id }, sess.user, { upsert: true, multi: true }, function (err, numberAffected, raw) {
 													if (err) return console.error(err);
 													console.log('The number of updated documents was %d', numberAffected);
 													console.log('The raw response from Mongo was ', raw);
