@@ -24,6 +24,7 @@ angular.module('dy.controllers.teacher',[
 			Root.Teacher = {};
 			Root.teacherMap = {};
 			Root.teacherList = [];
+			Root.teacherAuthList = [];
 
 			Root.noSelf = [];
 			Root.noParent = [];
@@ -81,6 +82,7 @@ angular.module('dy.controllers.teacher',[
 						term : Root.Term._id
 					}
 					Teacher.getTeacherList(param);
+					Teacher.getTeacherAuth();
 				}
 				var param = {
 					term : Root.Term._id,

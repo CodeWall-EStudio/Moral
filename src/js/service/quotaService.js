@@ -282,7 +282,6 @@ angular.module('dy.services.quota', [
                 Root.scoreStatus.self = Root.noSelf.length;
                 Root.scoreStatus.parent = Root.noParent.length;
                 Root.scoreStatus.teacher = Root.noTeacher.length;
-                console.log(Root.noTeacher);
             }
 
 

@@ -24,7 +24,7 @@
  			<li ng-class="{active:getMode() === 'record',hide:!studentTerm}"><a ng-click="switchMode('record')">评价</a></li> 			
  		</ul>
  		<div class="userinfo">
- 			<span>{{Teacher.cnname}}</span>
+ 			<span>{{Teacher.name}}</span>
  			<a href="/manage.html" ng-hide="{{Teacher.deptType === 1}}">管理</a>
  			<a href="/teacher/logout">退出</a>
  		</div>

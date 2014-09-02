@@ -7,13 +7,16 @@ var CONSTANTS = require('../config/constants');
 
 // the middleware function
 module.exports = function teacher(method) {
-    console.log('-------',method,'---------');
+
     return function (req, res, next) {
         var teacherModel = db.getTeacherModel();
         if (method === 'post') {
             if (req.body.teacher) {
                 try {
                     var data = JSON.parse(req.body.teacher);
+					    console.log('-------',method,'---------');
+					console.log(data);
+					    console.log('-------',method,'---------');
                     if (data.id) {
                         teacherModel.update({ id: data.id }, data, { upsert: true, multi: true }, function (err, numberAffected, raw) {
                             if (err) return console.error(err);

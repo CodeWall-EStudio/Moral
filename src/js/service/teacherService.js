@@ -34,7 +34,7 @@ angular.module('dy.services.teacher', [
 				var ts = new Date().getTime();
 				Http.get('/teacher?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
-						Root.Teacher = data.teacher.info;
+						Root.Teacher = data.teacher;
 						Root.Teacher.auth = data.teacher.authority;
 						if(!Root.Teacher.auth){
 							var gclist = getTeacherGrade(data.relationship);
@@ -129,9 +129,28 @@ angular.module('dy.services.teacher', [
 					});	
 			}
 
+			function getTeacherAuth(param,success,error){
+				var ts = new Date().getTime();
+				Http.get('/teacher/list?_='+ts,{responseType:'json'})
+					.success(function(data,status){
+						if(data.code === 0){
+							tList = data.teacher;
+							Root.teacherAuthList = data.teacher;
+							console.log('拉老师权限列表成功!', data);
+						}else{
+							Root.$emit('msg.codeshow',data.code);
+						}
+						if(success) success(data, status);
+					})
+					.error(function(data,status){
+						if(error) error(data, status);
+					});					
+			}
+
 			return {
 				getTeacherInfo : getTeacherInfo,
 				getTeacherList : getTeacherList,
+				getTeacherAuth : getTeacherAuth,
 				updateTeacher : updateTeacher,
 				filterTeacher : filterTeacher
 			}

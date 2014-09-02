@@ -15,8 +15,17 @@ angular.module('dy.controllers.manage',[
 				//return;
 			}
 
+			Root.setAuth = function(id,auth){
+				console.log(id,auth);
+				var param = {
+					id : id,
+					authority : auth
+				};
+				Teacher.updateTeacher(param);
+			}
+
 			Root.isManage = true;
-			Root.Teacher = {};
+			//Root.Teacher = {};
 
 			Teacher.getTeacherInfo();			
 
