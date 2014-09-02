@@ -104,9 +104,9 @@
  						</ul>
 
  						<ul >
- 							<li>未自评学生数目: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:hadSelf.length == 0}" ng-click="showNoList('self')">查看名单</a></li>
- 							<li>家长未评价学生数目: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:hadParent.length == 0}" ng-click="showNoList('parent')">查看名单</a></li>
- 							<li ng-class="{hide:Teacher.auth<3}">老师未评价学生数目: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:hadTeacher.length == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
+ 							<li>未参评学生数量: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:hadSelf.length == 0}" ng-click="showNoList('self')">查看名单</a></li>
+ 							<li>家长未参评学生数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:hadParent.length == 0}" ng-click="showNoList('parent')">查看名单</a></li>
+ 							<li ng-class="{hide:Teacher.auth<3}">老师未参评学生数量: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:hadTeacher.length == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
  						</ul>
  					</dd>
  				</dl>
@@ -181,6 +181,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">{{panelTit}}</h4>
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>                    
                 </div>
                 <div class="model-body"> 
 	                <div class="no-list">		
