@@ -680,7 +680,7 @@ angular.module('dy.services.teacher', [
 				var ts = new Date().getTime();
 				Http.get('/teacher?_='+ts,null,{responseType:'json'})
 					.success(function(data,status){
-						Root.Teacher = data.teacher.info;
+						Root.Teacher = data.teacher;
 						Root.Teacher.auth = data.teacher.authority;
 						if(!Root.Teacher.auth){
 							var gclist = getTeacherGrade(data.relationship);
@@ -761,10 +761,13 @@ angular.module('dy.services.teacher', [
 					)
 					.success(function(data,status){
 						if(data.code === 0){
-							tList = data.teacher;
-							Root.teacherList = data.teacher;
-							convertTeacher(data.teacher);
-							console.log('拉老师列表成功!', data);
+							var teacher = JSON.parse(param.teacher);
+							_.each(Root.teacherAuthList,function(item){
+								if(item.id === teacher.id){
+									item.authority = teacher.authority;
+								}
+							});
+							console.log('更新老师资料成功!', data);
 						}else{
 							Root.$emit('msg.codeshow',data.code);
 						}
@@ -775,9 +778,28 @@ angular.module('dy.services.teacher', [
 					});	
 			}
 
+			function getTeacherAuth(param,success,error){
+				var ts = new Date().getTime();
+				Http.get('/teacher/list?_='+ts,{responseType:'json'})
+					.success(function(data,status){
+						if(data.code === 0){
+							tList = data.teacher;
+							Root.teacherAuthList = data.teacher;
+							console.log('拉老师权限列表成功!', data);
+						}else{
+							Root.$emit('msg.codeshow',data.code);
+						}
+						if(success) success(data, status);
+					})
+					.error(function(data,status){
+						if(error) error(data, status);
+					});					
+			}
+
 			return {
 				getTeacherInfo : getTeacherInfo,
 				getTeacherList : getTeacherList,
+				getTeacherAuth : getTeacherAuth,
 				updateTeacher : updateTeacher,
 				filterTeacher : filterTeacher
 			}
@@ -1068,7 +1090,6 @@ angular.module('dy.services.quota', [
                 Root.scoreStatus.self = Root.noSelf.length;
                 Root.scoreStatus.parent = Root.noParent.length;
                 Root.scoreStatus.teacher = Root.noTeacher.length;
-                console.log(Root.noTeacher);
             }
 
 
@@ -1174,8 +1195,20 @@ angular.module('dy.controllers.manage',[
 				//return;
 			}
 
+			Root.setAuth = function(id,auth){
+				console.log(id,auth);
+				var param = {
+					id : id,
+					authority : auth
+				};
+
+				Teacher.updateTeacher({
+					teacher : JSON.stringify(param)
+				});
+			}
+
 			Root.isManage = true;
-			Root.Teacher = {};
+			//Root.Teacher = {};
 
 			Teacher.getTeacherInfo();			
 
@@ -1509,6 +1542,7 @@ angular.module('dy.controllers.teacher',[
 			Root.Teacher = {};
 			Root.teacherMap = {};
 			Root.teacherList = [];
+			Root.teacherAuthList = [];
 
 			Root.noSelf = [];
 			Root.noParent = [];
@@ -1566,6 +1600,7 @@ angular.module('dy.controllers.teacher',[
 						term : Root.Term._id
 					}
 					Teacher.getTeacherList(param);
+					Teacher.getTeacherAuth();
 				}
 				var param = {
 					term : Root.Term._id,

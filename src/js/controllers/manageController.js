@@ -21,7 +21,10 @@ angular.module('dy.controllers.manage',[
 					id : id,
 					authority : auth
 				};
-				Teacher.updateTeacher(param);
+
+				Teacher.updateTeacher({
+					teacher : JSON.stringify(param)
+				});
 			}
 
 			Root.isManage = true;

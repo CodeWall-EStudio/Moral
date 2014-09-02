@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1409661875162">
+  <link rel="stylesheet" href="css/main.css?t=1409670140255">
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -14,7 +14,7 @@
  			<li ng-class="{active:getMode() === 'record',hide:!studentTerm}"><a ng-click="switchMode('record')">评价</a></li> 			
  		</ul>
  		<div class="userinfo">
- 			<span>{{Teacher.cnname}}</span>
+ 			<span>{{Teacher.name}}</span>
  			<a href="/manage.html" ng-hide="{{Teacher.deptType === 1}}">管理</a>
  			<a href="/teacher/logout">退出</a>
  		</div>
@@ -200,7 +200,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/teacher.js?t=1409661875162"></script>
+	<script src="js/teacher.js?t=1409670140255"></script>
 
  </body>
  </html>

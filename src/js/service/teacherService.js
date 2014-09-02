@@ -115,10 +115,13 @@ angular.module('dy.services.teacher', [
 					)
 					.success(function(data,status){
 						if(data.code === 0){
-							tList = data.teacher;
-							Root.teacherList = data.teacher;
-							convertTeacher(data.teacher);
-							console.log('拉老师列表成功!', data);
+							var teacher = JSON.parse(param.teacher);
+							_.each(Root.teacherAuthList,function(item){
+								if(item.id === teacher.id){
+									item.authority = teacher.authority;
+								}
+							});
+							console.log('更新老师资料成功!', data);
 						}else{
 							Root.$emit('msg.codeshow',data.code);
 						}
