@@ -41,7 +41,7 @@
  		</ul>
  		<div class="userinfo">
  			<span>{{Teacher.cnname}}</span>
- 			<a ng-class="{hide:User.auth===0}" ng-click="authManage()">授权管理</a>
+ 			<a ng-class="{hide:Teacher.auth!==3}" ng-click="authManage()">授权管理</a>
  			<a href="/teacher/logout">退出</a>
  		</div>
  	</div>

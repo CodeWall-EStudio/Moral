@@ -93,8 +93,9 @@ angular.module('dy.controllers.teacher',[
 			var fn = function(){};
 			if(url.indexOf('teacher.html') > 0){
 				Root.teacherPage = true;
+				Teacher.getTeacherInfo();
 			}
-			Teacher.getTeacherInfo();
+			
 			//Student.getStudentList();
 		}
 	]);

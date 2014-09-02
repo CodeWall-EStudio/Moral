@@ -28,6 +28,6 @@ angular.module('dy.controllers.mgradelist',[
 				console.log(id);
 			}
 
-			Mgrade.getTermList();
+			//Mgrade.getTermList();
 		}
 	]);

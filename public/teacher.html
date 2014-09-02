@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1409585493853">
+  <link rel="stylesheet" href="css/main.css?t=1409661875162">
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -93,10 +93,10 @@
  							<li>{{nowGrade}}年级 {{nowClass}}班 最低得分: {{studentList[minStudent.student].name}} {{minStudent.total}}分</li>
  						</ul>
 
- 						<ul ng-class="{hide:Teacher.auth<3}">
- 							<li>已自评学生数目: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:hadSelf.length == 0}" ng-click="showNoList('self')">查看名单</a></li>
- 							<li>家长已评价学生数目: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:hadParent.length == 0}" ng-click="showNoList('parent')">查看名单</a></li>
- 							<li>老师已经评价学生数目: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:hadTeacher.length == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
+ 						<ul >
+ 							<li>未自评学生数目: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:hadSelf.length == 0}" ng-click="showNoList('self')">查看名单</a></li>
+ 							<li>家长未评价学生数目: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:hadParent.length == 0}" ng-click="showNoList('parent')">查看名单</a></li>
+ 							<li ng-class="{hide:Teacher.auth<3}">老师未评价学生数目: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:hadTeacher.length == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
  						</ul>
  					</dd>
  				</dl>
@@ -200,7 +200,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/teacher.js?t=1409585493853"></script>
+	<script src="js/teacher.js?t=1409661875162"></script>
 
  </body>
  </html>

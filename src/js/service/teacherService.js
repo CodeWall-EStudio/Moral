@@ -103,9 +103,36 @@ angular.module('dy.services.teacher', [
 				}
 			}
 
+			function updateTeacher(param,success,error){
+				var ts = new Date().getTime();
+				var body = Util.object.toUrlencodedString(param);
+				Http.post('/teacher/teacher?_=' + ts,
+                        body,
+                        {
+                            responseType: 'json',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }
+					)
+					.success(function(data,status){
+						if(data.code === 0){
+							tList = data.teacher;
+							Root.teacherList = data.teacher;
+							convertTeacher(data.teacher);
+							console.log('拉老师列表成功!', data);
+						}else{
+							Root.$emit('msg.codeshow',data.code);
+						}
+						if(success) success(data, status);
+					})
+					.error(function(data,status){
+						if(error) error(data, status);
+					});	
+			}
+
 			return {
 				getTeacherInfo : getTeacherInfo,
 				getTeacherList : getTeacherList,
+				updateTeacher : updateTeacher,
 				filterTeacher : filterTeacher
 			}
 
