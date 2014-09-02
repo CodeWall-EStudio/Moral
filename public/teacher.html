@@ -5,13 +5,13 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1409670778981">
+  <link rel="stylesheet" href="css/main.css?t=1409674808830">
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
  		<ul class="nav nav-tabs top-nav">
  			<li ng-class="{hide:User.auth === 0,active:getMode() === 'result'}"><a ng-click="switchMode('result')">评价统计</a></li>
- 			<li ng-class="{active:getMode() === 'record',hide:!studentTerm}"><a ng-click="switchMode('record')">评价</a></li> 			
+ 			<li ng-class="{active:getMode() === 'record',hide:!studentTerm,hide:Teacher.authority!==0}"><a ng-click="switchMode('record')">评价</a></li> 			
  		</ul>
  		<div class="userinfo">
  			<span>{{Teacher.name}}</span>
@@ -23,11 +23,19 @@
  	<div class="content">
  		<div ng-controller="mHeaderNavController">
 	 		<div class="content-header">
-	 			<div class="grade-zone">
+	 			<div class="grade-zone" ng-hide="getMode() === 'record'">
 		 			<div class="grade-dom dropdown" >
 		 				{{Term.name}}
 		 			</div>
-		 			<div class="grade-dom dropdown">
+		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority === 3">
+						<a class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+		 					<li ng-repeat="item in teacherGrade">
+		 						<a ng-click="changeGradeClass(item.g,item.c)">{{item.g}}年级{{item.c}}班</a>
+		 					</li>
+						</ul>
+		 			</div>		 			
+		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority < 3">
 						<a class="dropdown-toggle" data-toggle="dropdown">{{nowGrade}}年级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a  ng-click="changeGrade(0)">所有年级</a></li>
@@ -36,7 +44,7 @@
 		 					</li>
 						</ul>
 		 			</div>
-		 			<div class="grade-dom dropdown">
+		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority < 3">
 						<a class="dropdown-toggle" data-toggle="dropdown">{{nowClass}}班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a ng-click="changeClass(0)">所有班级</a></li>
@@ -47,14 +55,16 @@
 		 			</div>		 				 			
 		 			<ul class="nav grade-dom grade-list">
 		 				<li ng-class="{active:nowMonth === 0}">本学期</li>
-		 				<li ng-repeat="item in Term.months" ng-click="selectMonth(item.s)" ng-class="{active:nowMonth === item.s}">{{item.s}}</li>
+		 				<li ng-repeat="item in Term.months" ng-click="selectMonth(item.s)" ng-class="{active:nowMonth === item.s}">{{item.s}}月</li>
 		 			</ul>
 	 			</div> 			
-
+	 			<div class="grade-zone" ng-hide="getMode() === 'result'">
+					{{nowMonth-1}}月 {{studentTerm?'开放评价中':'关闭'}} 
+	 			</div>
 
 	 			<div class="search-zone">
-	 				<input type="text" value={{keyword}}  placeholder="请输入学生姓名查找" />
-	 				<button type="submit" />
+		 				<input type="text" ng-enter="startSearch()" ng-model="searchKeyWord" placeholder="搜索学生" />
+		 				<button type="submit" ng-click="startSearch()"  />
 	 			</div>
  			</div>
  		</div> 
@@ -95,8 +105,8 @@
 
  						<ul >
  							<li>未参评学生数量: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:hadSelf.length == 0}" ng-click="showNoList('self')">查看名单</a></li>
- 							<li>家长未参评学生数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:hadParent.length == 0}" ng-click="showNoList('parent')">查看名单</a></li>
- 							<li ng-class="{hide:Teacher.auth<3}">老师未参评学生数量: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:hadTeacher.length == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
+ 							<li>未参评教师数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:hadParent.length == 0}" ng-click="showNoList('parent')">查看名单</a></li>
+ 							<li ng-class="{hide:Teacher.auth<3}">未参评教师数量: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:hadTeacher.length == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
  						</ul>
  					</dd>
  				</dl>
@@ -201,7 +211,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/teacher.js?t=1409670778981"></script>
+	<script src="js/teacher.js?t=1409674808830"></script>
 
  </body>
  </html>

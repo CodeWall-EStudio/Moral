@@ -56,6 +56,15 @@ angular.module('dy.controllers.managehandernav',[
 				changeScore();
 			}
 
+			Scope.changeGradeClass = function(gid,cid){
+				Root.nowGrade = gid;
+				Root.nowClass = cid;
+				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				Teacher.filterTeacher(Root.nowGrade,Root.nowClass);
+				Root.$emit('status.grade.change');
+				changeScore();
+			}
+
 			Scope.selectMonth = function(month){
 				Root.nowMonth = month;
 				changeScore();				

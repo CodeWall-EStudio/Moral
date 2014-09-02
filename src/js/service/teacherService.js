@@ -15,19 +15,13 @@ angular.module('dy.services.teacher', [
 			}
 
 			function getTeacherGrade(glist){
-				var grade = [];
-				var clist = [];
 				_.each(glist,function(item){
-					grade.push(item.grade);
-					clist.push(item.class);
+					Root.teacherGrade.push({
+						g : item.grade,
+						c : item.class
+					});
 					// Root.gradeList.push(item.class);
 				});
-				grade = _.uniq(_.sortBy(grade));
-				clist = _.uniq(_.sortBy(clist));
-				return {
-					grade : grade,
-					class : clist
-				}
 			}
 
 			function getTeacherInfo(param,success,error){
@@ -38,8 +32,6 @@ angular.module('dy.services.teacher', [
 						Root.Teacher.auth = data.teacher.authority;
 						if(!Root.Teacher.auth){
 							var gclist = getTeacherGrade(data.relationship);
-							Root.gradeList = gclist.grade;
-							Root.classList = gclist.class;
 						}
 						// Root.gradeList = gclist.grade;
 						// Root.classList = gclist.clist;

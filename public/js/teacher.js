@@ -540,13 +540,25 @@ angular.module('dy.services.student', [
                     });	
 			}
 
+			function checkGrade(item){
+				var ret = false;
+				_.each(Root.teacherGrade,function(obj){
+					if(obj.g === item.grade && obj.c === item.class){
+						ret = true;
+						return true;
+					}
+				});
+				return ret;
+			}
+
 			function filterStudentByTeacher(){
 				if(Root.Teacher.auth){
 					return;
 				}
 				var list = [];
 				_.each(Root.studentMap,function(item,idx){
-					if(_.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0){
+					var ret = checkGrade(item);
+					if(ret){
 						list.push(item);
 					}else{
 						delete Root.studentMap[idx];
@@ -661,19 +673,13 @@ angular.module('dy.services.teacher', [
 			}
 
 			function getTeacherGrade(glist){
-				var grade = [];
-				var clist = [];
 				_.each(glist,function(item){
-					grade.push(item.grade);
-					clist.push(item.class);
+					Root.teacherGrade.push({
+						g : item.grade,
+						c : item.class
+					});
 					// Root.gradeList.push(item.class);
 				});
-				grade = _.uniq(_.sortBy(grade));
-				clist = _.uniq(_.sortBy(clist));
-				return {
-					grade : grade,
-					class : clist
-				}
 			}
 
 			function getTeacherInfo(param,success,error){
@@ -684,8 +690,6 @@ angular.module('dy.services.teacher', [
 						Root.Teacher.auth = data.teacher.authority;
 						if(!Root.Teacher.auth){
 							var gclist = getTeacherGrade(data.relationship);
-							Root.gradeList = gclist.grade;
-							Root.classList = gclist.class;
 						}
 						// Root.gradeList = gclist.grade;
 						// Root.classList = gclist.clist;
@@ -1293,6 +1297,15 @@ angular.module('dy.controllers.managehandernav',[
 				changeScore();
 			}
 
+			Scope.changeGradeClass = function(gid,cid){
+				Root.nowGrade = gid;
+				Root.nowClass = cid;
+				Student.filterStudent(Root.nowGrade,Root.nowClass);
+				Teacher.filterTeacher(Root.nowGrade,Root.nowClass);
+				Root.$emit('status.grade.change');
+				changeScore();
+			}
+
 			Scope.selectMonth = function(month){
 				Root.nowMonth = month;
 				changeScore();				
@@ -1522,6 +1535,7 @@ angular.module('dy.controllers.teacher',[
 			Root.teacherMap = {};
 			Root.teacherList = [];
 			Root.teacherAuthList = [];
+			Root.teacherGrade = [];
 
 			Root.noSelf = [];
 			Root.noParent = [];

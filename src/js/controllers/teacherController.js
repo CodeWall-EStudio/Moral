@@ -25,6 +25,7 @@ angular.module('dy.controllers.teacher',[
 			Root.teacherMap = {};
 			Root.teacherList = [];
 			Root.teacherAuthList = [];
+			Root.teacherGrade = [];
 
 			Root.noSelf = [];
 			Root.noParent = [];

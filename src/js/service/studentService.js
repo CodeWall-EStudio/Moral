@@ -256,13 +256,25 @@ angular.module('dy.services.student', [
                     });	
 			}
 
+			function checkGrade(item){
+				var ret = false;
+				_.each(Root.teacherGrade,function(obj){
+					if(obj.g === item.grade && obj.c === item.class){
+						ret = true;
+						return true;
+					}
+				});
+				return ret;
+			}
+
 			function filterStudentByTeacher(){
 				if(Root.Teacher.auth){
 					return;
 				}
 				var list = [];
 				_.each(Root.studentMap,function(item,idx){
-					if(_.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0){
+					var ret = checkGrade(item);
+					if(ret){
 						list.push(item);
 					}else{
 						delete Root.studentMap[idx];
