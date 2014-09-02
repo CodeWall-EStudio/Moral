@@ -26,6 +26,7 @@ var studentSchema = new Schema({
 var teacherSchema = new Schema({
     id: String,
     term: Schema.Types.ObjectId,
+	name: String,
     authority: Number /* 0 普通 1 数据管理 2 系统管理 3 校长*/
 });
 // 关系

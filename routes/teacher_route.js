@@ -42,6 +42,7 @@ router.post('/indicator', indicator('post'));
 
 /* teacher */
 router.get('/teacher', teacher('list'));
+router.get('/list', teacher('teacherlist'));
 router.post('/teacher', teacher('post'));
 
 /* relationship*/

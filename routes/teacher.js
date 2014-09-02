@@ -35,7 +35,7 @@ module.exports = function teacher(method) {
             } else {
                 res.json({ code: CONSTANTS.MSG_PARAM });
             }
-        } else if (method === 'list') {
+        } else if (method === 'teacherlist') {
             console.log('----- teacher -------');
             teacherModel.find(function (err, teachers) {
                 if (err) {

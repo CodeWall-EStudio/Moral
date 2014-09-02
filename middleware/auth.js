@@ -127,6 +127,7 @@ module.exports = function auth(method, role) {
                                     var teacherModel = db.getTeacherModel();
                                     teacherModel.findOne({id: sess.user.id}, function(err, teacher){
                                         sess.user.authority = 0;
+										sess.user.name = response.userInfo.name;
 										console.log(err,teacher);
                                         if (err) {
                                         } else {

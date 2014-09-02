@@ -37,11 +37,12 @@
  			</li>
  			<li ng-class="{active:getMode()==='student'}" ng-click="switchMode('student')"><a ng-click="studentShow()">学生信息管理</a></li>
  			<li ng-class="{active:getMode()==='teacher'}" ng-click="switchMode('teacher')"><a ng-click="teacherShow()">班主任导入</a></li>
- 			<li  ng-class="{active:getMode()==='quota'}" ng-click="switchMode('quota')"><a ng-click="quotaShow()">指标管理</a></li>
+ 			<li ng-class="{active:getMode()==='quota'}" ng-click="switchMode('quota')"><a ng-click="quotaShow()">指标管理</a></li>
+ 			<li ng-class="{active:getMode()==='auth',hide:Teacher.auth !== 3}" ng-click="switchMode('quota')"><a ng-click="quotaShow()">授权</a></li>
  		</ul>
  		<div class="userinfo">
  			<span>{{Teacher.cnname}}</span>
- 			<a ng-class="{hide:Teacher.auth!==3}" ng-click="authManage()">授权管理</a>
+ 			<!--<a ng-class="{hide:Teacher.auth!==3}" ng-click="authManage()">授权管理</a>-->
  			<a href="/teacher/logout">退出</a>
  		</div>
  	</div>
