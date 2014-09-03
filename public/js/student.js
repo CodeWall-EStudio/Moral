@@ -419,18 +419,6 @@ angular.module('dy.services.student', [
 				}
 			}
 
-			function convertScore(data){
-				var max = _.max(data,function(item){
-					return item.total;
-				});
-				var min = _.min(data,function(item){
-					return item.total;
-				});
-				Root.maxStudent = max;
-				Root.minStudent = min;
-			}
-
-
 			//拉单个学生评分
 			function getScore(param,success,error){
 				var ts = new Date().getTime();
@@ -565,6 +553,7 @@ angular.module('dy.services.student', [
 					}
 				});
 				Root.studentList = list;
+				Root.$emit('status.filter.student');
 				/*_.filter(sList,function(item){
 					return _.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0
 				});
@@ -881,6 +870,26 @@ angular.module('dy.services.quota', [
             }
 
 
+            function convertScore(data){
+                for(var i in data){
+                    if(!Root.studentMap[data[i].student]){
+                        delete data[i];
+                    }
+                }
+
+                console.log(data);
+                var max = _.max(data,function(item){
+                    return item.total;
+                });
+                var min = _.min(data,function(item){
+                    return item.total;
+                });
+
+                Root.maxStudent = max;
+                Root.minStudent = min;
+            }
+
+
             function getScores(params,success,error){
                 var ts = new Date().getTime();
                 params = params || {};
@@ -889,6 +898,7 @@ angular.module('dy.services.quota', [
                         if(data.code === 0){
                             Root.scoreMap = data.score;
                             getScoreStatus();
+                            convertScore(data.score);
                             console.log('拉学生分数列表成功!', data);
                         }else{
                             Root.$emit('msg.codeshow',data.code);
@@ -913,33 +923,31 @@ angular.module('dy.services.quota', [
                 Root.scoreStatus = {
                     have : Root.studentScoreList.length
                 }
+
                 var th = 0,
                     mh = 0,
                     ph = 0;
                 _.each(Root.studentScoreList,function(item){
                     var l = item.scores.length;
-                    var tmp = _.filter(item.scores,function(item){
-                        return !item.teacher
+                    _.each(item.scores,function(obj){
+                        if(obj.teacher){
+                            Root.hadTeacher.push(item.student);
+                        }
+                        if(obj.self){
+                            Root.hadSelf.push(item.student);   
+                        }
+                        if(obj.self){
+                            Root.hadParent.push(item.student);   
+                        }                        
                     });
-                    if(tmp.length != l){
-                        Root.noTeacher.push(item.student);
-                    }
-                    var tmp = _.filter(item.scores,function(item){
-                        return !item.self
-                    });
-                    if(tmp.length != l){
-                        Root.noSelf.push(item.student);
-                    }          
-                    var tmp = _.filter(item.scores,function(item){
-                        return !item.parent
-                    });                    
-                    if(tmp.length != l){
-                        Root.noParent.push(item.student);
-                    }
                 });
-                Root.scoreStatus.self = Root.noSelf.length;
-                Root.scoreStatus.parent = Root.noParent.length;
-                Root.scoreStatus.teacher = Root.noTeacher.length;
+                Root.hadTeacher = _.uniq(Root.hadTeacher);
+                Root.hadParent = _.uniq(Root.hadParent);
+                Root.hadSelf = _.uniq(Root.hadSelf);
+
+                Root.scoreStatus.self = Root.studentList.length - Root.hadSelf.length;
+                Root.scoreStatus.parent = Root.studentList.length -  Root.hadParent.length;
+                Root.scoreStatus.teacher = Root.studentList.length - Root.hadTeacher.length;
             }
 
 

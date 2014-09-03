@@ -135,18 +135,6 @@ angular.module('dy.services.student', [
 				}
 			}
 
-			function convertScore(data){
-				var max = _.max(data,function(item){
-					return item.total;
-				});
-				var min = _.min(data,function(item){
-					return item.total;
-				});
-				Root.maxStudent = max;
-				Root.minStudent = min;
-			}
-
-
 			//拉单个学生评分
 			function getScore(param,success,error){
 				var ts = new Date().getTime();
@@ -281,6 +269,7 @@ angular.module('dy.services.student', [
 					}
 				});
 				Root.studentList = list;
+				Root.$emit('status.filter.student');
 				/*_.filter(sList,function(item){
 					return _.indexOf(Root.gradeList,item.grade) >= 0 && _.indexOf(Root.classList,item.class) >= 0
 				});

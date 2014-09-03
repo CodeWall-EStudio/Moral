@@ -109,7 +109,9 @@ angular.module('dy.controllers.managehandernav',[
 				if(Root.nowMonth){
 					obj.month = Root.month;
 				}
-				Student.getScore(obj);
+				if(Root.Teacher.auth===3){
+					Student.getScore(obj);
+				}
 			});
 
 			if(url.indexOf('teacher.html') > 0){

@@ -109,14 +109,14 @@
  					<dt>{{nowGrade}}年级 {{nowClass}}班 概要{{nowMonth}}月</dt>
  					<dd>
  						<ul>
- 							<li>{{nowGrade}}年级 {{nowClass}}班 最高得分: {{studentList[maxStudent.student].name}} {{maxStudent.total}}分</li>
- 							<li>{{nowGrade}}年级 {{nowClass}}班 最低得分: {{studentList[minStudent.student].name}} {{minStudent.total}}分</li>
+ 							<li>{{studentMap[maxStudent.student].grade}}年级 {{studentMap[maxStudent.student].class}}班 最高得分:  {{studentMap[maxStudent.student].name}} {{maxStudent.total}}分</li>
+ 							<li>{{studentMap[minStudent.student].grade}}年级 {{studentMap[minStudent.student].class}}班 最低得分:   {{studentMap[minStudent.student].name}} {{minStudent.total}}分</li>
  						</ul>
 
  						<ul >
- 							<li>未参评学生数量: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:hadSelf.length == 0}" ng-click="showNoList('self')">查看名单</a></li>
- 							<li>未参评教师数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:hadParent.length == 0}" ng-click="showNoList('parent')">查看名单</a></li>
- 							<li ng-class="{hide:Teacher.auth<3}">未参评教师数量: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:hadTeacher.length == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
+ 							<li>未参评学生数量: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:scoreStatus.self == 0}" ng-click="showNoList('self')">查看名单</a></li>
+ 							<li>未参评教师数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.perent == 0}" ng-click="showNoList('parent')">查看名单</a></li>
+ 							<li ng-class="{hide:Teacher.auth<3}">未参评教师数量: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.teacher == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
  						</ul>
  					</dd>
  				</dl>

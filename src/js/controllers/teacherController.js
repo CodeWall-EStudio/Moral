@@ -27,26 +27,29 @@ angular.module('dy.controllers.teacher',[
 			Root.teacherAuthList = [];
 			Root.teacherGrade = [];
 
-			Root.noSelf = [];
-			Root.noParent = [];
-			Root.noTeacher = [];
-			Root.noList = [];
+			Root.hadSelf = [];
+			Root.hadParent = [];
+			Root.hadTeacher = [];
+			Root.hadList = [];
+			Root.noSelf = 0;
+			Root.noParent = 0;
+			Root.noTeacher = 0;
 			Root.panelTit = '';
 
 			Root.showNoList = function(type){
 				var list;
 				switch(type){
 					case 'self':
-						list = Root.noSelf;
+						list = Root.hadSelf;
 						Root.panelTit = '未自评学生';
 						break;
 					case 'parent':
 						Root.panelTit = '未家长评价的学生';
-						list = Root.noParent;
+						list = Root.hadParent;
 						break;
 					case 'teacher':
 						Root.panelTit = '未老师评价的学生';
-						list = Root.noTeacher;
+						list = Root.hadTeacher;
 						break;
 				}
 				Student.noScore(list);
@@ -76,6 +79,17 @@ angular.module('dy.controllers.teacher',[
 				Mgrade.getTermList();				
 			});
 
+			Root.$on('status.filter.student',function(){
+				if(Root.Teacher.auth === 3){
+					return;
+				}
+				var param = {
+					term : Root.Term._id,
+					month : Root.nowMonth
+				}
+				Quota.getScores(param);
+			});
+
 			//学期已经 加载 
 			Root.$on('status.term.load.teacher',function(){
 				if(Root.Teacher.auth===3){
@@ -89,7 +103,7 @@ angular.module('dy.controllers.teacher',[
 					term : Root.Term._id,
 					month : Root.nowMonth
 				}
-				Quota.getScores(param);	
+				//
 			});	
 
 			var url = Location.absUrl();
