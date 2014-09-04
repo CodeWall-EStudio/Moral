@@ -92,7 +92,7 @@ module.exports = function example(method, role) {
                 eq.on('getInd',function(doc){
                     inds = doc;
 					console.log('inds:', doc);
-					var con = {student:sid,term:term._id,month:nowmonth-1,day:nowday};
+					var con = {student:sid,term:term._id,month:nowmonth-1};
 					console.log('score search:',con);
                     var scoreModel = db.getScoreModel();
                     scoreModel.find({student:sid,term:term._id,month:nowmonth-1},eq.done('getScore'));
@@ -100,6 +100,7 @@ module.exports = function example(method, role) {
 
                 //评分返回
                 eq.on('getScore',function(doc){
+					console.log('scores :',doc);
                     var i2k = inds2Key(inds);
                     var myscore = {};//getScore(i2k,doc[0]);
                     var total = 0;
@@ -115,7 +116,6 @@ module.exports = function example(method, role) {
                                 total += item.self + item.parent + item.teacher;
                             }
                         }
-
                     }
                     res.json({
                         code : CONSTANTS.MSG_SUCC,
