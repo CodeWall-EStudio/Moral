@@ -82,6 +82,7 @@ module.exports = function example(method, role) {
                 //学期返回
                 eq.on('getTerm',function(doc){
                     term = doc[0];
+					console.log('term:', doc);
                     var indModel = db.getIndicatorModel();
 
                     indModel.find({term:term._id},eq.done('getInd'));
@@ -90,9 +91,11 @@ module.exports = function example(method, role) {
                 //指标返回
                 eq.on('getInd',function(doc){
                     inds = doc;
-                    console.log(sid);
+					console.log('inds:', doc);
+					var con = {student:sid,term:term._id,month:nowmonth-1,day:nowday};
+					console.log('score search:',con);
                     var scoreModel = db.getScoreModel();
-                    scoreModel.find({student:sid,term:term._id,month:nowmonth-1,day:nowday},eq.done('getScore'));
+                    scoreModel.find({student:sid,term:term._id,month:nowmonth-1},eq.done('getScore'));
                 });
 
                 //评分返回
