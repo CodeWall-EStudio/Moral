@@ -115,7 +115,6 @@ module.exports = function example(method, role) {
 							var had = 0;
 							for(var i in item.scores){
 								var obj = item.scores[i];
-								
 								if(obj.indicator){
 									had++;
 									myscore[item.month][obj.indicator] = {
@@ -126,7 +125,7 @@ module.exports = function example(method, role) {
 									total[item.month] += obj.self + obj.parent + obj.teacher;
 								}
 							}
-							total[item.month] = had;
+							hadscore[item.month] = had;
 						}
 						console.log('myscore',myscore);
                     }
