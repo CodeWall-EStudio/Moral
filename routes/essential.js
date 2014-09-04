@@ -134,9 +134,9 @@ module.exports = function example(method, role) {
 								}
 							}
 							hadscore[item.month] = {
-								self : mh,
-								parent : ph,
-								teacher : th
+								self : mh || 0,
+								parent : ph || 0,
+								teacher : th || 0
 							};
 						}
 						console.log('myscore',myscore);
