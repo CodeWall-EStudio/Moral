@@ -103,12 +103,13 @@ module.exports = function example(method, role) {
 					console.log('scores :',doc);
                     var i2k = inds2Key(inds);
                     var myscore = {};//getScore(i2k,doc[0]);
-                    var total = 0;
+                    var total = {};
                     if(doc.length){
 						console.log('scores length',doc.length);
 						for(var j in doc){
 							var item = doc[j];
 							myscore[item.month] = {};
+							total[item.month] = 0;
 							for(var i in item.scores){
 								var obj = item.scores[i];
 								if(obj.indicator){
@@ -117,7 +118,7 @@ module.exports = function example(method, role) {
 										parent : obj.parent || 0,
 										teacher : obj.teacher || 0
 									}
-									total += obj.self + obj.parent + obj.teacher;
+									total[item.month] += obj.self + obj.parent + obj.teacher;
 								}
 							}
 						}
