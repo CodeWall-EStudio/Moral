@@ -341,7 +341,6 @@ angular.module('dy.services.student', [
 			function checkMonth(month,tm){
 				var ret = false;
 				_.each(tm,function(item,idx){
-					console.log(typeof month,typeof item.e,month,item.e)
 					if(month === item.e){
 						ret = true;
 					}
@@ -363,6 +362,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.quota = data.quota;
 							Root.myInfo.allscore = 15* data.indicator.length;
 							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
+							Root.nowMonth = data.nowmonth;
 
 							Root.nowDay = data.day;
 							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){
@@ -843,6 +843,7 @@ angular.module('dy.services.quota', [
 						if(data.code === 0){
 							conventQuota(data.indicator);
 							console.log('拉指标列表成功!', data);
+                            Root.$emit('status.quota.load',data.code);
 						}else{
                             Root.$emit('msg.codeshow',data.code);
                         }
@@ -1234,7 +1235,7 @@ angular.module('dy.controllers.indexnav',[
 			console.log('load termController');
 
 			Root.nowDate = +new Date();
-			Root.nowMonth = new Date().getMonth()+1;
+			// Root.nowMonth = new Date().getMonth()+1;
 
 			Root.nowTrem = {
 				name : '2014 下学期',
@@ -1488,6 +1489,17 @@ angular.module('dy.controllers.student',[
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				//console.log(d.id,d.num);
 			});		
+
+			Root.$on('status.quota.load',function(e,d){
+				if(!$.isEmptyObject(Root.myInfo)){
+					var param = {
+						term : Root.myInfo.term._id,
+						month : Root.nowMonth,
+						student : Root.myInfo._id
+					}
+					//Student.getScore(param);
+				}
+			});
 
 			//老师页.等有学期之后再拉.
 			Root.$on('status.term.load.student',function(){
@@ -1791,7 +1803,7 @@ angular.module('dy.controllers.quota',[
 				//老师打分
 				var sid,tid,year,month
 				var param = {
-					month : Root.nowMonth || new Date().getMonth()+1,
+					month : Root.nowMonth-1 || new Date().getMonth(),
 					scores : Scope.allScore
 				};
 				if(!$.isEmptyObject(Root.nowStudent)){
@@ -1854,6 +1866,7 @@ angular.module('dy.controllers.quota',[
 			}
 
 			Root.$on('status.student.scoreload',function(){
+
 				Scope.allScore = Root.nowStudent.total[Root.nowMonth];
 				_.each(Root.nowStudent.score[Root.nowMonth],function(item,idx){
 					Root.nowScore[idx] = item.teacher;

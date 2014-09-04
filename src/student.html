@@ -105,7 +105,7 @@
 			<div class="content-info" ng-controller="quotaController">
  				<dl class="content-summary" ng-class="{hide:getMode() !== 'my' && getMode()}">
  					<dt>
- 						<div class="title">{{myInfo.user.name}}  {{nowMonth}}月  总分：{{myInfo.total}}</div>
+ 						<div class="title">{{myInfo.user.name}}  {{nowMonth-1}}月  总分：{{myInfo.total}}</div>
  					</dt>
  				</dl> 
  				<dl class="content-score"  ng-class="{hide:getMode() !== 'my' && getMode()}"  ng-repeat="item in quotaList">

@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-学生/家长</title>
-  <link rel="stylesheet" href="css/main.css?t=1409758385311">
+  <link rel="stylesheet" href="css/main.css?t=1409838665908">
  </head>
 <body ng-controller="studentController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -22,7 +22,7 @@
 
 	<div class="content">
 		<div class="content-header" ng-controller="termController">
-			{{myInfo.term.name}}  {{nowDate | date:'MM月'}}德育评价 {{studentTerm?'开放评价中':'关闭'}} （{{nowTrem.nowmonth}}月1日 至 {{myInfo.term.day}}日）  今天：{{nowDate | date:'MM月dd日'}}
+			{{myInfo.term.name}}  {{nowMonth-1}}月德育评价 {{studentTerm?'开放评价中':'关闭'}} （{{nowTrem.nowmonth}}月1日 至 {{myInfo.term.day}}日）  今天：{{nowDate | date:'MM月dd日'}}
 		</div>
 
 		<div class="content-main">
@@ -95,7 +95,7 @@
 			<div class="content-info" ng-controller="quotaController">
  				<dl class="content-summary" ng-class="{hide:getMode() !== 'my' && getMode()}">
  					<dt>
- 						<div class="title">{{myInfo.user.name}}  {{nowDate | date:'M月' }}  总分：{{myInfo.total}}</div>
+ 						<div class="title">{{myInfo.user.name}}  {{nowMonth-1}}月  总分：{{myInfo.total}}</div>
  					</dt>
  				</dl> 
  				<dl class="content-score"  ng-class="{hide:getMode() !== 'my' && getMode()}"  ng-repeat="item in quotaList">
@@ -157,7 +157,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/student.js?t=1409758385311"></script>
+	<script src="js/student.js?t=1409838665908"></script>
 
 
 </body>
