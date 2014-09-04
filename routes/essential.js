@@ -108,16 +108,16 @@ module.exports = function example(method, role) {
 						console.log('scores length',doc.length);
 						for(var j in doc){
 							var item = doc[j];
+							myscore[item.month] = {};
 							for(var i in item.scores){
-								var item = doc[0].scores[i];
-								myscore[item.month] = {};
-								if(item.indicator){
-									myscore[item.month][item.indicator] = {
-										self : item.self || 0,
-										parent : item.parent || 0,
-										teacher : item.teacher || 0
+								var obj = item.scores[i];
+								if(obj.indicator){
+									myscore[item.month][obj.indicator] = {
+										self : obj.self || 0,
+										parent : obj.parent || 0,
+										teacher : obj.teacher || 0
 									}
-									total += item.self + item.parent + item.teacher;
+									total += obj.self + obj.parent + obj.teacher;
 								}
 							}
 						}
