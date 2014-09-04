@@ -115,8 +115,9 @@ module.exports = function example(method, role) {
 							var had = 0;
 							for(var i in item.scores){
 								var obj = item.scores[i];
-								had++;
+								
 								if(obj.indicator){
+									had++;
 									myscore[item.month][obj.indicator] = {
 										self : obj.self || 0,
 										parent : obj.parent || 0,
