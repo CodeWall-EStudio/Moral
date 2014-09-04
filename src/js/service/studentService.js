@@ -57,7 +57,6 @@ angular.module('dy.services.student', [
 			function checkMonth(month,tm){
 				var ret = false;
 				_.each(tm,function(item,idx){
-					console.log(typeof month,typeof item.e,month,item.e)
 					if(month === item.e){
 						ret = true;
 					}
@@ -79,6 +78,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.quota = data.quota;
 							Root.myInfo.allscore = 15* data.indicator.length;
 							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
+							Root.nowMonth = data.nowmonth;
 
 							Root.nowDay = data.day;
 							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){

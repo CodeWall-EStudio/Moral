@@ -42,7 +42,7 @@ angular.module('dy.controllers.indexnav',[
 			console.log('load termController');
 
 			Root.nowDate = +new Date();
-			Root.nowMonth = new Date().getMonth()+1;
+			// Root.nowMonth = new Date().getMonth()+1;
 
 			Root.nowTrem = {
 				name : '2014 下学期',

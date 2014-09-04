@@ -118,6 +118,17 @@ angular.module('dy.controllers.student',[
 				//console.log(d.id,d.num);
 			});		
 
+			Root.$on('status.quota.load',function(e,d){
+				if(!$.isEmptyObject(Root.myInfo)){
+					var param = {
+						term : Root.myInfo.term._id,
+						month : Root.nowMonth,
+						student : Root.myInfo._id
+					}
+					//Student.getScore(param);
+				}
+			});
+
 			//老师页.等有学期之后再拉.
 			Root.$on('status.term.load.student',function(){
 				fn = function(data){

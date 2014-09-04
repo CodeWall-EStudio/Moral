@@ -92,7 +92,7 @@ module.exports = function example(method, role) {
                     inds = doc;
                     console.log(sid);
                     var scoreModel = db.getScoreModel();
-                    scoreModel.find({student:sid,term:term._id,month:nowmonth,day:nowday},eq.done('getScore'));
+                    scoreModel.find({student:sid,term:term._id,month:nowmonth-1,day:nowday},eq.done('getScore'));
                 });
 
                 //评分返回

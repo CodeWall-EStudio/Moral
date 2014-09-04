@@ -42,6 +42,7 @@ angular.module('dy.services.quota', [
 						if(data.code === 0){
 							conventQuota(data.indicator);
 							console.log('拉指标列表成功!', data);
+                            Root.$emit('status.quota.load',data.code);
 						}else{
                             Root.$emit('msg.codeshow',data.code);
                         }
