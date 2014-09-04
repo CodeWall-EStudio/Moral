@@ -105,6 +105,7 @@ module.exports = function example(method, role) {
                     var myscore = {};//getScore(i2k,doc[0]);
                     var total = 0;
                     if(doc.length){
+						console.log('scores length',doc.length);
                         for(var i in doc[0].scores){
                             var item = doc[0].scores[i];
                             if(item.indicator){
@@ -116,6 +117,7 @@ module.exports = function example(method, role) {
                                 total += item.self + item.parent + item.teacher;
                             }
                         }
+						console.log('myscore',myscore);
                     }
                     res.json({
                         code : CONSTANTS.MSG_SUCC,
