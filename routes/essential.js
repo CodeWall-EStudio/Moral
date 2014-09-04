@@ -95,7 +95,7 @@ module.exports = function example(method, role) {
 					var con = {student:sid,term:term._id,month:nowmonth-1};
 					console.log('score search:',con);
                     var scoreModel = db.getScoreModel();
-                    scoreModel.find({student:sid,term:term._id,month:nowmonth-1},eq.done('getScore'));
+                    scoreModel.find({student:sid,term:term._id},eq.done('getScore'));
                 });
 
                 //评分返回
@@ -106,17 +106,21 @@ module.exports = function example(method, role) {
                     var total = 0;
                     if(doc.length){
 						console.log('scores length',doc.length);
-                        for(var i in doc[0].scores){
-                            var item = doc[0].scores[i];
-                            if(item.indicator){
-                                myscore[item.indicator] = {
-                                    self : item.self || 0,
-                                    parent : item.parent || 0,
-                                    teacher : item.teacher || 0
-                                }
-                                total += item.self + item.parent + item.teacher;
-                            }
-                        }
+						for(var j in doc){
+							var item = doc[j];
+							for(var i in item.scores){
+								var item = doc[0].scores[i];
+								myscore[item.month] = {};
+								if(item.indicator){
+									myscore[item.month][item.indicator] = {
+										self : item.self || 0,
+										parent : item.parent || 0,
+										teacher : item.teacher || 0
+									}
+									total += item.self + item.parent + item.teacher;
+								}
+							}
+						}
 						console.log('myscore',myscore);
                     }
                     res.json({
