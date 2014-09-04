@@ -112,11 +112,19 @@ module.exports = function example(method, role) {
 							myscore[item.month] = {};
 							hadscore[item.month] = 0;
 							total[item.month] = 0;
-							var had = 0;
+							var mh,th,ph = 0;
 							for(var i in item.scores){
 								var obj = item.scores[i];
 								if(obj.indicator){
-									had++;
+									if(obj.self){
+										mh++;
+									}
+									if(obj.parent){
+										ph++;
+									}
+									if(obj.teacher){
+										th++;
+									}
 									myscore[item.month][obj.indicator] = {
 										self : obj.self || 0,
 										parent : obj.parent || 0,
@@ -125,7 +133,11 @@ module.exports = function example(method, role) {
 									total[item.month] += obj.self + obj.parent + obj.teacher;
 								}
 							}
-							hadscore[item.month] = had;
+							hadscore[item.month] = {
+								self : mh,
+								parent : ph,
+								teacher : th
+							};
 						}
 						console.log('myscore',myscore);
                     }

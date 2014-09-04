@@ -145,7 +145,7 @@
  					<dt>
  						<div class="title">{{myInfo.name}} <span ng-hide="getMode() === 'parent'">自评</span><span ng-hide="getMode() === 'record'">家长评价</span> {{nowDate | date:'M月' }} </div>
  						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
- 						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()" ng-class="{hide:myInfo.score[studentMonth].length === quotaList.length}">保存</button>
+ 						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()" ng-class="{hide:myInfo.hadscore[studentMonth][getMode()] === quotaList.length}">保存</button>
 
  						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
  					</dt>

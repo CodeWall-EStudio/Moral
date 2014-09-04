@@ -358,7 +358,8 @@ angular.module('dy.services.student', [
 							Root.myInfo = data.user || {};
 							Root.myInfo.score = data.score || [];
 							Root.myInfo.total = data.total || 0;
-							
+							Root.myInfo.hadscore = data.hadscore;
+
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
 							Root.myInfo.allscore = 15* data.indicator.length*data.term.months.length;
