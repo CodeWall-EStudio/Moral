@@ -110,20 +110,24 @@ module.exports = function example(method, role) {
 						for(var j in doc){
 							var item = doc[j];
 							myscore[item.month] = {};
-							hadscore[item.month] = 0;
+							hadscore[item.month] = {
+								self : 0,
+								parent : 0,
+								teacher : 0
+							};
 							total[item.month] = 0;
 							var mh,th,ph = 0;
 							for(var i in item.scores){
 								var obj = item.scores[i];
 								if(obj.indicator){
 									if(obj.self){
-										mh++;
+										hadscore[item.month].self++;
 									}
 									if(obj.parent){
-										ph++;
+										hadscore[item.month].parent++;
 									}
 									if(obj.teacher){
-										th++;
+										hadscore[item.month].teacher++;
 									}
 									myscore[item.month][obj.indicator] = {
 										self : obj.self || 0,
@@ -133,11 +137,6 @@ module.exports = function example(method, role) {
 									total[item.month] += obj.self + obj.parent + obj.teacher;
 								}
 							}
-							hadscore[item.month] = {
-								self : mh || 0,
-								parent : ph || 0,
-								teacher : th || 0
-							};
 						}
 						console.log('myscore',myscore);
                     }
