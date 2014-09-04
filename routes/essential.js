@@ -104,14 +104,18 @@ module.exports = function example(method, role) {
                     var i2k = inds2Key(inds);
                     var myscore = {};//getScore(i2k,doc[0]);
                     var total = {};
+					var hadscore = {};
                     if(doc.length){
 						console.log('scores length',doc.length);
 						for(var j in doc){
 							var item = doc[j];
 							myscore[item.month] = {};
+							hadscore[item.month] = 0;
 							total[item.month] = 0;
+							var had = 0;
 							for(var i in item.scores){
 								var obj = item.scores[i];
+								had++;
 								if(obj.indicator){
 									myscore[item.month][obj.indicator] = {
 										self : obj.self || 0,
@@ -121,6 +125,7 @@ module.exports = function example(method, role) {
 									total[item.month] += obj.self + obj.parent + obj.teacher;
 								}
 							}
+							total[item.month] = had;
 						}
 						console.log('myscore',myscore);
                     }
@@ -128,6 +133,7 @@ module.exports = function example(method, role) {
                         code : CONSTANTS.MSG_SUCC,
                         user : sess.user || sess.student,
                         term : term,
+						hadscore : hadscore,
                         indicator : inds,
                         score : myscore,
                         total : total,

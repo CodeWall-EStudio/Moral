@@ -25,6 +25,8 @@ angular.module('dy.controllers.student',[
 			Root.myInfo = {};
 			Root.studentTerm = false;
 			Root.studentMap = {};
+			Root.studentMonth = 0;
+			Root.firstMonth = {};
 
 			var userList = {};
 			var gradeList = [];
@@ -46,6 +48,14 @@ angular.module('dy.controllers.student',[
 			function resetData(){
 				// Scope.name = '';
 				// Scope.cmis = '';
+			}
+
+			Root.selectStudentMonth = function(id){
+				// var first = Root.myInfo.term.months[0];
+				// console.log(id,first.s);
+				// if(id>first.s){
+					Root.studentMonth = id;	
+				//}
 			}
 
 			Root.changeStudent = function(id){

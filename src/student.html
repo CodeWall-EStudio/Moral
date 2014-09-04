@@ -32,7 +32,16 @@
 
 	<div class="content">
 		<div class="content-header" ng-controller="termController">
+			<span ng-class="{hide:getMode() === 'record' || getMode() === 'parent' }">
+				<span class="myterm">{{myInfo.term.name}} {{studentMonth}}</span>
+	 			<ul class="nav grade-dom grade-list">
+	 				<li ng-class="{active:studentMonth === 0}">本学期</li>
+	 				<li ng-repeat="item in myInfo.term.months" ng-click="selectStudentMonth(item.s)" ng-class="{active:studentMonth === item.s}">{{item.s}}月</li>
+	 			</ul>				
+			</span>
+			<span ng-class="{hide:getMode() === 'my' || !getMode()}">
 			{{myInfo.term.name}}  {{nowMonth-1}}月德育评价 {{studentTerm?'开放评价中':'关闭'}} （{{nowTrem.nowmonth}}月1日 至 {{myInfo.term.day}}日）  今天：{{nowDate | date:'MM月dd日'}}
+			</span>
 		</div>
 
 		<div class="content-main">
@@ -42,7 +51,7 @@
  					<img src="css/imgs/badge.png" />
  					<h1>我的徽章</h1>
  					<p>应得总分: {{myInfo.allscore}}</p>
- 					<p>实得总分: {{myInfo.total}}</p>
+ 					<p>实得总分: {{myInfo.totalScore}}</p>
  					<p>（{{myInfo.pre | number:2}}%）</p>
  				</div>
 
@@ -105,7 +114,7 @@
 			<div class="content-info" ng-controller="quotaController">
  				<dl class="content-summary" ng-class="{hide:getMode() !== 'my' && getMode()}">
  					<dt>
- 						<div class="title">{{myInfo.user.name}}  {{nowMonth-1}}月  总分：{{myInfo.total}}</div>
+ 						<div class="title">{{myInfo.user.name}}  {{studentMonth}}月  总分：{{myInfo.total[studentMonth]}}</div>
  					</dt>
  				</dl> 
  				<dl class="content-score"  ng-class="{hide:getMode() !== 'my' && getMode()}"  ng-repeat="item in quotaList">
@@ -118,15 +127,15 @@
  						<ul class="score-list">
  							<li>
  								教师
- 								<div>{{myInfo.score[item._id].teacher}}</div>
+ 								<div>{{myInfo.score[studentMonth][item._id].teacher}}</div>
  							</li>
  							<li>
  								自评
- 								<div>{{myInfo.score[item._id].self}}</div>
+ 								<div>{{myInfo.score[studentMonth][item._id].self}}</div>
  							</li>
  							<li>
  								家长
- 								<div>{{myInfo.score[item._id].parent}}</div>
+ 								<div>{{myInfo.score[studentMonth][item._id].parent}}</div>
  							</li>
  						</ul>
  					</dd>
@@ -136,7 +145,8 @@
  					<dt>
  						<div class="title">{{myInfo.name}} <span ng-hide="getMode() === 'parent'">自评</span><span ng-hide="getMode() === 'record'">家长评价</span> {{nowDate | date:'M月' }} </div>
  						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
- 						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
+ 						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()" ng-class="{hide:myInfo.score[studentMonth].length === quotaList.length}">保存</button>
+
  						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
  					</dt>
  				</dl>

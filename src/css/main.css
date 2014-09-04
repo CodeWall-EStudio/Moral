@@ -28,6 +28,11 @@ li{
 	float:left;
 }
 
+.myterm{
+	float:left;
+	margin-right:20px;
+}
+
 .login-area{
 	float:right;
 	width:400px;

@@ -358,11 +358,19 @@ angular.module('dy.services.student', [
 							Root.myInfo = data.user || {};
 							Root.myInfo.score = data.score || [];
 							Root.myInfo.total = data.total || 0;
+							
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
-							Root.myInfo.allscore = 15* data.indicator.length;
-							Root.myInfo.pre = data.total/Root.myInfo.allscore*100;
+							Root.myInfo.allscore = 15* data.indicator.length*data.term.months.length;
+
+							var total = 0;
+							_.each(data.total,function(item){
+								total += item;
+							});
+							Root.myInfo.totalScore = total;
+							Root.myInfo.pre = total/Root.myInfo.allscore*100;
 							Root.nowMonth = data.nowmonth;
+							Root.studentMonth = data.nowmonth;
 
 							Root.nowDay = data.day;
 							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){
@@ -1418,6 +1426,8 @@ angular.module('dy.controllers.student',[
 			Root.myInfo = {};
 			Root.studentTerm = false;
 			Root.studentMap = {};
+			Root.studentMonth = 0;
+			Root.firstMonth = {};
 
 			var userList = {};
 			var gradeList = [];
@@ -1439,6 +1449,14 @@ angular.module('dy.controllers.student',[
 			function resetData(){
 				// Scope.name = '';
 				// Scope.cmis = '';
+			}
+
+			Root.selectStudentMonth = function(id){
+				// var first = Root.myInfo.term.months[0];
+				// console.log(id,first.s);
+				// if(id>first.s){
+					Root.studentMonth = id;	
+				//}
 			}
 
 			Root.changeStudent = function(id){
@@ -1908,11 +1926,16 @@ angular.module('dy.controllers.quota',[
 
 			function getOneScores(type){
 				var total = 0;
-				_.each(Root.myInfo.score,function(item,idx){
-					Root.nowScore[idx] = item[type];
-					total += item[type];
-				});
+				if(Root.myInfo.score[Root.studentMonth]){
+					_.each(Root.myInfo.score[Root.studentMonth],function(item,idx){
+						Root.nowScore[idx] = item[type];
+						total += item[type];
+					});
+				}else{
+					Root.nowScore = {};
+				}
 				Scope.allScore = total;
+
 			}
 
 

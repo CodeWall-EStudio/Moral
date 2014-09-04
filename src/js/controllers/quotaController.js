@@ -237,11 +237,16 @@ angular.module('dy.controllers.quota',[
 
 			function getOneScores(type){
 				var total = 0;
-				_.each(Root.myInfo.score,function(item,idx){
-					Root.nowScore[idx] = item[type];
-					total += item[type];
-				});
+				if(Root.myInfo.score[Root.studentMonth]){
+					_.each(Root.myInfo.score[Root.studentMonth],function(item,idx){
+						Root.nowScore[idx] = item[type];
+						total += item[type];
+					});
+				}else{
+					Root.nowScore = {};
+				}
 				Scope.allScore = total;
+
 			}
 
 
