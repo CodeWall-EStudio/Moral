@@ -1180,7 +1180,7 @@ angular.module('dy.controllers.student',[
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
-					month : Root.nowMonth
+					month : Root.nowMonth-1
 				}
 				Student.getScore(param);
 				Root.$emit('status.student.change',true);
