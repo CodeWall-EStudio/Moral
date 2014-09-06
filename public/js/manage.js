@@ -558,6 +558,7 @@ angular.module('dy.services.student', [
 
 			function filterStudentByTeacher(){
 				if(Root.Teacher.auth){
+					Root.$emit('status.filter.student');
 					return;
 				}
 				var list = [];
@@ -1680,13 +1681,15 @@ angular.module('dy.controllers.teacher',[
 			});
 
 			Root.$on('status.filter.student',function(){
-				if(Root.Teacher.auth === 3){
-					return;
-				}
 				var param = {
 					term : Root.Term._id,
 					month : Root.nowMonth
+				}				
+				if(Root.Teacher.auth === 3){
+					Quota.getScores(param);
+					return;
 				}
+
 				Quota.getScores(param);
 			});
 

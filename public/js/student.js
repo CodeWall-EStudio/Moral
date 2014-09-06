@@ -558,6 +558,7 @@ angular.module('dy.services.student', [
 
 			function filterStudentByTeacher(){
 				if(Root.Teacher.auth){
+					Root.$emit('status.filter.student');
 					return;
 				}
 				var list = [];
