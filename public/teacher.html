@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1410017581836">
+  <link rel="stylesheet" href="css/main.css?t=1410021587682">
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -162,15 +162,15 @@
 	 						<ul class="score-list">
 	 							<li>
 	 								教师
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].teacher}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1][item._id].teacher || 0}}</div>
 	 							</li>
 	 							<li>
 	 								自评
-	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth][item._id].self}}</div>
+	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth-1][item._id].self || 0}}</div>
 	 							</li>
 	 							<li>
 	 								家长
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].parent}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1][item._id].parent || 0}}</div>
 	 							</li>
 
 	 						</ul>
@@ -247,7 +247,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/teacher.js?t=1410017581836"></script>
+	<script src="js/teacher.js?t=1410021587682"></script>
 
  </body>
  </html>

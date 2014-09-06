@@ -172,15 +172,15 @@
 	 						<ul class="score-list">
 	 							<li>
 	 								教师
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].teacher}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1][item._id].teacher || 0}}</div>
 	 							</li>
 	 							<li>
 	 								自评
-	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth][item._id].self}}</div>
+	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth-1][item._id].self || 0}}</div>
 	 							</li>
 	 							<li>
 	 								家长
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].parent}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1][item._id].parent || 0}}</div>
 	 							</li>
 
 	 						</ul>

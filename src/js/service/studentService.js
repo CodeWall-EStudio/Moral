@@ -75,6 +75,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.score = data.score || [];
 							Root.myInfo.total = data.total || 0;
 							Root.myInfo.hadscore = data.hadscore;
+							Root.myInfo.nowMonth = data.nowmonth;
 
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
@@ -87,7 +88,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.totalScore = total;
 							Root.myInfo.pre = total/Root.myInfo.allscore*100;
 							Root.nowMonth = data.nowmonth;
-							Root.studentMonth = data.nowmonth;
+							Root.studentMonth = data.nowmonth-1;
 
 							Root.nowDay = data.day;
 							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){
