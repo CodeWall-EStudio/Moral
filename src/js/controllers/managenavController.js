@@ -26,6 +26,10 @@ angular.module('dy.controllers.managenav',[
 			}
 
 			Root.switchMode = function(mode){
+				if(mode === 'record' && Root.nowMonth === 0){
+					alert('你还没有选择月份');
+					return;
+				}
                 if(mode !== Root.getMode()){
                     $location.search('mode', mode);
                 }

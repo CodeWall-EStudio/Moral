@@ -26,6 +26,7 @@ angular.module('dy.controllers.managehandernav',[
 			// Root.nowClass = 1;
 
 			Root.nowMonth = new Date().getMonth()+1;
+			Root.scoreMonth = new Date().getMonth();
 			Root.nowDay = 0;
 			Scope.searchKeyWord = '';
 

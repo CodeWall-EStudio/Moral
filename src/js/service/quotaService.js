@@ -146,7 +146,9 @@ angular.module('dy.services.quota', [
                 }else{
 
                     Root.studentMap[pd.student].total = pd.total;
+                    var num = 0;
                     _.each(obj.scores,function(item){
+                        num++;
                         Root.studentMap[pd.student].score[item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,

@@ -153,7 +153,8 @@ angular.module('dy.controllers.quota',[
 				//老师打分
 				var sid,tid,year,month
 				var param = {
-					month : Root.nowMonth-1 || new Date().getMonth(),
+					//month : Root.nowMonth-1 || new Date().getMonth(),
+					month : new Date().getMonth(),
 					scores : Scope.allScore
 				};
 				if(!$.isEmptyObject(Root.nowStudent)){
@@ -217,8 +218,8 @@ angular.module('dy.controllers.quota',[
 
 			Root.$on('status.student.scoreload',function(){
 
-				Scope.allScore = Root.nowStudent.total[Root.nowMonth];
-				_.each(Root.nowStudent.score[Root.nowMonth],function(item,idx){
+				Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
+				_.each(Root.nowStudent.score[Root.scoreMonth],function(item,idx){
 					Root.nowScore[idx] = item.teacher;
 				});
 			});

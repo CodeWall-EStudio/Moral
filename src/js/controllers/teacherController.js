@@ -40,6 +40,14 @@ angular.module('dy.controllers.teacher',[
 			Root.noTeacher = 0;
 			Root.panelTit = '';
 
+			Root.getScoreNum = function(){
+				var num = 0;
+				_.each(Root.nowScore,function(item){
+					num++;
+				});
+				return num;
+			}
+
 			Root.showNoList = function(type){
 				var list;
 				switch(type){

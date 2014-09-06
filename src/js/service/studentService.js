@@ -130,8 +130,10 @@ angular.module('dy.services.student', [
 				var list = {};
 				var total = 0;
 				$.extend(list,Root.defScore);
+				var num = 0;
 				//先确保每个指标都保存了.
 				_.map(data.scores,function(item,idx){
+					num++;
 					list[item.indicator] = {
 						self : item.self || 0,
 						parent : item.parent || 0,
@@ -142,7 +144,8 @@ angular.module('dy.services.student', [
 
 				return {
 					list : list,
-					total : total
+					total : total,
+					num : num
 				}
 			}
 
@@ -163,16 +166,18 @@ angular.module('dy.services.student', [
 								if(data.score.length === 0){
 
 									//if(!Root.nowStudent.score){
-										Root.nowStudent.score[Root.nowMonth] = Root.defScore;
-										Root.nowStudent.total[Root.nowMonth] = 0;
+										Root.nowStudent.score[param.month] = Root.defScore;
+										Root.nowStudent.total[param.month] = 0;
+										Root.nowStudent.nums[param.month] = 0;
 									//}
 									return;
 								}
 								var score = convertOneScore(data.score[0]);
 								if(Root.nowStudent._id === data.score[0].student){
 									//Root.nowStudent.scorelist[Root.nowMonth] = score;
-									Root.nowStudent.score[Root.nowMonth] = score.list;
-									Root.nowStudent.total[Root.nowMonth] = score.total;
+									Root.nowStudent.score[param.month] = score.list;
+									Root.nowStudent.total[param.month] = score.total;
+									Root.nowStudent.nums[param.month] = score.num;
 								}
 								Root.$emit('status.student.scoreload')
 							}

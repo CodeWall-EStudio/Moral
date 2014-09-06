@@ -118,7 +118,15 @@
  			<div class="content-info" ng-controller="quotaController">
  				<!--年级概要-->
  				<dl class="content-summary" ng-class="{hide:getMode() === 'record' || nowStudent.id }">
- 					<dt>{{nowGrade}}年级 {{nowClass}}班 概要{{nowMonth}}月</dt>
+ 					<dt>
+ 						{{nowGrade}}年级 {{nowClass}}班 概要
+ 						<span ng-hide="nowMonth==0">
+ 						{{nowMonth}}月
+ 						</span>
+ 						<span ng-hide="nowMonth!=0">
+ 						本学期
+ 						</span> 						
+ 					</dt>
  					<dd>
  						<ul>
  							<li> 最高得分: 
@@ -184,8 +192,10 @@
  					<dt>
  						<div class="title">{{nowStudent.name}} 老师评价 {{nowMonth-1}}月 </div>
  						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
- 						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
- 						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
+ 						<span ng-class="{hide:nowStudent.nums[nowMonth-1] === quotaList.length}">
+ 							<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
+ 							<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
+ 						</span>
  					</dt>
  				</dl> 				
  				<dl class="content-score"  ng-class="{hide:getMode() !== 'record'}" ng-repeat="item in quotaList" ng-model="quotaList">

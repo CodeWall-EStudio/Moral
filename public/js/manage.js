@@ -414,8 +414,10 @@ angular.module('dy.services.student', [
 				var list = {};
 				var total = 0;
 				$.extend(list,Root.defScore);
+				var num = 0;
 				//先确保每个指标都保存了.
 				_.map(data.scores,function(item,idx){
+					num++;
 					list[item.indicator] = {
 						self : item.self || 0,
 						parent : item.parent || 0,
@@ -426,7 +428,8 @@ angular.module('dy.services.student', [
 
 				return {
 					list : list,
-					total : total
+					total : total,
+					num : num
 				}
 			}
 
@@ -447,16 +450,18 @@ angular.module('dy.services.student', [
 								if(data.score.length === 0){
 
 									//if(!Root.nowStudent.score){
-										Root.nowStudent.score[Root.nowMonth] = Root.defScore;
-										Root.nowStudent.total[Root.nowMonth] = 0;
+										Root.nowStudent.score[param.month] = Root.defScore;
+										Root.nowStudent.total[param.month] = 0;
+										Root.nowStudent.nums[param.month] = 0;
 									//}
 									return;
 								}
 								var score = convertOneScore(data.score[0]);
 								if(Root.nowStudent._id === data.score[0].student){
 									//Root.nowStudent.scorelist[Root.nowMonth] = score;
-									Root.nowStudent.score[Root.nowMonth] = score.list;
-									Root.nowStudent.total[Root.nowMonth] = score.total;
+									Root.nowStudent.score[param.month] = score.list;
+									Root.nowStudent.total[param.month] = score.total;
+									Root.nowStudent.nums[param.month] = score.num;
 								}
 								Root.$emit('status.student.scoreload')
 							}
@@ -961,7 +966,9 @@ angular.module('dy.services.quota', [
                 }else{
 
                     Root.studentMap[pd.student].total = pd.total;
+                    var num = 0;
                     _.each(obj.scores,function(item){
+                        num++;
                         Root.studentMap[pd.student].score[item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
@@ -1267,6 +1274,10 @@ angular.module('dy.controllers.managenav',[
 			}
 
 			Root.switchMode = function(mode){
+				if(mode === 'record' && Root.nowMonth === 0){
+					alert('你还没有选择月份');
+					return;
+				}
                 if(mode !== Root.getMode()){
                     $location.search('mode', mode);
                 }
@@ -1309,6 +1320,7 @@ angular.module('dy.controllers.managehandernav',[
 			// Root.nowClass = 1;
 
 			Root.nowMonth = new Date().getMonth()+1;
+			Root.scoreMonth = new Date().getMonth();
 			Root.nowDay = 0;
 			Scope.searchKeyWord = '';
 
@@ -1476,6 +1488,7 @@ angular.module('dy.controllers.student',[
 				$.extend(Root.nowStudent,st);
 				Root.nowStudent.total = {};
 				Root.nowStudent.score = {};
+				Root.nowStudent.nums = {};
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
@@ -1614,6 +1627,14 @@ angular.module('dy.controllers.teacher',[
 			Root.noParent = 0;
 			Root.noTeacher = 0;
 			Root.panelTit = '';
+
+			Root.getScoreNum = function(){
+				var num = 0;
+				_.each(Root.nowScore,function(item){
+					num++;
+				});
+				return num;
+			}
 
 			Root.showNoList = function(type){
 				var list;
@@ -1850,7 +1871,8 @@ angular.module('dy.controllers.quota',[
 				//老师打分
 				var sid,tid,year,month
 				var param = {
-					month : Root.nowMonth-1 || new Date().getMonth(),
+					//month : Root.nowMonth-1 || new Date().getMonth(),
+					month : new Date().getMonth(),
 					scores : Scope.allScore
 				};
 				if(!$.isEmptyObject(Root.nowStudent)){
@@ -1914,8 +1936,8 @@ angular.module('dy.controllers.quota',[
 
 			Root.$on('status.student.scoreload',function(){
 
-				Scope.allScore = Root.nowStudent.total[Root.nowMonth];
-				_.each(Root.nowStudent.score[Root.nowMonth],function(item,idx){
+				Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
+				_.each(Root.nowStudent.score[Root.scoreMonth],function(item,idx){
 					Root.nowScore[idx] = item.teacher;
 				});
 			});
