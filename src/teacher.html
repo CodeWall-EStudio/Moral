@@ -29,7 +29,6 @@
  			<a href="/teacher/logout">退出</a>
  		</div>
  	</div>
-
  	<div class="content">
  		<div ng-controller="mHeaderNavController">
 	 		<div class="content-header">
@@ -64,12 +63,25 @@
 						</ul>
 		 			</div>		 				 			
 		 			<ul class="nav grade-dom grade-list">
-		 				<li ng-class="{active:nowMonth === 0}">本学期</li>
+		 				<li ng-class="{active:nowMonth === 0}"  ng-click="selectMonth(0)">本学期</li>
 		 				<li ng-repeat="item in Term.months" ng-click="selectMonth(item.s)" ng-class="{active:nowMonth === item.e}">{{item.s}}月</li>
 		 			</ul>
 	 			</div> 			
-	 			<div class="grade-zone" ng-hide="getMode() === 'result'">
-					{{nowMonth-1}}月 {{studentTerm?'开放评价中':'关闭'}} 
+	 			<div class="grade-zone" ng-hide="getMode() === 'result'"  ng-hide="Teacher.authority === 3">
+		 			<div class="grade-dom dropdown" >
+		 				{{Term.name}}
+
+		 				{{nowMonth-1}}月 德育评价 {{studentTerm?'开放评价中':'关闭'}} （{{nowMonth}}月1日 至 {{Term.day}}日）  今天：{{nowDate | date:'MM月dd日'}}
+		 			</div>	 			
+		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority === 3">
+						<a class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+		 					<li ng-repeat="item in teacherGrade">
+		 						<a ng-click="changeGradeClass(item.g,item.c)">{{item.g}}年级{{item.c}}班</a>
+		 					</li>
+						</ul>
+		 			</div>			 				
+					
 	 			</div>
 
 	 			<div class="search-zone">
@@ -109,8 +121,22 @@
  					<dt>{{nowGrade}}年级 {{nowClass}}班 概要{{nowMonth}}月</dt>
  					<dd>
  						<ul>
- 							<li>{{studentMap[maxStudent.student].grade}}年级 {{studentMap[maxStudent.student].class}}班 最高得分:  {{studentMap[maxStudent.student].name}} {{maxStudent.total}}分</li>
- 							<li>{{studentMap[minStudent.student].grade}}年级 {{studentMap[minStudent.student].class}}班 最低得分:   {{studentMap[minStudent.student].name}} {{minStudent.total}}分</li>
+ 							<li> 最高得分: 
+ 								<span ng-class="{hide:!studentMap[maxStudent.student]}">
+ 								{{studentMap[maxStudent.student].grade}}年级 {{studentMap[maxStudent.student].class}}班 {{studentMap[maxStudent.student].name}}  {{maxStudent.total}}分
+ 								</span>
+ 								<span ng-class="{hide:studentMap[maxStudent.student]}">
+ 									暂无
+ 								</span>
+ 							</li>
+ 							<li> 最低得分:
+ 								<span ng-class="{hide:!studentMap[maxStudent.student]}">
+ 								 {{studentMap[minStudent.student].grade}}年级 {{studentMap[minStudent.student].class}}班 {{studentMap[minStudent.student].name}}{{minStudent.total}}分
+ 								</span>
+ 								<span ng-class="{hide:studentMap[maxStudent.student]}">
+ 									暂无
+ 								</span> 								
+ 							</li>
  						</ul>
 
  						<ul >

@@ -20,12 +20,16 @@ angular.module('dy.controllers.teacher',[
 				//return;
 			}
 
+			Root.nowDate = new Date();
+
 			Root.isTeacher = true;
 			Root.Teacher = {};
 			Root.teacherMap = {};
 			Root.teacherList = [];
 			Root.teacherAuthList = [];
-			Root.teacherGrade = [];
+			Root.teacherGrade = {};
+
+			//Root.defScore = {};
 
 			Root.hadSelf = [];
 			Root.hadParent = [];

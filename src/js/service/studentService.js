@@ -129,6 +129,7 @@ angular.module('dy.services.student', [
 				var tmp = {};
 				var list = {};
 				var total = 0;
+				$.extend(list,Root.defScore);
 				//先确保每个指标都保存了.
 				_.map(data.scores,function(item,idx){
 					list[item.indicator] = {
@@ -138,6 +139,7 @@ angular.module('dy.services.student', [
 					};
 					total += list[item.indicator].self + list[item.indicator].teacher + list[item.indicator].parent;
 				});
+
 				return {
 					list : list,
 					total : total
@@ -159,10 +161,11 @@ angular.module('dy.services.student', [
 								convertScore(data.score);
 							}else{
 								if(data.score.length === 0){
-									if(!Root.nowStudent.score){
-										Root.nowStudent.score = {};
-										Root.nowStudent.total = {};
-									}
+
+									//if(!Root.nowStudent.score){
+										Root.nowStudent.score[Root.nowMonth] = Root.defScore;
+										Root.nowStudent.total[Root.nowMonth] = 0;
+									//}
 									return;
 								}
 								var score = convertOneScore(data.score[0]);
@@ -343,7 +346,7 @@ angular.module('dy.services.student', [
 					return;
 				}
 				
-				Root.studentList = _.filter(sList,function(item){
+				Root.studentList = _.filter(Root.studentMap,function(item){
 					return item.name.indexOf(key)>=0
 				});				
 			}

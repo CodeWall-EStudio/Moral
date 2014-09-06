@@ -15,11 +15,13 @@ angular.module('dy.services.teacher', [
 			}
 
 			function getTeacherGrade(glist){
+				console.log(glist);
 				_.each(glist,function(item){
-					Root.teacherGrade.push({
+					var key = item.grade+'|'+item.class
+					Root.teacherGrade[key] = {
 						g : item.grade,
 						c : item.class
-					});
+					};
 					// Root.gradeList.push(item.class);
 				});
 			}

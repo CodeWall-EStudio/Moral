@@ -230,8 +230,6 @@ angular.module('dy.services.quota', [
                         delete data[i];
                     }
                 }
-
-                console.log(data);
                 var max = _.max(data,function(item){
                     return item.total;
                 });

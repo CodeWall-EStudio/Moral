@@ -256,7 +256,7 @@ angular.module('dy.controllers.quota',[
 				if(Root.getMode() === 'parent'){
 					getOneScores('parent');
 				//学生
-				}else{
+				}else if(Root.getMode() === 'self'){
 					getOneScores('self');
 				}
 			});
