@@ -68,7 +68,7 @@ angular.module('dy.controllers.managehandernav',[
 
 			Scope.selectMonths = function(month){
 				Root.nowMonth = month;
-				changeScore();				
+				Root.$emit('status.filter.student');
 			};
 
 			//变更年级
@@ -82,12 +82,6 @@ angular.module('dy.controllers.managehandernav',[
 			}	
 
 			function changeScore(){
-				console.log(Root.nowMonth);
-				var param = {
-					term : Root.Term._id,
-					month : Root.nowMonth
-				}
-				console.log(param);
 			}		
 
 			//搜索

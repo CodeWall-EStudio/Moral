@@ -563,6 +563,7 @@ angular.module('dy.services.student', [
 					return;
 				}
 				var list = [];
+				console.log(Root.teacherGrade);
 				_.each(Root.studentMap,function(item,idx){
 					var ret = checkGrade(item);
 					if(ret){
@@ -571,6 +572,7 @@ angular.module('dy.services.student', [
 						delete Root.studentMap[idx];
 					}
 				});
+				//console.log(Root.studentMap,list);
 				Root.studentList = list;
 				Root.$emit('status.filter.student');
 				/*_.filter(sList,function(item){

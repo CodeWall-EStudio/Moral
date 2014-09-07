@@ -563,6 +563,7 @@ angular.module('dy.services.student', [
 					return;
 				}
 				var list = [];
+				console.log(Root.teacherGrade);
 				_.each(Root.studentMap,function(item,idx){
 					var ret = checkGrade(item);
 					if(ret){
@@ -571,6 +572,7 @@ angular.module('dy.services.student', [
 						delete Root.studentMap[idx];
 					}
 				});
+				//console.log(Root.studentMap,list);
 				Root.studentList = list;
 				Root.$emit('status.filter.student');
 				/*_.filter(sList,function(item){
@@ -681,7 +683,6 @@ angular.module('dy.services.teacher', [
 			}
 
 			function getTeacherGrade(glist){
-				console.log(glist);
 				_.each(glist,function(item){
 					var key = item.grade+'|'+item.class
 					Root.teacherGrade[key] = {
@@ -1364,7 +1365,7 @@ angular.module('dy.controllers.managehandernav',[
 
 			Scope.selectMonths = function(month){
 				Root.nowMonth = month;
-				changeScore();				
+				Root.$emit('status.filter.student');
 			};
 
 			//变更年级
@@ -1378,12 +1379,6 @@ angular.module('dy.controllers.managehandernav',[
 			}	
 
 			function changeScore(){
-				console.log(Root.nowMonth);
-				var param = {
-					term : Root.Term._id,
-					month : Root.nowMonth
-				}
-				console.log(param);
 			}		
 
 			//搜索
