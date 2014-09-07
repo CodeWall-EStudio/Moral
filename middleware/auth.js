@@ -219,7 +219,7 @@ module.exports = function auth(method, role) {
                             res.redirect(hostUrl + '/' + role + '.html');
                         }
                     } else {
-                        res.redirect(hostUrl + '/' + role + '.html');
+                        res.redirect(hostUrl + '/student/login');
                     }
                 });
             } else {

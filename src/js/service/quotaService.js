@@ -230,23 +230,31 @@ angular.module('dy.services.quota', [
             }
 
             function convertScore(data){
-                for(var i in data){
-                    if(!Root.studentMap[data[i].student]){
-                        delete data[i];
-                    }else{
-                        updateStudentScore(data[i]);
+                if(Root.myInfo._id){
+                    var max = _.max(data,function(item){
+                        return item.total;
+                    });
+                    Root.myInfo.max[Root.nowMonth] = max.total;
+                }else{
+                   for(var i in data){
+                        if(!Root.studentMap[data[i].student]){
+                            delete data[i];
+                        }else{
+                            updateStudentScore(data[i]);
+                        }
                     }
-                }
-                
-                var max = _.max(data,function(item){
-                    return item.total;
-                });
-                var min = _.min(data,function(item){
-                    return item.total;
-                });
+                    
+                    var max = _.max(data,function(item){
+                        return item.total;
+                    });
+                    var min = _.min(data,function(item){
+                        return item.total;
+                    });
 
-                Root.maxStudent = max;
-                Root.minStudent = min;
+                    Root.maxStudent = max;
+                    Root.minStudent = min;                 
+                }
+
             }
 
             //拉评分列表

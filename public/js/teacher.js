@@ -372,7 +372,9 @@ angular.module('dy.services.student', [
 								total += item;
 							});
 							Root.myInfo.totalScore = total;
+							Root.myInfo.max = {};
 							Root.myInfo.pre = total/Root.myInfo.allscore*100;
+
 							Root.nowMonth = data.nowmonth;
 							Root.studentMonth = data.nowmonth;
 
@@ -1055,23 +1057,31 @@ angular.module('dy.services.quota', [
             }
 
             function convertScore(data){
-                for(var i in data){
-                    if(!Root.studentMap[data[i].student]){
-                        delete data[i];
-                    }else{
-                        updateStudentScore(data[i]);
+                if(Root.myInfo._id){
+                    var max = _.max(data,function(item){
+                        return item.total;
+                    });
+                    Root.myInfo.max[Root.nowMonth] = max.total;
+                }else{
+                   for(var i in data){
+                        if(!Root.studentMap[data[i].student]){
+                            delete data[i];
+                        }else{
+                            updateStudentScore(data[i]);
+                        }
                     }
-                }
-                
-                var max = _.max(data,function(item){
-                    return item.total;
-                });
-                var min = _.min(data,function(item){
-                    return item.total;
-                });
+                    
+                    var max = _.max(data,function(item){
+                        return item.total;
+                    });
+                    var min = _.min(data,function(item){
+                        return item.total;
+                    });
 
-                Root.maxStudent = max;
-                Root.minStudent = min;
+                    Root.maxStudent = max;
+                    Root.minStudent = min;                 
+                }
+
             }
 
             //拉评分列表
@@ -1929,13 +1939,14 @@ angular.module('dy.controllers.quota',[
 
 			//打分.这里记录id和分数
 			//通知设置了分数
-			Scope.setStudentQuota = function(id,num){
+			Scope.setStudentQuota = function(id,num,old){
 
 				nowRecord[id] = num;
 				Root.quotaMap[id].now = num;
 				Root.nowScore[id] = num;
 				// //这里有问题..要修改下.
-				Scope.allScore = getEqua();
+				Scope.allScore -=old;
+				Scope.allScore += num;
 				Root.$emit(CMD_SET_QUOTA,{ 
 					id : id,
 					num : num
@@ -1995,6 +2006,15 @@ angular.module('dy.controllers.quota',[
 					term : Root.Term._id
 				}
 				Quota.getQuotaList(param);
+
+				var param = {
+					term : Root.Term._id,
+					grade : Root.myInfo.grade,
+					class : Root.myInfo.class,
+					month : Root.nowMonth
+				}
+				console.log(Root.myInfo)
+				Quota.getScores(param);
 			});
 
 			Root.$on('status.term.load.quota',function(){

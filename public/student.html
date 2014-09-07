@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-学生/家长</title>
-  <link rel="stylesheet" href="css/main.css?t=1410104026143">
+  <link rel="stylesheet" href="css/main.css?t=1410110420657">
  </head>
 <body ng-controller="studentController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -22,7 +22,7 @@
 	<div class="content">
 		<div class="content-header" ng-controller="termController">
 			<span ng-class="{hide:getMode() === 'self' || getMode() === 'parent' }">
-				<span class="myterm">{{myInfo.term.name}} {{studentMonth}}月</span>
+				<span class="myterm">{{myInfo.term.name}} </span>
 	 			<ul class="nav grade-dom grade-list">
 	 				<li ng-class="{active:studentMonth === 0}">本学期</li>
 	 				<li ng-repeat="item in myInfo.term.months" ng-click="selectStudentMonth(item.s)" ng-class="{active:studentMonth === item.s}">{{item.s}}月</li>
@@ -37,7 +37,10 @@
  			<!--学生个人信息-->
  			<div class="content-userinfo" ng-class="{hide:getMode() !== 'my' && getMode()}">
  				<div class="my-badge">
- 					<img src="css/imgs/badge.png" />
+ 					<div class="gold" ng-hide="myInfo.pre<90"></div>
+ 					<div class="silver" ng-hide="myInfo.pre<80 || myInfo.pre>=90"></div>
+ 					<div class="bronze" ng-hide="myInfo.pre<70 || myInfo.pre>=80"></div>
+ 					<div class="nomodel" ng-hide="myInfo.pre>=70"></div>
  					<h1>我的徽章</h1>
  					<p>应得总分: {{myInfo.allscore}}</p>
  					<p>实得总分: {{myInfo.totalScore}}</p>
@@ -52,7 +55,7 @@
  				</ul>
  				<div class="my-grade">
  					<p>{{myInfo.grade}}年级 {{myInfo.class}}班</p>
- 					<p>{{nowMonth}}月 最高得分 {{myInfo.topScore}}</p>
+ 					<p>{{nowMonth}}月 最高得分 {{myInfo.max[nowMonth]}}</p>
  				</div>
  			</div>
  			<!--自评说明-->
@@ -147,11 +150,11 @@
  							<li>
  								打分
  								<div class="num{{nowScore[item.id]}}">
- 									<i ng-click="setStudentQuota(item.id,1)"></i>
- 									<i ng-click="setStudentQuota(item.id,2)"></i>
- 									<i ng-click="setStudentQuota(item.id,3)"></i>
- 									<i ng-click="setStudentQuota(item.id,4)"></i>
- 									<i ng-click="setStudentQuota(item.id,5)"></i>
+ 									<i ng-click="setStudentQuota(item.id,1,nowScore[item.id])"></i>
+ 									<i ng-click="setStudentQuota(item.id,2,nowScore[item.id])"></i>
+ 									<i ng-click="setStudentQuota(item.id,3,nowScore[item.id])"></i>
+ 									<i ng-click="setStudentQuota(item.id,4,nowScore[item.id])"></i>
+ 									<i ng-click="setStudentQuota(item.id,5,nowScore[item.id])"></i>
  								</div>
  							</li>
  						</ul>
@@ -164,7 +167,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/student.js?t=1410104026143"></script>
+	<script src="js/student.js?t=1410110420657"></script>
 
 
 </body>

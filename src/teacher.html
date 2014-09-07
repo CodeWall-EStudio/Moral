@@ -68,7 +68,7 @@
 		 				<li ng-repeat="item in Term.months" ng-click="selectMonths(item.s)" ng-class="{active:nowMonth === item.s}">{{item.s}}月</li>
 		 			</ul>
 	 			</div> 			
-	 			<div class="grade-zone" ng-hide="getMode() === 'result'"  ng-hide="Teacher.authority === 3">
+	 			<div class="grade-zone" ng-hide="getMode() === 'result' || getMode() == ''"  ng-hide="Teacher.authority === 3">
 		 			<div class="grade-dom dropdown" >
 		 				{{Term.name}}
 
@@ -160,7 +160,7 @@
  				<div ng-class="{hide:!nowStudent.id || getMode() === 'record'}"> 
 	 				<dl class="content-summary">
 	 					<dt>
-	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: {{nowStudent.score[Root.nowMonth]}} 全校排名 :1 </div>
+	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: {{nowStudent.score[Root.nowMonth]}} <span ng-hide="Teacher.authority !== 3">全校</span>排名 :1 </div>
 	 						<button class="btn btn-default" ng-click="returnStudentList()">返回概要</button>
 	 					</dt>
 	 				</dl> 
@@ -209,11 +209,11 @@
  								打分
  								{{nowScore[item.id]}}
  								<div class="num{{nowScore[item.id]}}">
- 									<i ng-click="setStudentQuota(item.id,1)"></i>
- 									<i ng-click="setStudentQuota(item.id,2)"></i>
- 									<i ng-click="setStudentQuota(item.id,3)"></i>
- 									<i ng-click="setStudentQuota(item.id,4)"></i>
- 									<i ng-click="setStudentQuota(item.id,5)"></i>
+ 									<i ng-click="setStudentQuota(item.id,1,nowScore[item.id])"></i>
+ 									<i ng-click="setStudentQuota(item.id,2,nowScore[item.id])"></i>
+ 									<i ng-click="setStudentQuota(item.id,3,nowScore[item.id])"></i>
+ 									<i ng-click="setStudentQuota(item.id,4,nowScore[item.id])"></i>
+ 									<i ng-click="setStudentQuota(item.id,5,nowScore[item.id])"></i>
  								</div>
  							</li>
  						</ul>

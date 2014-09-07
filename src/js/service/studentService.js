@@ -87,7 +87,9 @@ angular.module('dy.services.student', [
 								total += item;
 							});
 							Root.myInfo.totalScore = total;
+							Root.myInfo.max = {};
 							Root.myInfo.pre = total/Root.myInfo.allscore*100;
+
 							Root.nowMonth = data.nowmonth;
 							Root.studentMonth = data.nowmonth;
 

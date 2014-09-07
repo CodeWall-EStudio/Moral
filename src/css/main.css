@@ -381,3 +381,27 @@ button.close{
 	top:20px;
 	right:20px;
 }
+.gold{
+	background:url(imgs/gold_medal.png) no-repeat;
+	width:124px;
+	height:124px;
+	margin:0 auto;
+}
+.silver{
+	background:url(imgs/silver_medal.png) no-repeat;
+	width:124px;
+	height:124px;
+	margin:0 auto;
+}
+.bronze{
+	background:url(imgs/bronze_medal.png) no-repeat;
+	width:124px;
+	height:124px;
+	margin:0 auto;
+}
+.nomodel{
+	background:url(imgs/badge.png) no-repeat;
+	width:124px;
+	height:124px;
+	margin:0 auto;	
+}

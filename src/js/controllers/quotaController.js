@@ -206,13 +206,14 @@ angular.module('dy.controllers.quota',[
 
 			//打分.这里记录id和分数
 			//通知设置了分数
-			Scope.setStudentQuota = function(id,num){
+			Scope.setStudentQuota = function(id,num,old){
 
 				nowRecord[id] = num;
 				Root.quotaMap[id].now = num;
 				Root.nowScore[id] = num;
 				// //这里有问题..要修改下.
-				Scope.allScore = getEqua();
+				Scope.allScore -=old;
+				Scope.allScore += num;
 				Root.$emit(CMD_SET_QUOTA,{ 
 					id : id,
 					num : num
@@ -272,6 +273,15 @@ angular.module('dy.controllers.quota',[
 					term : Root.Term._id
 				}
 				Quota.getQuotaList(param);
+
+				var param = {
+					term : Root.Term._id,
+					grade : Root.myInfo.grade,
+					class : Root.myInfo.class,
+					month : Root.nowMonth
+				}
+				console.log(Root.myInfo)
+				Quota.getScores(param);
 			});
 
 			Root.$on('status.term.load.quota',function(){
