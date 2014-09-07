@@ -451,7 +451,6 @@ angular.module('dy.services.student', [
 							if(!param.student){
 								convertScore(data.score);
 							}else{
-								console.log(data.score);
 								if(data.score.length === 0){
 
 									//if(!Root.nowStudent.score){
@@ -1047,13 +1046,20 @@ angular.module('dy.services.quota', [
                 Root.quotaList = sort;
             }
 
+            function updateStudentScore(item){
+                var obj = _.findWhere(Root.studentList,{_id : item.student});
+                if(!obj.totals){
+                    obj.totals = {};
+                }
+                obj.totals[Root.nowMonth] = item.total;
+            }
 
             function convertScore(data){
                 for(var i in data){
                     if(!Root.studentMap[data[i].student]){
                         delete data[i];
                     }else{
-                        console.log(data[i]);
+                        updateStudentScore(data[i]);
                     }
                 }
                 

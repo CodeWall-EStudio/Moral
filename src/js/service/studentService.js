@@ -166,7 +166,6 @@ angular.module('dy.services.student', [
 							if(!param.student){
 								convertScore(data.score);
 							}else{
-								console.log(data.score);
 								if(data.score.length === 0){
 
 									//if(!Root.nowStudent.score){

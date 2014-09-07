@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1410100719385">
+  <link rel="stylesheet" href="css/main.css?t=1410104026143">
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -102,7 +102,7 @@
  						</td>
  						<td>{{item.grade}}年级</td>
  						<td>{{item.class}}班</td>
- 						<td>{{item.score[nowMonth]}}</td>
+ 						<td>{{item.totals[nowMonth]}}</td>
  					</tr>
  				</table>
  			</div>
@@ -182,7 +182,7 @@
 
  				<dl class="content-summary"  ng-class="{hide:getMode() !== 'record'}" ng-model="nowStudent">
  					<dt>
- 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 {{defMonth-1}}月 老师评价</div>
+ 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 {{defMonth-1}}月</div>
  						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
 						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
 						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
@@ -247,7 +247,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/teacher.js?t=1410100719385"></script>
+	<script src="js/teacher.js?t=1410104026143"></script>
 
  </body>
  </html>
