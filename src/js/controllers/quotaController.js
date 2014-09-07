@@ -234,15 +234,16 @@ angular.module('dy.controllers.quota',[
 				});
 			})
 
+			//学生变动
 			Root.$on('status.student.change',function(){
 				Root.nowScore = {};
 				Scope.resetStudentQuota();
 			});
 
 			function getOneScores(type){
-				var total = 0;
-				if(Root.myInfo.score[Root.studentMonth]){
-					_.each(Root.myInfo.score[Root.studentMonth],function(item,idx){
+				var total = 0;	
+				if(Root.myInfo.score[Root.myInfo.defMonth-1]){
+					_.each(Root.myInfo.score[Root.myInfo.defMonth-1],function(item,idx){
 						Root.nowScore[idx] = item[type];
 						total += item[type];
 					});
