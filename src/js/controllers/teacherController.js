@@ -12,8 +12,8 @@ angular.module('dy.controllers.teacher',[
 			
 
 			if(Util.cookie.get('role') !== 'teacher'){
-				// window.location.href="/teacher/login";
-				// return;
+				window.location.href="/teacher/login";
+				return;
 			}
 
 			if(Root.isManage){

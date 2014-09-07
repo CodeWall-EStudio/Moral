@@ -361,6 +361,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.total = data.total || 0;
 							Root.myInfo.hadscore = data.hadscore;
 							Root.myInfo.nowMonth = data.nowmonth;
+							Root.myInfo.defMonth = data.nowmonth;
 
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
@@ -373,7 +374,7 @@ angular.module('dy.services.student', [
 							Root.myInfo.totalScore = total;
 							Root.myInfo.pre = total/Root.myInfo.allscore*100;
 							Root.nowMonth = data.nowmonth;
-							Root.studentMonth = data.nowmonth-1;
+							Root.studentMonth = data.nowmonth;
 
 							Root.nowDay = data.day;
 							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){
@@ -381,6 +382,7 @@ angular.module('dy.services.student', [
 							}
 							Root.Term = data.term;
 							Root.$emit('status.myinfo.load');
+							Root.$emit('status.student.quotacheng');
 							console.log('拉取学生资料成功',data);
 						}else{
 							Root.Term  = false;
@@ -914,7 +916,7 @@ angular.module('dy.services.quota', [
                 Root.minStudent = min;
             }
 
-
+            //拉评分列表
             function getScores(params,success,error){
                 var ts = new Date().getTime();
                 params = params || {};
@@ -1071,6 +1073,9 @@ angular.module('dy.controllers.indexnav',[
 		'$rootScope', '$scope','$location','Util','mGradeService','studentService',function(Root,Scope,$location,Util,Mgrade,Student){
 			console.log('load indexnavcontroller');
 
+			Root.nowMonth;
+			Root.defMonth;
+
 			Root.showRecode = function(){
 
 			}
@@ -1186,6 +1191,11 @@ angular.module('dy.controllers.student',[
 			
 			//选中一个学生
 			Root.selectStudent = function(id){
+				var month = Root.nowMonth;
+				if(Root.getMode() === 'record'){
+					month = Root.defMonth-1;
+				}
+
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);
@@ -1195,7 +1205,7 @@ angular.module('dy.controllers.student',[
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
-					month : Root.nowMonth-1
+					month : month
 				}
 				Student.getScore(param);
 				Root.$emit('status.student.change',true);

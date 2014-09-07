@@ -8,6 +8,9 @@ angular.module('dy.controllers.indexnav',[
 		'$rootScope', '$scope','$location','Util','mGradeService','studentService',function(Root,Scope,$location,Util,Mgrade,Student){
 			console.log('load indexnavcontroller');
 
+			Root.nowMonth;
+			Root.defMonth;
+
 			Root.showRecode = function(){
 
 			}

@@ -66,6 +66,11 @@ angular.module('dy.controllers.student',[
 			
 			//选中一个学生
 			Root.selectStudent = function(id){
+				var month = Root.nowMonth;
+				if(Root.getMode() === 'record'){
+					month = Root.defMonth-1;
+				}
+
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);
@@ -75,7 +80,7 @@ angular.module('dy.controllers.student',[
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
-					month : Root.nowMonth-1
+					month : month
 				}
 				Student.getScore(param);
 				Root.$emit('status.student.change',true);

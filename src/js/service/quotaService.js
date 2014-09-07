@@ -246,7 +246,7 @@ angular.module('dy.services.quota', [
                 Root.minStudent = min;
             }
 
-
+            //拉评分列表
             function getScores(params,success,error){
                 var ts = new Date().getTime();
                 params = params || {};
