@@ -230,8 +230,11 @@ angular.module('dy.services.quota', [
                 for(var i in data){
                     if(!Root.studentMap[data[i].student]){
                         delete data[i];
+                    }else{
+                        console.log(data[i]);
                     }
                 }
+                
                 var max = _.max(data,function(item){
                     return item.total;
                 });

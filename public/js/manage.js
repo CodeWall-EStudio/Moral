@@ -153,6 +153,7 @@ angular.module('dy.services.mgrade', [
 						if(data.code === 0){
 							conventTerm(data.term);
 							Root.nowMonth = data.nowmonth;
+							Root.defMonth = data.nowmonth;
 							Root.nowDay = data.day;
 							console.log('拉学期列表成功!', data);
 						}else{
@@ -563,7 +564,6 @@ angular.module('dy.services.student', [
 					return;
 				}
 				var list = [];
-				console.log(Root.teacherGrade);
 				_.each(Root.studentMap,function(item,idx){
 					var ret = checkGrade(item);
 					if(ret){
@@ -1053,8 +1053,11 @@ angular.module('dy.services.quota', [
                 for(var i in data){
                     if(!Root.studentMap[data[i].student]){
                         delete data[i];
+                    }else{
+                        console.log(data[i]);
                     }
                 }
+                
                 var max = _.max(data,function(item){
                     return item.total;
                 });
@@ -1324,6 +1327,7 @@ angular.module('dy.controllers.managehandernav',[
 
 			Root.nowMonth = new Date().getMonth()+1;
 			Root.scoreMonth = new Date().getMonth();
+			Root.defMonth = 0;
 			Root.nowDay = 0;
 			Scope.searchKeyWord = '';
 

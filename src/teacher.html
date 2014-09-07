@@ -39,6 +39,7 @@
 		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority === 3">
 						<a class="dropdown-toggle" data-toggle="dropdown">{{nowGrade}}年级{{nowClass}}班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
+							<li><a ng-click="changeGradeClass(0,0)">所有班级</a></li>
 		 					<li ng-repeat="item in teacherGrade">
 		 						<a ng-click="changeGradeClass(item.g,item.c)">{{item.g}}年级{{item.c}}班</a>
 		 					</li>
@@ -76,6 +77,7 @@
 		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority === 3">
 						<a class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
+
 		 					<li ng-repeat="item in teacherGrade">
 		 						<a ng-click="changeGradeClass(item.g,item.c)">{{item.g}}年级{{item.c}}班</a>
 		 					</li>
@@ -149,7 +151,7 @@
 
  						<ul >
  							<li>未参评学生数量: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:scoreStatus.self == 0}" ng-click="showNoList('self')">查看名单</a></li>
- 							<li>未参评教师数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.perent == 0}" ng-click="showNoList('parent')">查看名单</a></li>
+ 							<li>未参评家长数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.perent == 0}" ng-click="showNoList('parent')">查看名单</a></li>
  							<li ng-class="{hide:Teacher.auth<3}">未参评教师数量: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.teacher == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
  						</ul>
  					</dd>
@@ -192,7 +194,7 @@
  					<dt>
  						<div class="title">{{nowStudent.name}} 老师评价 {{nowMonth-1}}月 </div>
  						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
- 						<span ng-class="{hide:nowStudent.nums[nowMonth-1] === quotaList.length}">
+ 						<span ng-class="{hide:nowMonth != defMonth}">
  							<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
  							<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
  						</span>
