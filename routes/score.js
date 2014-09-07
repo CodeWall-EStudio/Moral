@@ -69,6 +69,8 @@ module.exports = function score(method) {
                             totalObj[t_index] = 1;
                         }
                     }
+					console.log(sArr);
+					console.log(conn1);
                     scoreModel.find(conn1).where('student').in(sArr).exec(function(err, scores) {
                         if (err) {
                             console.error(err);
