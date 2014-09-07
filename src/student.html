@@ -141,7 +141,7 @@
  					
  				<dl class="content-summary"  ng-class="{hide:getMode() === 'my' || !getMode()}">
  					<dt>
- 						<div class="title">{{myInfo.name}} <span ng-hide="getMode() === 'parent'">自评</span><span ng-hide="getMode() === 'self'">家长评价</span> {{myInfo.studentMonth-1}}月 </div>
+ 						<div class="title">{{myInfo.name}} <span ng-hide="getMode() === 'parent'">自评</span><span ng-hide="getMode() === 'self'">家长评价</span> {{myInfo.defMonth-1}}月 </div>
  						<div class="score-num">打分: <span ng-model=equaself>{{allScore}}</span></div>
  						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
  						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
