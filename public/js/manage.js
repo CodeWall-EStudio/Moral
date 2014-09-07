@@ -1369,6 +1369,14 @@ angular.module('dy.controllers.managehandernav',[
 				Student.filterStudent(Root.nowGrade,Root.nowClass);
 				Teacher.filterTeacher(Root.nowGrade,Root.nowClass);
 				Root.$emit('status.grade.change');
+
+				if(!gid){
+					Root.nowGrade = '所有';	
+				}
+				if(!cid){
+					Root.nowClass = '所有';	
+				}				
+
 				changeScore();
 			}
 
