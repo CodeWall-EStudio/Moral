@@ -1864,9 +1864,12 @@ angular.module('dy.controllers.quota',[
 				}
 				//老师打分
 				var sid,tid,year,month
+
+				var month = Root.defMonth || Root.myInfo.defMonth;
+
 				var param = {
 					//month : Root.nowMonth-1 || new Date().getMonth(),
-					month : Root.defMonth-1,
+					month : month-1,
 					scores : Scope.allScore
 				};
 				if(!$.isEmptyObject(Root.nowStudent)){
