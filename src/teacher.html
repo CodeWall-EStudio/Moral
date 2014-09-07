@@ -192,12 +192,10 @@
 
  				<dl class="content-summary"  ng-class="{hide:getMode() !== 'record'}" ng-model="nowStudent">
  					<dt>
- 						<div class="title">{{nowStudent.name}} 老师评价 {{nowMonth-1}}月 </div>
+ 						<div class="title">{{nowStudent.name}} 老师评价 {{defMonth-1}}月 </div>
  						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
- 						<span ng-class="{hide:nowMonth != defMonth}">
- 							<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
- 							<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
- 						</span>
+						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
+						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
  					</dt>
  				</dl> 				
  				<dl class="content-score"  ng-class="{hide:getMode() !== 'record'}" ng-repeat="item in quotaList" ng-model="quotaList">

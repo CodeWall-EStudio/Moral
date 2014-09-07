@@ -1881,7 +1881,7 @@ angular.module('dy.controllers.quota',[
 				var sid,tid,year,month
 				var param = {
 					//month : Root.nowMonth-1 || new Date().getMonth(),
-					month : new Date().getMonth(),
+					month : Root.defMonth-1,
 					scores : Scope.allScore
 				};
 				if(!$.isEmptyObject(Root.nowStudent)){
