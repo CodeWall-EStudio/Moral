@@ -361,7 +361,7 @@ angular.module('dy.services.student', [
 			}
 
 			function noScore(list){
-				Root.noList = _.filter(Root.studentMap,function(item){
+				Root.noList = _.filter(Root.studentList,function(item){
 					return $.inArray(item._id,list) <0;
 				});
 			}

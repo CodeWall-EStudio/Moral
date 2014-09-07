@@ -265,7 +265,7 @@ angular.module('dy.services.quota', [
             }
 
             function getScoreStatus(){
-                Root.studentScoreList = [];
+                Root.studentScoreList = [];                
                 _.each(Root.scoreMap,function(item,idx){
                     var otmp = _.find(Root.studentList,function(obj){
                         return obj._id === item.student;

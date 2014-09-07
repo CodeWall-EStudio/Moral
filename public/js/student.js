@@ -645,7 +645,7 @@ angular.module('dy.services.student', [
 			}
 
 			function noScore(list){
-				Root.noList = _.filter(Root.studentMap,function(item){
+				Root.noList = _.filter(Root.studentList,function(item){
 					return $.inArray(item._id,list) <0;
 				});
 			}
@@ -933,7 +933,7 @@ angular.module('dy.services.quota', [
             }
 
             function getScoreStatus(){
-                Root.studentScoreList = [];
+                Root.studentScoreList = [];                
                 _.each(Root.scoreMap,function(item,idx){
                     var otmp = _.find(Root.studentList,function(obj){
                         return obj._id === item.student;
