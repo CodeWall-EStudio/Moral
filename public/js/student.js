@@ -724,10 +724,6 @@ angular.module('dy.services.quota', [
 					});				
 			};
 
-			function getStudentQuota(param,success,error){
-
-			};
-
 			function createQuota(param,success,error){
 				var ts = new Date().getTime();
 				var body = Util.object.toUrlencodedString(param);
@@ -1523,9 +1519,10 @@ angular.module('dy.controllers.quota',[
 
 			Root.$on('status.student.scoreload',function(){
 
-				Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
+				//Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
 				_.each(Root.nowStudent.score[Root.scoreMonth],function(item,idx){
 					Root.nowScore[idx] = item.teacher;
+					Scope.allScore += item.teacher; 
 				});
 			});
 

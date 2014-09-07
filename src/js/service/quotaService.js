@@ -53,10 +53,6 @@ angular.module('dy.services.quota', [
 					});				
 			};
 
-			function getStudentQuota(param,success,error){
-
-			};
-
 			function createQuota(param,success,error){
 				var ts = new Date().getTime();
 				var body = Util.object.toUrlencodedString(param);

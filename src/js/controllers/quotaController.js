@@ -221,9 +221,10 @@ angular.module('dy.controllers.quota',[
 
 			Root.$on('status.student.scoreload',function(){
 
-				Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
+				//Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
 				_.each(Root.nowStudent.score[Root.scoreMonth],function(item,idx){
 					Root.nowScore[idx] = item.teacher;
+					Scope.allScore += item.teacher; 
 				});
 			});
 
