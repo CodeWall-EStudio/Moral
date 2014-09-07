@@ -64,7 +64,7 @@
 		 			</div>		 				 			
 		 			<ul class="nav grade-dom grade-list">
 		 				<li ng-class="{active:nowMonth === 0}"  ng-click="selectMonth(0)">本学期</li>
-		 				<li ng-repeat="item in Term.months" ng-click="selectMonth(item.s)" ng-class="{active:nowMonth === item.e}">{{item.s}}月</li>
+		 				<li ng-repeat="item in Term.months" ng-click="selectMonths(item.s)" ng-class="{active:nowMonth === item.s}">{{item.s}}月</li>
 		 			</ul>
 	 			</div> 			
 	 			<div class="grade-zone" ng-hide="getMode() === 'result'"  ng-hide="Teacher.authority === 3">

@@ -1362,7 +1362,7 @@ angular.module('dy.controllers.managehandernav',[
 				changeScore();
 			}
 
-			Scope.selectMonth = function(month){
+			Scope.selectMonths = function(month){
 				Root.nowMonth = month;
 				changeScore();				
 			};
@@ -1378,6 +1378,12 @@ angular.module('dy.controllers.managehandernav',[
 			}	
 
 			function changeScore(){
+				console.log(Root.nowMonth);
+				var param = {
+					term : Root.Term._id,
+					month : Root.nowMonth
+				}
+				console.log(param);
 			}		
 
 			//搜索

@@ -46,7 +46,9 @@ module.exports = function score(method) {
             var conn1 = {term: t};
             if (m != '0') {
                 conn1 = {term: t, month: m};
-            }
+            }else{
+				conn1 = {term: t};
+			}
             var conn2 = {};
             if (g && c) {
                 conn2 = {grade: g, class: c};
