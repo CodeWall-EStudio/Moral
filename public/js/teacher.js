@@ -1811,11 +1811,11 @@ angular.module('dy.controllers.quota',[
 				var total = 0;
 				var score;
 				if(Root.nowStudent._id){
-					score = Root.nowStudent.score[Root.nowMonth] || {};
-					console.log(score)
+					score = Root.nowStudent.score[Root.defMonth-1] || {};
 				}else{
-					score = Root.myInfo.score;
+					score = Root.myInfo.score[Root.myInfo.defMonth-1];
 				}
+				// console.log(score);
 				_.each(Root.nowScore,function(item,idx){
 					var self,parent,teacher;
 					if($.isEmptyObject(score) || !score[idx]){
