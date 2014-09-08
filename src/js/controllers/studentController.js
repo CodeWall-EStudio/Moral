@@ -55,6 +55,7 @@ angular.module('dy.controllers.student',[
 				// console.log(id,first.s);
 				// if(id>first.s){
 					Root.studentMonth = id;	
+					Root.$emit('status.myinfo.load');
 				//}
 			}
 

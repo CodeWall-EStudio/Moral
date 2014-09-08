@@ -676,12 +676,18 @@ angular.module('dy.services.student', [
 
 			//按类型降序排列学生
 			function orderByStudent(type,order){
+				var num = 0;
 				var sort = _.sortBy(Root.studentList,function(item){
+					// if(num===0){
+					// 	console.log(-parseInt(item[type]));
+					// }
+					// num++
 					if(order){
 						return -item[type];
 					}else{
 						return +item[type];
 					}
+					
 				});
 				Root.studentList = sort;
 			}
@@ -1262,6 +1268,7 @@ angular.module('dy.controllers.student',[
 				// console.log(id,first.s);
 				// if(id>first.s){
 					Root.studentMonth = id;	
+					Root.$emit('status.myinfo.load');
 				//}
 			}
 
@@ -1666,7 +1673,7 @@ angular.module('dy.controllers.quota',[
 					term : Root.Term._id,
 					grade : Root.myInfo.grade,
 					class : Root.myInfo.class,
-					month : Root.nowMonth
+					month : Root.studentMonth
 				}
 				console.log(Root.myInfo)
 				Quota.getScores(param);

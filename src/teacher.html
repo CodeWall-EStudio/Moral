@@ -160,7 +160,11 @@
  				<div ng-class="{hide:!nowStudent.id || getMode() === 'record'}"> 
 	 				<dl class="content-summary">
 	 					<dt>
-	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: {{nowStudent.totals[nowMonth]}} <span ng-hide="Teacher.authority !== 3">全校排名 :{{nowStudent.nos[nowMonth]}} </span></div>
+	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 
+	 							<span ng-hide="!nowMonth">
+	 							{{nowMonth}}月
+	 							</span>
+	 							<span ng-hide="nowMonth">本学期</span> 总分: {{nowStudent.totals[nowMonth]}} <span ng-hide="Teacher.authority !== 3">全校排名 :{{nowStudent.nos[nowMonth]}} </span></div>
 	 						<button class="btn btn-default" ng-click="returnStudentList()">返回概要</button>
 	 					</dt>
 	 					{{nowStudnet}}
@@ -175,15 +179,15 @@
 	 						<ul class="score-list">
 	 							<li>
 	 								教师
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1][item._id].teacher || 0}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].teacher || 0}}</div>
 	 							</li>
 	 							<li>
 	 								自评
-	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth-1][item._id].self || 0}}</div>
+	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth][item._id].self || 0}}</div>
 	 							</li>
 	 							<li>
 	 								家长
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1][item._id].parent || 0}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].parent || 0}}</div>
 	 							</li>
 
 	 						</ul>

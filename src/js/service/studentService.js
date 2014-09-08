@@ -391,12 +391,18 @@ angular.module('dy.services.student', [
 
 			//按类型降序排列学生
 			function orderByStudent(type,order){
+				var num = 0;
 				var sort = _.sortBy(Root.studentList,function(item){
+					// if(num===0){
+					// 	console.log(-parseInt(item[type]));
+					// }
+					// num++
 					if(order){
 						return -item[type];
 					}else{
 						return +item[type];
 					}
+					
 				});
 				Root.studentList = sort;
 			}

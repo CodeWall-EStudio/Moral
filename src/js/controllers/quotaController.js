@@ -278,7 +278,7 @@ angular.module('dy.controllers.quota',[
 					term : Root.Term._id,
 					grade : Root.myInfo.grade,
 					class : Root.myInfo.class,
-					month : Root.nowMonth
+					month : Root.studentMonth
 				}
 				console.log(Root.myInfo)
 				Quota.getScores(param);
