@@ -126,6 +126,11 @@ angular.module('dy.controllers.student',[
 				Student.orderByStudent(type,Scope.order[type]);
 			}
 
+			Root.orderStudentScore = function(type){
+				Scope.order['score'] = Scope.order['score']?0:1;
+				Student.orderByStudentScore(Scope.order['score']);
+			}			
+
 			Root.returnStudentList = function(){
 				Root.nowStudent = {};
 			}

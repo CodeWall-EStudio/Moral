@@ -375,6 +375,20 @@ angular.module('dy.services.student', [
 			}
 
 
+			function orderByStudentScore(order){
+				var sort = _.sortBy(Root.studentList,function(item){
+					if(item.totals && item.totals[Root.nowMonth]){
+						if(order){
+							return -item.totals[Root.nowMonth];
+						}else{
+							return +item.totals[Root.nowMonth];
+						}
+					}
+
+				});
+				Root.studentList = sort;
+			}
+
 			//按类型降序排列学生
 			function orderByStudent(type,order){
 				var sort = _.sortBy(Root.studentList,function(item){
@@ -412,6 +426,7 @@ angular.module('dy.services.student', [
 				getStudent : getStudent,         //
 				filterStudent : filterStudent,		//
 				orderByStudent : orderByStudent,
+				orderByStudentScore : orderByStudentScore,
 				searchStudent : searchStudent,
 				getScore : getScore,
 				getScoreList : getScoreList,

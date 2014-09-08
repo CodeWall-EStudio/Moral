@@ -102,7 +102,7 @@
  						<th ng-click="orderStudent('sex')" width="60">性别<span class="caret" ng-class="{uaret:order['sex']}"></span></th>
  						<th ng-click="orderStudent('grade')" width="60">年级<span class="caret" ng-class="{uaret:order['grade']}"></span></th>
  						<th ng-click="orderStudent('class')" width="60">班级<span class="caret" ng-class="{uaret:order['class']}"></span></th>
- 						<th ng-click="orderStudent('scores')" width="60">得分<span class="caret" ng-class="{hide:Teacher.auth!==3,uaret:order['scores']}"></span></th>
+ 						<th ng-click="orderStudentScore()" width="60">得分<span class="caret" ng-class="{hide:Teacher.auth!==3,uaret:order['scores']}"></span></th>
  					</tr>
  					<tr ng-repeat="item in studentList" ng-click="selectStudent(item._id)">
  						<td>{{item.name}}</td>
