@@ -22,7 +22,8 @@ angular.module('dy.controllers.managenav',[
 			}
 
 			Root.getMode = function(){
-				return $location.search()['mode'];
+				console.log($location.search()['mode']);
+				return $location.search()['mode'] || false;
 			}
 
 			Root.switchMode = function(mode){
@@ -33,7 +34,7 @@ angular.module('dy.controllers.managenav',[
                 if(mode !== Root.getMode()){
                     $location.search('mode', mode);
                 }
-			}					
+			}	
 
 			// Scope.authManage = function(){
 

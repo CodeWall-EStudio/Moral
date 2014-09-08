@@ -67,12 +67,12 @@
 		 				<li ng-class="{active:nowMonth === 0}"  ng-click="selectMonths(0)">本学期</li>
 		 				<li ng-repeat="item in Term.months" ng-click="selectMonths(item.s)" ng-class="{active:nowMonth === item.s}">{{item.s}}月</li>
 		 			</ul>
-	 			</div> 			
-	 			<div class="grade-zone" ng-hide="getMode() === 'result' || getMode() == ''"  ng-hide="Teacher.authority === 3">
+	 			</div> 		
+	 			<div class="grade-zone" ng-hide="getMode() === 'result' || !getMode()"  ng-hide="Teacher.authority === 3">
 		 			<div class="grade-dom dropdown" >
 		 				{{Term.name}}
 
-		 				{{nowMonth-1}}月 德育评价 {{studentTerm?'开放评价中':'关闭'}} （{{nowMonth}}月1日 至 {{Term.day}}日）  今天：{{nowDate | date:'MM月dd日'}}
+		 				{{defMonth-1}}月德育评价 {{studentTerm?'开放评价中':'关闭'}} （{{defMonth}}月1日 至 {{Term.day}}日）  今天：{{nowDate | date:'MM月dd日'}}
 		 			</div>	 			
 		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority === 3">
 						<a class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
@@ -160,9 +160,10 @@
  				<div ng-class="{hide:!nowStudent.id || getMode() === 'record'}"> 
 	 				<dl class="content-summary">
 	 					<dt>
-	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: {{nowStudent.score[Root.nowMonth]}} <span ng-hide="Teacher.authority !== 3">全校</span>排名 :1 </div>
+	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 本学期 总分: {{nowStudent.totals[nowMonth]}} <span ng-hide="Teacher.authority !== 3">全校排名 :{{nowStudent.nos[nowMonth]}} </span></div>
 	 						<button class="btn btn-default" ng-click="returnStudentList()">返回概要</button>
 	 					</dt>
+	 					{{nowStudnet}}
 	 				</dl> 
 
 	 				<dl class="content-score" ng-repeat="item in quotaList">

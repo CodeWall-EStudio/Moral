@@ -34,12 +34,12 @@
 			<span ng-class="{hide:getMode() === 'self' || getMode() === 'parent' }">
 				<span class="myterm">{{myInfo.term.name}} </span>
 	 			<ul class="nav grade-dom grade-list">
-	 				<li ng-class="{active:studentMonth === 0}">本学期</li>
+	 				<li ng-class="{active:studentMonth === 0}" ng-click="selectStudentMonth(0)">本学期</li>
 	 				<li ng-repeat="item in myInfo.term.months" ng-click="selectStudentMonth(item.s)" ng-class="{active:studentMonth === item.s}">{{item.s}}月</li>
 	 			</ul>				
 			</span>
 			<span ng-class="{hide:getMode() === 'my' || !getMode()}">
-			{{myInfo.term.name}}  {{myInfo.nowMonth-1}}月德育评价 {{studentTerm?'开放评价中':'关闭'}} （{{myInfo.nowMonth}}月1日 至 {{myInfo.term.day}}日）  今天：{{nowDate | date:'MM月dd日'}}
+			{{myInfo.term.name}}  {{myInfo.defMonth-1}}月德育评价 {{studentTerm?'开放评价中':'关闭'}} （{{myInfo.nowMonth}}月1日 至 {{myInfo.term.day}}日）  今天：{{nowDate | date:'MM月dd日'}}
 			</span>
 		</div>
 
@@ -115,7 +115,14 @@
 			<div class="content-info" ng-controller="quotaController">
  				<dl class="content-summary" ng-class="{hide:getMode() !== 'my' && getMode()}">
  					<dt>
- 						<div class="title">{{myInfo.user.name}}  {{studentMonth}}月  总分：{{myInfo.total[studentMonth]}}</div>
+ 						<div class="title">{{myInfo.user.name}}  
+ 							<span ng-hide="!studentMonth">
+ 							{{studentMonth}}月
+ 							</span>
+ 							<span ng-hide="studentMonth">
+ 							本学期
+ 							</span> 							
+ 						  总分：{{myInfo.total[studentMonth]}}</div>
  					</dt>
  				</dl> 
  				<dl class="content-score"  ng-class="{hide:getMode() !== 'my' && getMode()}"  ng-repeat="item in quotaList">

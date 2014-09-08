@@ -350,6 +350,30 @@ angular.module('dy.services.student', [
 				return ret;
 			}
 
+			function setZeroMonth(){
+				var t = 0;
+				var tp = {}
+				_.each(Root.myInfo.total,function(item){
+					t += item;
+				});
+				_.each(Root.myInfo.score,function(item){
+					_.each(item,function(obj,idx){
+						if(!tp[idx]){
+							tp[idx] = {
+								self : 0,
+								parent : 0,
+								teacher : 0
+							}
+						}
+						tp[idx].self += obj.self;
+						tp[idx].parent += obj.parent;
+						tp[idx].teacher += obj.teacher;
+					});
+				});
+				Root.myInfo.score[0] = tp;
+				Root.myInfo.total[0] = t;
+			}
+
 			//拉学生个人信息
 			function getStudentInfo(param,success,error){
 
@@ -383,6 +407,7 @@ angular.module('dy.services.student', [
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;
+							setZeroMonth();
 							Root.$emit('status.myinfo.load');
 							Root.$emit('status.student.quotacheng');
 							console.log('拉取学生资料成功',data);
@@ -599,6 +624,17 @@ angular.module('dy.services.student', [
 				if(!gid && !cid){
 					//$.extend(list,sList);
 					Root.studentList = [];
+					// if(Root.Teacher.authority===3){
+					// 	var sort = {};
+					// 	$.extend(sort,Root.studentMap);
+					// 	_.sortBy(sort,function(item){
+					// 		if(order){
+					// 			return -item[type];
+					// 		}else{
+					// 			return +item[type];
+					// 		}
+					// 	});						
+					// }
 					_.each(Root.studentMap,function(item){
 						Root.studentList.push(item);
 					});
@@ -924,7 +960,23 @@ angular.module('dy.services.quota', [
                     });
 
                     Root.maxStudent = max;
-                    Root.minStudent = min;                 
+                    Root.minStudent = min;   
+
+                    if(Root.Teacher.authority === 3){
+                        Root.studentList = _.sortBy(Root.studentList,function(item){
+                            if(item.totals && item.totals[Root.nowMonth]){
+                                return -item.totals[Root.nowMonth];
+                            }
+                        });
+                        _.each(Root.studentList,function(item,idx){
+                            if(!item.nos){
+                                item.nos = {};
+                            }
+                            item.nos[Root.nowMonth] = idx+1;
+                            $.extend(Root.studentMap[item._id],item);
+                        });
+                        //console.log(Root.studentList);
+                    }
                 }
 
             }
@@ -957,6 +1009,7 @@ angular.module('dy.services.quota', [
                         return obj._id === item.student;
                     });
                     if(otmp){
+                        //otmp.totals = item.total;
                         Root.studentScoreList.push(item);
                     }
                 });
@@ -981,6 +1034,7 @@ angular.module('dy.services.quota', [
                         }                        
                     });
                 });
+
                 Root.hadTeacher = _.uniq(Root.hadTeacher);
                 Root.hadParent = _.uniq(Root.hadParent);
                 Root.hadSelf = _.uniq(Root.hadSelf);
@@ -1094,7 +1148,7 @@ angular.module('dy.controllers.indexnav',[
 			}
 
 			Root.getMode = function(){
-				return $location.search()['mode'];
+				return $location.search()['mode'] || false;
 			}
 			//切换模块
 			Root.switchMode = function(mode){

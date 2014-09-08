@@ -34,6 +34,11 @@
                                 <input type="text" name="number" class="form-control" placeholder="输入登录ID码">
                             </div>
                         </li>
+			<li id="errors">
+				<div class="input-group input-group-lg" style="color:red">
+					学生姓名或者登录id错误!
+				</div>
+			</li>
                         <li>
                             <input type="submit" value="登录" class="btn btn-primary btn-lg btn-login"/>
                         </li>
@@ -46,15 +51,12 @@
 <div class="footer">
     版权所有
 </div>
-
-<script src="/js/lib/jquery/jquery-2.0.3.min.js"></script>
-<script src="/js/lib/angular/angular_1.2.6.js"></script>
-<script src="/js/lib/bootstrap.min.js"></script>
-
-<script src="/js/constants/constants.js"></script>
-<script src="/js/service/UtilsService.js"></script>
-<script src="/js/controllers/LoginUinController.js"></script>
-<script src="/js/userlogin.js"></script>
+<script>
+var hash = location.hash;
+if(hash){
+	document.getElementById('errors').style.display = 'block';
+}
+</script>
 
 </body>
 </html>

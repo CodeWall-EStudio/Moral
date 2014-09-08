@@ -252,7 +252,23 @@ angular.module('dy.services.quota', [
                     });
 
                     Root.maxStudent = max;
-                    Root.minStudent = min;                 
+                    Root.minStudent = min;   
+
+                    if(Root.Teacher.authority === 3){
+                        Root.studentList = _.sortBy(Root.studentList,function(item){
+                            if(item.totals && item.totals[Root.nowMonth]){
+                                return -item.totals[Root.nowMonth];
+                            }
+                        });
+                        _.each(Root.studentList,function(item,idx){
+                            if(!item.nos){
+                                item.nos = {};
+                            }
+                            item.nos[Root.nowMonth] = idx+1;
+                            $.extend(Root.studentMap[item._id],item);
+                        });
+                        //console.log(Root.studentList);
+                    }
                 }
 
             }
@@ -285,6 +301,7 @@ angular.module('dy.services.quota', [
                         return obj._id === item.student;
                     });
                     if(otmp){
+                        //otmp.totals = item.total;
                         Root.studentScoreList.push(item);
                     }
                 });
@@ -309,6 +326,7 @@ angular.module('dy.services.quota', [
                         }                        
                     });
                 });
+
                 Root.hadTeacher = _.uniq(Root.hadTeacher);
                 Root.hadParent = _.uniq(Root.hadParent);
                 Root.hadSelf = _.uniq(Root.hadSelf);

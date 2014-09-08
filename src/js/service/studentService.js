@@ -65,6 +65,30 @@ angular.module('dy.services.student', [
 				return ret;
 			}
 
+			function setZeroMonth(){
+				var t = 0;
+				var tp = {}
+				_.each(Root.myInfo.total,function(item){
+					t += item;
+				});
+				_.each(Root.myInfo.score,function(item){
+					_.each(item,function(obj,idx){
+						if(!tp[idx]){
+							tp[idx] = {
+								self : 0,
+								parent : 0,
+								teacher : 0
+							}
+						}
+						tp[idx].self += obj.self;
+						tp[idx].parent += obj.parent;
+						tp[idx].teacher += obj.teacher;
+					});
+				});
+				Root.myInfo.score[0] = tp;
+				Root.myInfo.total[0] = t;
+			}
+
 			//拉学生个人信息
 			function getStudentInfo(param,success,error){
 
@@ -98,6 +122,7 @@ angular.module('dy.services.student', [
 								Root.studentTerm = true;
 							}
 							Root.Term = data.term;
+							setZeroMonth();
 							Root.$emit('status.myinfo.load');
 							Root.$emit('status.student.quotacheng');
 							console.log('拉取学生资料成功',data);
@@ -314,6 +339,17 @@ angular.module('dy.services.student', [
 				if(!gid && !cid){
 					//$.extend(list,sList);
 					Root.studentList = [];
+					// if(Root.Teacher.authority===3){
+					// 	var sort = {};
+					// 	$.extend(sort,Root.studentMap);
+					// 	_.sortBy(sort,function(item){
+					// 		if(order){
+					// 			return -item[type];
+					// 		}else{
+					// 			return +item[type];
+					// 		}
+					// 	});						
+					// }
 					_.each(Root.studentMap,function(item){
 						Root.studentList.push(item);
 					});

@@ -16,7 +16,7 @@ angular.module('dy.controllers.indexnav',[
 			}
 
 			Root.getMode = function(){
-				return $location.search()['mode'];
+				return $location.search()['mode'] || false;
 			}
 			//切换模块
 			Root.switchMode = function(mode){
