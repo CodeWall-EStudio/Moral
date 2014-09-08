@@ -216,7 +216,7 @@ module.exports = function auth(method, role) {
                             res.cookie('role', role, 60000);
                             res.redirect(hostUrl + '/' + role+'.html');
                         } else {
-                            res.redirect(hostUrl + '/' + role + '.html');
+                            res.redirect(hostUrl + '/student/login#error=1');
                         }
                     } else {
                         res.redirect(hostUrl + '/student/login#error=1');
