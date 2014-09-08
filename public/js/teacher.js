@@ -1628,6 +1628,9 @@ angular.module('dy.controllers.student',[
 			}
 
 			Root.orderStudentScore = function(type){
+				if(Root.Teacher.authority<3){
+					return;
+				}
 				Scope.order['score'] = Scope.order['score']?0:1;
 				Student.orderByStudentScore(Scope.order['score']);
 			}			
