@@ -76,6 +76,9 @@ angular.module('dy.controllers.managehandernav',[
 			}
 
 			Scope.selectMonths = function(month){
+				if(month >= Root.defMonth && !(Root.defMonth < 2 && month > 9)){
+					return;
+				}
 				Root.nowMonth = month;
 				Root.$emit('status.filter.student');
 			};

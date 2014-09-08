@@ -8,6 +8,9 @@ li{
 .nav-tabs>li{
 	margin-bottom:0;
 }
+.nav .disabled{
+	color:#ddd;
+}
 
 .dropdown-menu{
 	max-height:320px;

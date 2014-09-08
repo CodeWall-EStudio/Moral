@@ -51,6 +51,9 @@ angular.module('dy.controllers.student',[
 			}
 
 			Root.selectStudentMonth = function(id){
+				if(id >= Root.myInfo.defMonth && !(Root.myInfo.defMonth < 2 && id > 9)){
+					return;
+				}				
 				// var first = Root.myInfo.term.months[0];
 				// console.log(id,first.s);
 				// if(id>first.s){

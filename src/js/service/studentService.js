@@ -390,13 +390,23 @@ angular.module('dy.services.student', [
 			}
 
 			//按类型降序排列学生
+			function orderByStudentName(order){
+				Root.studentList.sort(function(a,b){
+					if(order){
+						return a.name.localeCompare(b.name);
+					}else{
+						return !a.name.localeCompare(b.name);
+					}
+				});
+			}
+
+			//按类型降序排列学生
 			function orderByStudent(type,order){
-				var num = 0;
-				var sort = _.sortBy(Root.studentList,function(item){
-					// if(num===0){
-					// 	console.log(-parseInt(item[type]));
-					// }
-					// num++
+				if(type === 'name'){
+					orderByStudentName(order);
+					return;
+				}
+				var sort = _.sortBy(Root.studentList,function(item,item2){
 					if(order){
 						return -item[type];
 					}else{

@@ -675,13 +675,23 @@ angular.module('dy.services.student', [
 			}
 
 			//按类型降序排列学生
+			function orderByStudentName(order){
+				Root.studentList.sort(function(a,b){
+					if(order){
+						return a.name.localeCompare(b.name);
+					}else{
+						return !a.name.localeCompare(b.name);
+					}
+				});
+			}
+
+			//按类型降序排列学生
 			function orderByStudent(type,order){
-				var num = 0;
-				var sort = _.sortBy(Root.studentList,function(item){
-					// if(num===0){
-					// 	console.log(-parseInt(item[type]));
-					// }
-					// num++
+				if(type === 'name'){
+					orderByStudentName(order);
+					return;
+				}
+				var sort = _.sortBy(Root.studentList,function(item,item2){
 					if(order){
 						return -item[type];
 					}else{
@@ -1444,6 +1454,9 @@ angular.module('dy.controllers.managehandernav',[
 			}
 
 			Scope.selectMonths = function(month){
+				if(month >= Root.defMonth && !(Root.defMonth < 2 && month > 9)){
+					return;
+				}
 				Root.nowMonth = month;
 				Root.$emit('status.filter.student');
 			};
@@ -1551,6 +1564,9 @@ angular.module('dy.controllers.student',[
 			}
 
 			Root.selectStudentMonth = function(id){
+				if(id >= Root.myInfo.defMonth && !(Root.myInfo.defMonth < 2 && id > 9)){
+					return;
+				}				
 				// var first = Root.myInfo.term.months[0];
 				// console.log(id,first.s);
 				// if(id>first.s){
