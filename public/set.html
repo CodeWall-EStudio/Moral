@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="manage">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="author" content="Xzone" />
+  <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>德育系统</title>
+  <link rel="stylesheet" href="css/manage.css?t=1411802357194">
+ </head>
+ <body>
+            <div class="form-group" style="width:50%;margin:0 auto;padding:50px;">
+              <label for="gradeNameInput" class="col-sm-3 control-label">设置当前月份:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="TestMonth" placeholder="请输入当前月份" ng-model="nowTerm.name">
+                <button id="setMonth">设置</button>
+              </div>
+            </div>
+
+  <script src="js/lib/jslib.js"></script>
+    <script>
+
+jQuery.cookie = function(name, value, options) {
+    if (typeof value != 'undefined') { // name and value given, set cookie
+        options = options || {};
+        if (value === null) {
+            value = '';
+            options.expires = -1;
+        }
+        var expires = '';
+        if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+            var date;
+            if (typeof options.expires == 'number') {
+                date = new Date();
+                date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
+            } else {
+                date = options.expires;
+            }
+            expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
+        }
+        var path = options.path ? '; path=' + options.path : '';
+        var domain = options.domain ? '; domain=' + options.domain : '';
+        var secure = options.secure ? '; secure' : '';
+        document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+    } else { // only name given, get cookie
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+};
+
+  var Cookie = jQuery.cookie;
+        $("#setMonth").click(function(){
+          var val = parseInt($("#TestMonth").val());
+          if(val > 0 && val < 12){
+            $.cookie('test-month',val);
+          }
+        });
+        var month = $.cookie('test-month');
+        $("#TestMonth").val(month);
+    </script>
+  </body>
+</html>
