@@ -114,7 +114,12 @@ angular.module('dy.services.student', [
 							Root.myInfo.max = {};
 							Root.myInfo.pre = total/Root.myInfo.allscore*100;
 
-							Root.nowMonth = data.nowmonth;
+							if($.cookie('test-month')){
+								Root.nowMonth = $.cookie('test-month');
+							}else{
+								Root.nowMonth = data.nowmonth;	
+							}
+							
 							Root.studentMonth = data.nowmonth;
 
 							Root.nowDay = data.day;
