@@ -404,7 +404,7 @@ angular.module('dy.services.student', [
 							});
 							Root.myInfo.totalScore = total;
 							Root.myInfo.max = {};
-							Root.myInfo.pre = total/Root.myInfo.allscore*100;
+							Root.myInfo.pre = total/Root.myInfo.allscore*100 || 0;
 
 							if($.cookie('test-month')){
 								Root.nowMonth = $.cookie('test-month');
