@@ -200,24 +200,30 @@ module.exports = function auth(method, role) {
                 var sess = req.session;
                 //console.log('sess',sess);
                 //console.log(req.body);
-                studentModel.findOne({name: req.body.name}, function (err, studentEntity) {
+                studentModel.find({name: req.body.name}, function (err, studentEntity) {
                     if (err) {
                         console.error(err);
                     }
-                    console.log('student info',studentEntity);
+                    
                     if (studentEntity) {
-                        if (req.body.number == studentEntity.eid) {
-                            sess.user = studentEntity;
-                            //本地测试用。。。发布的时候可以去掉。。。
-                            sess.student = studentEntity;
-                            //
-                            res.cookie('sid',sess.user._id,60000);
-                            //console.log(studentEntity);
-                            res.cookie('role', role, 60000);
-                            res.redirect(hostUrl + '/' + role+'.html');
-                        } else {
-                            res.redirect(hostUrl + '/student/login#error=1');
+                        for(var i in studentEntity){
+                            var sitem = studentEntity[i];
+                            console.log('student info',sitem);
+                            if (req.body.number == sitem.eid) {
+                                sess.user = sitem;
+                                //本地测试用。。。发布的时候可以去掉。。。
+                                sess.student = sitem;
+                                //
+                                res.cookie('sid',sess.user._id,60000);
+                                //console.log(studentEntity);
+                                res.cookie('role', role, 60000);
+                                res.redirect(hostUrl + '/' + role+'.html');
+                                return;
+                            } else {
+                            }
                         }
+                        res.redirect(hostUrl + '/student/login#error=1');
+                        return;                        
                     } else {
                         res.redirect(hostUrl + '/student/login#error=1');
                     }
