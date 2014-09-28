@@ -22,7 +22,7 @@ angular.module('dy.controllers.managenav',[
 			}
 
 			Root.getMode = function(){
-				console.log($location.search()['mode']);
+				//console.log($location.search()['mode']);
 				return $location.search()['mode'] || false;
 			}
 

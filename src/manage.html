@@ -81,6 +81,7 @@
                     <form method="post" enctype="multipart/form-data" action="/teacher/upload" id="studentFrom">
                     	<!--<a>下载当前列表</a>-->
                         <input type="hidden" name="type" value="student">
+                        <input type="hidden" name="term" class="term-hide" value="{{Term._id}}">
                         <button class="btn btn-primary">导入CMIS数据</button>
                         <input type="file" name="thumbnail" onchange="uploadStudent()" class="btn hide-input hide-input-student">
                     </form>	 				
@@ -115,6 +116,7 @@
                     <form method="post" enctype="multipart/form-data" action="/teacher/upload" id="teacherFrom">
                     	<!--<a>下载含年级班级数据的模板</a>-->
                     	<input type="hidden" value="teacher" name='type' />
+                    	<input type="hidden" name="term" class="term-hide" value="{{Term._id}}">
                         <button class="btn btn-primary">导入班主任数据</button>
                         <input type="file" name="thumbnail" onchange="uploadTeacher()" class="btn hide-input hide-input-teacher">
                     </form>	 
@@ -129,6 +131,7 @@
 		 				<a>下载模板</a>
 		 				-->
 						<input type="hidden" value="indicator" name='type' />
+						<input type="hidden" name="term" class="term-hide" value="{{Term._id}}">
                         <button class="btn btn-primary">从文件导入</button>
                         <input type="file" name="thumbnail" onchange="uploadQuota()" class="btn hide-input hide-input-quota">
                     </form>	 	 				
