@@ -328,7 +328,10 @@ angular.module('dy.services.student', [
 						if(data.code === 0){
 							Root.studentList = data.student;
 							sList = data.student;
-							Root.studentMap = data.studentList;
+							Root.studentMap = {};
+							_.each(data.student,function(item){
+								Root.studentMap[item._id] = item;
+							});
 							window.localStorage.setItem('student',JSON.stringify(sList));
 							console.log('拉学生列表成功!', data);
 							Root.$emit('status.student.load');
