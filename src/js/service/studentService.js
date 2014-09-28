@@ -19,16 +19,16 @@ angular.module('dy.services.student', [
 
 			//拉学生列表
 			function getStudentList(param,success,error){
-				if(window.localStorage.getItem('student')){
-					var list  = JSON.parse(window.localStorage.getItem('student'));
-					Root.studentList = list;
-					sList = JSON.parse(window.localStorage.getItem('student'));
-					conventStudent(list);
-					//sMap = list;
-					console.log('拉缓存学生列表成功!');
-					if(success) success(list);
-					//return;
-				}
+				// if(window.localStorage.getItem('student')){
+				// 	var list  = JSON.parse(window.localStorage.getItem('student'));
+				// 	Root.studentList = list;
+				// 	sList = JSON.parse(window.localStorage.getItem('student'));
+				// 	conventStudent(list);
+				// 	//sMap = list;
+				// 	console.log('拉缓存学生列表成功!');
+				// 	if(success) success(list);
+				// 	//return;
+				// }
 
 				var ts = new Date().getTime();
 				var body = Util.object.toUrlencodedString(param);

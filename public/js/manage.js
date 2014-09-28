@@ -308,16 +308,16 @@ angular.module('dy.services.student', [
 
 			//拉学生列表
 			function getStudentList(param,success,error){
-				if(window.localStorage.getItem('student')){
-					var list  = JSON.parse(window.localStorage.getItem('student'));
-					Root.studentList = list;
-					sList = JSON.parse(window.localStorage.getItem('student'));
-					conventStudent(list);
-					//sMap = list;
-					console.log('拉缓存学生列表成功!');
-					if(success) success(list);
-					//return;
-				}
+				// if(window.localStorage.getItem('student')){
+				// 	var list  = JSON.parse(window.localStorage.getItem('student'));
+				// 	Root.studentList = list;
+				// 	sList = JSON.parse(window.localStorage.getItem('student'));
+				// 	conventStudent(list);
+				// 	//sMap = list;
+				// 	console.log('拉缓存学生列表成功!');
+				// 	if(success) success(list);
+				// 	//return;
+				// }
 
 				var ts = new Date().getTime();
 				var body = Util.object.toUrlencodedString(param);
@@ -1307,6 +1307,10 @@ angular.module('dy.controllers.mgradelist',[
 				Root.Term = Root.termList[id];
 				Root.$emit('status.grade.change',id);
 
+				Root.$emit('status.term.load.mh');
+				Root.$emit('status.term.load.teacher');
+				Root.$emit('status.term.load.student');
+				Root.$emit('status.term.load.quota');				
 			}
 
 			Scope.selectTerm = function(id){
@@ -1385,7 +1389,7 @@ angular.module('dy.controllers.managenav',[
 			}
 
 			Root.getMode = function(){
-				console.log($location.search()['mode']);
+				//console.log($location.search()['mode']);
 				return $location.search()['mode'] || false;
 			}
 

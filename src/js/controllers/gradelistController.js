@@ -13,6 +13,11 @@ angular.module('dy.controllers.mgradelist',[
 			Root.showGrade = function(id){
 				Root.Term = Root.termList[id];
 				Root.$emit('status.grade.change',id);
+
+				Root.$emit('status.term.load.mh');
+				Root.$emit('status.term.load.teacher');
+				Root.$emit('status.term.load.student');
+				Root.$emit('status.term.load.quota');				
 			}
 
 			Scope.selectTerm = function(id){
