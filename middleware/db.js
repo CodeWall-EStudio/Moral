@@ -20,7 +20,8 @@ var studentSchema = new Schema({
     grade: Number,
     class: Number,
     pid: Number,
-    sex: Number
+    sex: Number,
+    eid : Number
 });
 // 老师
 var teacherSchema = new Schema({
