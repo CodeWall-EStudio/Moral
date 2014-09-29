@@ -1045,7 +1045,7 @@ angular.module('dy.services.quota', [
                 if(Root.myInfo._id){
                     Root.myInfo.total = pd.total;
                     _.each(obj,function(item){
-                        Root.myInfo.score[item.indicator] = {
+                        Root.myInfo.score[pd.month][item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
                             parent : item.parent
@@ -1058,11 +1058,26 @@ angular.module('dy.services.quota', [
                     var num = 0;
                     _.each(obj.scores,function(item){
                         num++;
-                        Root.studentMap[pd.student].score[item.indicator] = {
+                        Root.studentMap[pd.student].score[pd.month][item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
                             parent : item.parent
                         }
+                        try{
+                            if(!Root.nowStudent.score){
+                                Root.nowStudent.score = {};
+                            }
+                            if(!Root.nowStudent.score[pd.month]){
+                                Root.nowStudent.score[pd.month] = {};
+                            }
+                        Root.nowStudent.score[pd.month][item.indicator] = {
+                            self : item.self,
+                            teacher : item.teacher,
+                            parent : item.parent
+                        }   
+                        }catch(e){
+                            console.log(222);
+                        }                     
                     });                    
                 }
             }
@@ -1079,6 +1094,8 @@ angular.module('dy.services.quota', [
 					)
                     .success(function(data, status){
                         Root.$emit('msg.codeshow',data.code);
+                        console.log(param);
+
                     	if(data.code === 0){
                     		param._id = data.id;
                     		//Root.quotaList[data.id] = param;
