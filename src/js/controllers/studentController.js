@@ -9,6 +9,7 @@ angular.module('dy.controllers.student',[
 			function(Root,Scope,Location,Util,Mgrade,Student,CMD_SET_QUOTA){
 			console.log('load studentcontroller');
 			var url = Location.absUrl();
+			$.cookie('test-month',0);
 
 			//console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
 			if(url.indexOf('student.html') > 0 && Util.cookie.get('role') !== 'student'){

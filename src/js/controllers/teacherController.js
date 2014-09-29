@@ -9,7 +9,7 @@ angular.module('dy.controllers.teacher',[
 	.controller('teacherController',[
 		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService','quotaService',function(Root,Scope,Location,Util,Mgrade,Teacher,Student,Quota){
 			console.log('load teachercontroller');
-			
+			$.cookie('test-month',0);
 
 			if(Util.cookie.get('role') !== 'teacher'){
 				window.location.href="/teacher/login";
