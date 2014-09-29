@@ -102,8 +102,15 @@ angular.module('dy.services.student', [
 							Root.myInfo.score = data.score || [];
 							Root.myInfo.total = data.total || 0;
 							Root.myInfo.hadscore = data.hadscore;
+
+							if($.cookie('test-month')){
+								Root.myInfo.nowMonth = $.cookie('test-month');
+								Root.myInfo.defMonth = $.cookie('test-month');
+							}else{
+
 							Root.myInfo.nowMonth = data.nowmonth;
 							Root.myInfo.defMonth = data.nowmonth;
+							}
 
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;

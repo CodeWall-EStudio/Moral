@@ -207,7 +207,7 @@ angular.module('dy.controllers.quota',[
 			//打分.这里记录id和分数
 			//通知设置了分数
 			Scope.setStudentQuota = function(id,num,old){
-
+				old = old || 0;
 				nowRecord[id] = num;
 				Root.quotaMap[id].now = num;
 				Root.nowScore[id] = num;
