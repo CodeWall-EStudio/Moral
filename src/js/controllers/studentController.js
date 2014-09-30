@@ -79,7 +79,7 @@ angular.module('dy.controllers.student',[
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);
-				Root.nowStudent.total = {};
+				Root.nowStudent.totals = {};
 				Root.nowStudent.score = {};
 				Root.nowStudent.nums = {};
 				var param = {

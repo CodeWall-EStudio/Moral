@@ -41,6 +41,7 @@ angular.module('dy.services.student', [
 							sList = data.student;
 							Root.studentMap = {};
 							_.each(data.student,function(item){
+
 								Root.studentMap[item._id] = item;
 							});
 							window.localStorage.setItem('student',JSON.stringify(sList));
@@ -211,17 +212,26 @@ angular.module('dy.services.student', [
 								if(data.score.length === 0){
 
 									//if(!Root.nowStudent.score){
+									if(!Root.nowStudent.totals){
+										Root.nowStudent.totals = {};
+									}	
 										Root.nowStudent.score[param.month] = Root.defScore;
-										Root.nowStudent.total[param.month] = 0;
+										Root.nowStudent.totals[param.month] = 0;
 										Root.nowStudent.nums[param.month] = 0;
+										console.log(Root.nowStudent);
 									//}
 									return;
 								}
 								var score = convertOneScore(data.score[0]);
 								if(Root.nowStudent._id === data.score[0].student){
+
+									if(!Root.nowStudent.totals){
+										Root.nowStudent.totals = {};
+									}	
+
 									//Root.nowStudent.scorelist[Root.nowMonth] = score;
 									Root.nowStudent.score[param.month] = score.list;
-									Root.nowStudent.total[param.month] = score.total;
+									Root.nowStudent.totals[param.month] = score.total;
 									Root.nowStudent.nums[param.month] = score.num;
 								}
 								Root.$emit('status.student.scoreload')

@@ -138,6 +138,8 @@ angular.module('dy.services.quota', [
                             parent : item.parent
                         }
                     });
+                                        //console.log(Root.myInfo);
+
                 //老师
                 }else{
 
@@ -253,6 +255,7 @@ angular.module('dy.services.quota', [
                     });
                     Root.myInfo.max[Root.nowMonth] = max.total;
                 }else{
+                    console.log(data);
                    for(var i in data){
                         if(!Root.studentMap[data[i].student]){
                             delete data[i];

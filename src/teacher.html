@@ -112,7 +112,14 @@
  						</td>
  						<td>{{item.grade}}年级</td>
  						<td>{{item.class}}班</td>
- 						<td>{{item.totals[nowMonth]}}</td>
+ 						<td>
+ 							<span ng-show="item.totals[nowMonth]">
+								{{item.totals[nowMonth]}}
+ 							</span>
+ 							<span ng-show="!item.totals[nowMonth]">
+ 								未评分
+ 							</span>
+ 						</td>
  					</tr>
  				</table>
  			</div>
@@ -210,7 +217,7 @@
  						{{item.desc}}
  					</dd>
  					<dd class="score-result">
- 						<ul class="write-score">
+ 						<ul class="write-score teacher-score-list">
  							<li>
  								打分
  								{{nowScore[item.id]}}

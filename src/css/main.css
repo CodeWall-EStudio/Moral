@@ -356,6 +356,42 @@ i.copper{
 	cursor:pointer;
 }
 
+.teacher-score-list i{
+	background:url(imgs/star1.png) no-repeat;	
+}
+
+.teacher-score-list div.num1 i{
+	background:url(imgs/star.png) no-repeat;
+}
+.teacher-score-list div.num1 i:nth-child(1){
+	background:url(imgs/star1.png) no-repeat;
+}
+.teacher-score-list div.num2 i{
+	background:url(imgs/star.png) no-repeat;
+}
+.teacher-score-list div.num2 i:nth-child(1){
+	background:url(imgs/star1.png) no-repeat;
+}
+.teacher-score-list div.num2 i:nth-child(2){
+	background:url(imgs/star1.png) no-repeat;
+}
+.teacher-score-list div.num3 i:nth-child(4){
+	background:url(imgs/star.png) no-repeat;
+}
+.teacher-score-list div.num3 i:nth-child(5){
+	background:url(imgs/star.png) no-repeat;
+}
+
+.teacher-score-list div.num4 i{
+	background:url(imgs/star1.png) no-repeat;
+}
+.teacher-score-list div.num4 i:nth-child(5){
+	background:url(imgs/star.png) no-repeat;
+}
+.teacher-score-list div.num5 i{
+	background:url(imgs/star1.png) no-repeat;
+}
+
 .hide{
 	display:hide;
 }
