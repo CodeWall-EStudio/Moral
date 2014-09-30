@@ -205,10 +205,13 @@
 
  				<dl class="content-summary"  ng-class="{hide:getMode() !== 'record'}" ng-model="nowStudent">
  					<dt>
+ 						<span ng-show="nowStudent.name">
  						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 {{defMonth-1}}月</div>
  						<div class="score-num">打分: <span ng-model=equaRecord>{{allScore}}</span></div>
 						<button class="btn btn-default btn-sub" ng-click="saveStudentQuota()">保存</button>
 						<button class="btn btn-default" ng-click="resetStudentQuota()">复位</button>
+						</span>
+						<span ng-show="!nowStudent.name">还没有选择要评价的学生</span>
  					</dt>
  				</dl> 				
  				<dl class="content-score"  ng-class="{hide:getMode() !== 'record'}" ng-repeat="item in quotaList" ng-model="quotaList">

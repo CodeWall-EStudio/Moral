@@ -28,6 +28,7 @@ angular.module('dy.controllers.indexnav',[
 			}	
 
 			function resetQuota(){
+				Root.nowStudent = null;
 				_.each(Root.quotaList,function(item){
 					delete item.now;
 				});

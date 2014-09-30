@@ -107,12 +107,14 @@ angular.module('dy.services.student', [
 							Root.myInfo.hadscore = data.hadscore;
 
 							if($.cookie('test-month')){
+								console.log(123);
 								Root.myInfo.nowMonth = $.cookie('test-month');
 								Root.myInfo.defMonth = $.cookie('test-month');
 							}else{
 
 							Root.myInfo.nowMonth = data.nowmonth;
 							Root.myInfo.defMonth = data.nowmonth;
+							Root.defMonth = data.nowmonth;
 							}
 
 							Root.myInfo.term = data.term;
@@ -133,7 +135,7 @@ angular.module('dy.services.student', [
 								Root.nowMonth = data.nowmonth;	
 							}
 							
-							Root.studentMonth = data.nowmonth;
+							Root.studentMonth = 0;//data.nowmonth;
 
 							Root.nowDay = data.day;
 							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){

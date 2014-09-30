@@ -396,12 +396,14 @@ angular.module('dy.services.student', [
 							Root.myInfo.hadscore = data.hadscore;
 
 							if($.cookie('test-month')){
+								console.log(123);
 								Root.myInfo.nowMonth = $.cookie('test-month');
 								Root.myInfo.defMonth = $.cookie('test-month');
 							}else{
 
 							Root.myInfo.nowMonth = data.nowmonth;
 							Root.myInfo.defMonth = data.nowmonth;
+							Root.defMonth = data.nowmonth;
 							}
 
 							Root.myInfo.term = data.term;
@@ -422,7 +424,7 @@ angular.module('dy.services.student', [
 								Root.nowMonth = data.nowmonth;	
 							}
 							
-							Root.studentMonth = data.nowmonth;
+							Root.studentMonth = 0;//data.nowmonth;
 
 							Root.nowDay = data.day;
 							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){
@@ -1055,42 +1057,61 @@ angular.module('dy.services.quota', [
                 var obj = pd.scores;
                 //学生
                 if(Root.myInfo._id){
-                    Root.myInfo.total = pd.total;
+                    var ot = Root.myInfo.total[pd.month];
+                    Root.myInfo.total[pd.month] = pd.total;
+                    Root.myInfo.total[0] += pd.total - ot;
                     _.each(obj,function(item){
+                        var os = Root.myInfo.score[pd.month][item.indicator].self || 0,
+                            op = Root.myInfo.score[pd.month][item.indicator].parent || 0,
+                            ott = Root.myInfo.score[pd.month][item.indicator].teacher || 0;
                         Root.myInfo.score[pd.month][item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
                             parent : item.parent
                         }
+                        Root.myInfo.score[0][item.indicator].self += item.self - os;
+                        Root.myInfo.score[0][item.indicator].parent += item.parent - op;
+                        Root.myInfo.score[0][item.indicator].teacher += item.teacher - ott;
                     });
                                         //console.log(Root.myInfo);
 
                 //老师
                 }else{
-
+                    var ot = Root.studentMap[pd.student].total;
                     Root.studentMap[pd.student].total = pd.total;
+                    Root.studentMap[0] += pd.total - ot;
                     var num = 0;
                     _.each(obj.scores,function(item){
                         num++;
+                        var os = Root.studentMap[pd.student].score[pd.month][item.indicator].self || 0,
+                            op = Root.studentMap[pd.student].score[pd.month][item.indicator].parent || 0,
+                            ott = Root.studentMap[pd.student].score[pd.month][item.indicator].teacher || 0;
+
+
                         Root.studentMap[pd.student].score[pd.month][item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
                             parent : item.parent
                         }
+                        if(!Root.studentMap[pd.student].score[0]){
+                            Root.studentMap[pd.student].score[0] = {};
+                        }
+                        Root.studentMap[pd.student].score[0][item.indicator].self += item.self - os;
+                        Root.studentMap[pd.student].score[0][item.indicator].parent += item.parent - op;
+                        Root.studentMap[pd.student].score[0][item.indicator].teacher += item.teacher - ott;
                         try{
                             if(!Root.nowStudent.score){
                                 Root.nowStudent.score = {};
                             }
                             if(!Root.nowStudent.score[pd.month]){
                                 Root.nowStudent.score[pd.month] = {};
-                            }
+                            }     
                         Root.nowStudent.score[pd.month][item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
                             parent : item.parent
                         }   
                         }catch(e){
-                            console.log(222);
                         }                     
                     });                    
                 }
