@@ -101,7 +101,7 @@ angular.module('dy.controllers.quota',[
 				var list = [];
 				var total = 0;
 				var score;
-				if(Root.nowStudent._id){
+				if(Root.nowStudent && Root.nowStudent._id){
 					score = Root.nowStudent.score[Root.defMonth-1] || {};
 				}else{
 					score = Root.myInfo.score[Root.myInfo.defMonth-1];
@@ -198,7 +198,7 @@ angular.module('dy.controllers.quota',[
 
 			//重置学生分数
 			Scope.resetStudentQuota = function(){
-				Scope.allScore = 0;
+				Scope.allScore = Root.quotaList.length *5;
 				for(var i in Root.quotaMap){
 					Root.quotaMap[i].now = 0;
 				}
@@ -238,7 +238,14 @@ angular.module('dy.controllers.quota',[
 
 			//学生变动
 			Root.$on('status.student.change',function(){
-				Root.nowScore = {};
+				Root.nowScore = {
+					total : Root.quotaList.length * 5
+				};
+				Scope.allScore = Root.quotaList.length *5;
+				console.log(Scope.allScore);
+				_.each(Root.quotaList,function(item){
+					Root.nowScore[item._id] = 5;
+				});
 				Scope.resetStudentQuota();
 			});
 
@@ -258,8 +265,7 @@ angular.module('dy.controllers.quota',[
 
 
 			Root.$on('status.student.quotacheng',function(){
-				Scope.allScore = 0;
-				//家长
+				Scope.allScore = 0
 				if(Root.getMode() === 'parent'){
 					getOneScores('parent');
 				//学生

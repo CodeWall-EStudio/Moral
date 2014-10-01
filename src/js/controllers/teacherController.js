@@ -9,7 +9,7 @@ angular.module('dy.controllers.teacher',[
 	.controller('teacherController',[
 		'$rootScope', '$scope','$location','Util','mGradeService','teacherService','studentService','quotaService',function(Root,Scope,Location,Util,Mgrade,Teacher,Student,Quota){
 			console.log('load teachercontroller');
-			$.cookie('test-month',null);
+			//$.cookie('test-month',null);
 
 			if(Util.cookie.get('role') !== 'teacher'){
 				window.location.href="/teacher/login";
@@ -92,9 +92,15 @@ angular.module('dy.controllers.teacher',[
 			});
 
 			Root.$on('status.filter.student',function(){
+				var month = 0;
+				if(Root.nowMonth == 12){
+					month = 1;
+				}else if(Root.nowMonth){
+					month = Root.nowMonth-1;
+				}
 				var param = {
 					term : Root.Term._id,
-					month : Root.nowMonth
+					month : month//Root.nowMonth==12?1:Root.nowMonth-1
 				}				
 				if(Root.Teacher.auth === 3){
 					Quota.getScores(param);

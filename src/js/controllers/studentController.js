@@ -73,7 +73,7 @@ angular.module('dy.controllers.student',[
 			Root.selectStudent = function(id){
 				var month = Root.nowMonth;
 				if(Root.getMode() === 'record'){
-					month = Root.defMonth-1;
+					month = Root.defMonth;
 				}
 
 				Root.nowStudent = {};
@@ -85,7 +85,7 @@ angular.module('dy.controllers.student',[
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
-					month : month
+					month : month-1>0?month-1:0
 				}
 				Student.getScore(param);
 				Root.$emit('status.student.change',true);
