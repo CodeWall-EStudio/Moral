@@ -80,6 +80,7 @@ angular.module('dy.controllers.managehandernav',[
 					return;
 				}
 				Root.nowMonth = month;
+				Root.$emit('status.month.change');
 				Root.$emit('status.filter.student');
 			};
 
@@ -143,7 +144,6 @@ angular.module('dy.controllers.managehandernav',[
 					Student.getScore(obj);
 				}
 			});
-
 
 			if(url.indexOf('teacher.html') > 0){
 				//Mgrade.getTermList();

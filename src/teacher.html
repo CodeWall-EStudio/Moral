@@ -192,11 +192,11 @@
 	 							</li>
 	 							<li>
 	 								自评
-	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth-1?nowMonth-1:0][item._id].self || 0}}</div>
+	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth-1>0?nowMonth-1:0][item._id].self || 0}}</div>
 	 							</li>
 	 							<li>
 	 								家长
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1?nowMonth-1:0][item._id].parent || 0}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1>0?nowMonth-1:0][item._id].parent || 0}}</div>
 	 							</li>
 
 	 						</ul>
@@ -224,13 +224,13 @@
  						<ul class="write-score teacher-score-list">
  							<li>
  								打分
- 								{{nowScore[item.id]}}
+ 								{{nowScore[item.id]?nowScore[item.id]:5}}
  								<div class="num{{nowScore[item.id]}}">
- 									<i ng-click="setStudentQuota(item.id,1,nowScore[item.id])"></i>
- 									<i ng-click="setStudentQuota(item.id,2,nowScore[item.id])"></i>
- 									<i ng-click="setStudentQuota(item.id,3,nowScore[item.id])"></i>
- 									<i ng-click="setStudentQuota(item.id,4,nowScore[item.id])"></i>
- 									<i ng-click="setStudentQuota(item.id,5,nowScore[item.id])"></i>
+ 									<i ng-click="setStudentQuota(item.id,1,nowScore[item.id]?nowScore[item.id]:5)"></i>
+ 									<i ng-click="setStudentQuota(item.id,2,nowScore[item.id]?nowScore[item.id]:5)"></i>
+ 									<i ng-click="setStudentQuota(item.id,3,nowScore[item.id]?nowScore[item.id]:5)"></i>
+ 									<i ng-click="setStudentQuota(item.id,4,nowScore[item.id]?nowScore[item.id]:5)"></i>
+ 									<i ng-click="setStudentQuota(item.id,5,nowScore[item.id]?nowScore[item.id]:5)"></i>
  								</div>
  							</li>
  						</ul>

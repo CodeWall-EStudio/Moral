@@ -1575,6 +1575,7 @@ angular.module('dy.controllers.managehandernav',[
 					return;
 				}
 				Root.nowMonth = month;
+				Root.$emit('status.month.change');
 				Root.$emit('status.filter.student');
 			};
 
@@ -1638,7 +1639,6 @@ angular.module('dy.controllers.managehandernav',[
 					Student.getScore(obj);
 				}
 			});
-
 
 			if(url.indexOf('teacher.html') > 0){
 				//Mgrade.getTermList();
@@ -1794,6 +1794,23 @@ angular.module('dy.controllers.student',[
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				//console.log(d.id,d.num);
 			});		
+
+			Root.$on('status.month.change',function(){
+				if(Root.nowStudent._id){
+					var month = Root.nowMonth;
+
+					if(!Root.nowStudent.score[month]){
+						var param = {
+							term : Root.Term._id,
+							student : Root.nowStudent._id,
+							month : month-1>0?month-1:0
+						}
+						Student.getScore(param);
+						Root.$emit('status.student.change',true);	
+					}
+				
+				}
+			});			
 
 			Root.$on('status.quota.load',function(e,d){
 				if(!$.isEmptyObject(Root.myInfo)){
@@ -2081,29 +2098,37 @@ angular.module('dy.controllers.quota',[
 				}else{
 					score = Root.myInfo.score[Root.myInfo.defMonth-1];
 				}
-				// console.log(score);
 				_.each(Root.nowScore,function(item,idx){
-					var self,parent,teacher;
-					if($.isEmptyObject(score) || !score[idx]){
-						self = 0;
-						parent = 0;
-						teacher = 0;
-					}else{
-						self = score[idx].self || 0;
-						parent = score[idx].parent || 0;
-						teacher = score[idx].teacher || 0;
+					if(idx!=='total'){
+						var self,parent,teacher;
+						if($.isEmptyObject(score) || !score[idx]){
+							self = 0;
+							parent = 0;
+							teacher = 0;
+						}else{
+							self = score[idx].self || 0;
+							parent = score[idx].parent || 0;
+							teacher = score[idx].teacher || 0;
+						}
+						
+						var obj = {
+							indicator:idx,
+							self : self,
+							parent : parent,
+							teacher : teacher
+						}
+						obj[type]  = item
+						//if(Root.nowStudent && Root.nowStudent._id){
+						//	total += obj.self + obj.parent;
+						//}else{
+							total += obj.self + obj.parent+ obj.teacher;
+						//}
+						list.push(obj);
 					}
-					
-					var obj = {
-						indicator:idx,
-						self : self,
-						parent : parent,
-						teacher : teacher
-					}
-					obj[type]  = item
-					total += obj.self + obj.parent+ obj.teacher;
-					list.push(obj);
 				});
+				if(Root.nowStudent && Root.nowStudent._id){
+					//total += Scope.allScore;
+				}
 				return {
 					total : total,
 					list : list
@@ -2162,8 +2187,7 @@ angular.module('dy.controllers.quota',[
 				sp = getStudentNewQuota(type);
 				param.scores = sp.list;
 				param.total = sp.total;
-				// console.log(param);
-				// return;
+				console.log(param);
 				// console.log(Root.nowStudent);
 				//return;
 				Quota.saveStudentQuota({
@@ -2184,23 +2208,33 @@ angular.module('dy.controllers.quota',[
 			Scope.setStudentQuota = function(id,num,old){
 				old = old || 0;
 				nowRecord[id] = num;
-				Root.quotaMap[id].now = num;
-				Root.nowScore[id] = num;
-				// //这里有问题..要修改下.
-				Scope.allScore -=old;
-				Scope.allScore += num;
-				Root.$emit(CMD_SET_QUOTA,{ 
-					id : id,
-					num : num
-				});
+				/*
+				if(Root.nowStudent){
+					console.log(Root.nowStudent,Root.nowStudent.score,Root.nowStudent.totals);
+				}else{
+				*/	
+					Root.quotaMap[id].now = num;
+					Root.nowScore[id] = num;
+					// //这里有问题..要修改下.
+					Scope.allScore -=old;
+					Scope.allScore += num;
+					Root.$emit(CMD_SET_QUOTA,{ 
+						id : id,
+						num : num
+					});					
+				//}
+
 			}
 
 			Root.$on('status.student.scoreload',function(){
 
 				//Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
 				_.each(Root.nowStudent.score[Root.scoreMonth],function(item,idx){
+					if(idx != 'undefined'){
 					Root.nowScore[idx] = item.teacher;
-					Scope.allScore += item.teacher; 
+					Scope.allScore -= (5-item.teacher);
+					}else{
+					} 
 				});
 			});
 
@@ -2217,7 +2251,6 @@ angular.module('dy.controllers.quota',[
 					total : Root.quotaList.length * 5
 				};
 				Scope.allScore = Root.quotaList.length *5;
-				console.log(Scope.allScore);
 				_.each(Root.quotaList,function(item){
 					Root.nowScore[item._id] = 5;
 				});

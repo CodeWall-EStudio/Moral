@@ -147,6 +147,23 @@ angular.module('dy.controllers.student',[
 				//console.log(d.id,d.num);
 			});		
 
+			Root.$on('status.month.change',function(){
+				if(Root.nowStudent._id){
+					var month = Root.nowMonth;
+
+					if(!Root.nowStudent.score[month]){
+						var param = {
+							term : Root.Term._id,
+							student : Root.nowStudent._id,
+							month : month-1>0?month-1:0
+						}
+						Student.getScore(param);
+						Root.$emit('status.student.change',true);	
+					}
+				
+				}
+			});			
+
 			Root.$on('status.quota.load',function(e,d){
 				if(!$.isEmptyObject(Root.myInfo)){
 					var param = {
