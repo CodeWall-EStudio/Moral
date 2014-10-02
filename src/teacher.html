@@ -65,7 +65,7 @@
 		 			</div>		 				 			
 		 			<ul class="nav grade-dom grade-list">
 		 				<li ng-class="{active:nowMonth === 0}"  ng-click="selectMonths(0)">本学期</li>
-		 				<li ng-repeat="item in Term.months" ng-click="selectMonths(item.s)" ng-class="{active:nowMonth === item.s,disabled:(defMonth <= item.s && defMonth > 2)}">{{item.s}}月
+		 				<li ng-repeat="item in Term.months" ng-click="selectMonths(item.s)" ng-class="{active:nowMonth === item.s,disabled:checkMonths(defMonth,item.e,Term.months)}">{{item.s}}月
 		 				</li>
 		 			</ul>
 	 			</div> 		
@@ -131,7 +131,7 @@
  					<dt>
  						{{nowGrade}}年级 {{nowClass}}班 概要
  						<span ng-hide="nowMonth==0">
- 						{{nowMonth==1?12:nowMonth-1}}月
+ 						{{nowMonth==1?12:nowMonth}}月
  						</span>
  						<span ng-hide="nowMonth!=0">
  						本学期
@@ -171,9 +171,9 @@
 	 						<div class="title">{{nowStudent.name}} {{nowStudent.grade}}年级 {{nowStudent.class}}班 
 
 	 							<span ng-hide="!nowMonth">
-	 							{{nowMonth-1}}月
+	 							{{nowMonth}}月
 	 							</span>
-	 							<span ng-hide="nowMonth">本学期</span> 总分: {{nowStudent.totals[nowMonth-1>0?nowMonth-1:0]}} <span ng-hide="Teacher.authority !== 3">全校排名 :{{nowStudent.nos[nowMonth-1]}} </span></div>
+	 							<span ng-hide="nowMonth">本学期</span> 总分: {{nowStudent.totals[nowMonth]}} <span ng-hide="Teacher.authority !== 3">全校排名 :{{nowStudent.nos[nowMonth]}} </span></div>
 	 						<button class="btn btn-default" ng-click="returnStudentList()">返回概要</button>
 	 					</dt>
 	 					{{nowStudnet}}
@@ -188,15 +188,15 @@
 	 						<ul class="score-list">
 	 							<li>
 	 								教师
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1>0?nowMonth-1:0][item._id].teacher || 0}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].teacher || 0}}</div>
 	 							</li>
 	 							<li>
 	 								自评
-	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth-1>0?nowMonth-1:0][item._id].self || 0}}</div>
+	 								<div ng-model="nowStudent.score.self">{{nowStudent.score[nowMonth][item._id].self || 0}}</div>
 	 							</li>
 	 							<li>
 	 								家长
-	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth-1>0?nowMonth-1:0][item._id].parent || 0}}</div>
+	 								<div ng-model="nowStudent.score.teacher">{{nowStudent.score[nowMonth][item._id].parent || 0}}</div>
 	 							</li>
 
 	 						</ul>

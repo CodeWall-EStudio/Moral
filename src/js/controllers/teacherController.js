@@ -79,6 +79,7 @@ angular.module('dy.controllers.teacher',[
 				if(Root.nowClass !== '所有'){
 					param.class = Root.nowClass;	
 				}		
+
 				Quota.getScores(param);
 			});
 
@@ -96,7 +97,7 @@ angular.module('dy.controllers.teacher',[
 				if(Root.nowMonth == 12){
 					month = 1;
 				}else if(Root.nowMonth){
-					month = Root.nowMonth-1;
+					month = Root.nowMonth;
 				}
 				var param = {
 					term : Root.Term._id,

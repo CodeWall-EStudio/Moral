@@ -35,6 +35,24 @@ angular.module('dy.controllers.indexnav',[
 				Root.allScore = 0;
 			}
 
+			Root.checkMonths = function(def,end,term){
+				if(end === 1){
+					if(def !== 1){
+						return false;
+					}else{
+						return true;
+					}
+
+				}else{
+					if(def >= end){
+						return false;
+					}else{
+						return true;
+					}
+				}
+				return false;
+			}
+
 			//退出登录
 			Root.quitLogin = function(){
 

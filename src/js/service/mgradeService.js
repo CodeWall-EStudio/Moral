@@ -64,11 +64,15 @@ angular.module('dy.services.mgrade', [
 						if(data.code === 0){
 							conventTerm(data.term);
 							if($.cookie('test-month')){
-								Root.nowMonth = $.cookie('test-month');
+								Root.nowMonth = 0;//$.cookie('test-month');
+								Root.defMonth = $.cookie('test-month');
+
 							}else{
 								Root.nowMonth = 0;//data.nowmonth;	
+								Root.defMonth = data.nowmonth;
+
 							}
-							Root.defMonth = data.nowmonth;
+							console.log(Root.defMonth);
 							Root.nowDay = data.day;
 							console.log('拉学期列表成功!', data);
 						}else{

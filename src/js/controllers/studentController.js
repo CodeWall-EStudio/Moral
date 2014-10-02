@@ -9,7 +9,7 @@ angular.module('dy.controllers.student',[
 			function(Root,Scope,Location,Util,Mgrade,Student,CMD_SET_QUOTA){
 			console.log('load studentcontroller');
 			var url = Location.absUrl();
-			$.cookie('test-month',null);
+			//$.cookie('test-month',null);
 
 			//console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
 			if(url.indexOf('student.html') > 0 && Util.cookie.get('role') !== 'student'){
@@ -75,7 +75,7 @@ angular.module('dy.controllers.student',[
 				if(Root.getMode() === 'record'){
 					month = Root.defMonth;
 				}
-
+				console.log(month);
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);
@@ -85,7 +85,7 @@ angular.module('dy.controllers.student',[
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
-					month : month-1>0?month-1:0
+					month : month
 				}
 				Student.getScore(param);
 				Root.$emit('status.student.change',true);
@@ -148,14 +148,14 @@ angular.module('dy.controllers.student',[
 			});		
 
 			Root.$on('status.month.change',function(){
-				if(Root.nowStudent._id){
+				if(Root.nowStudent && Root.nowStudent._id){
 					var month = Root.nowMonth;
 
 					if(!Root.nowStudent.score[month]){
 						var param = {
 							term : Root.Term._id,
 							student : Root.nowStudent._id,
-							month : month-1>0?month-1:0
+							month : month
 						}
 						Student.getScore(param);
 						Root.$emit('status.student.change',true);	

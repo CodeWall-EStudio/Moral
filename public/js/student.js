@@ -153,11 +153,15 @@ angular.module('dy.services.mgrade', [
 						if(data.code === 0){
 							conventTerm(data.term);
 							if($.cookie('test-month')){
-								Root.nowMonth = $.cookie('test-month');
+								Root.nowMonth = 0;//$.cookie('test-month');
+								Root.defMonth = $.cookie('test-month');
+
 							}else{
 								Root.nowMonth = 0;//data.nowmonth;	
+								Root.defMonth = data.nowmonth;
+
 							}
-							Root.defMonth = data.nowmonth;
+							console.log(Root.defMonth);
 							Root.nowDay = data.day;
 							console.log('拉学期列表成功!', data);
 						}else{
@@ -396,9 +400,9 @@ angular.module('dy.services.student', [
 							Root.myInfo.hadscore = data.hadscore;
 
 							if($.cookie('test-month')){
-								console.log(123);
-								Root.myInfo.nowMonth = $.cookie('test-month');
+								Root.myInfo.nowMonth = 0;//$.cookie('test-month');
 								Root.myInfo.defMonth = $.cookie('test-month');
+								Root.defMonth = $.cookie('test-month');
 							}else{
 
 							Root.myInfo.nowMonth = data.nowmonth;
@@ -417,12 +421,6 @@ angular.module('dy.services.student', [
 							Root.myInfo.totalScore = total;
 							Root.myInfo.max = {};
 							Root.myInfo.pre = total/Root.myInfo.allscore*100 || 0;
-
-							if($.cookie('test-month')){
-								Root.nowMonth = $.cookie('test-month');
-							}else{
-								Root.nowMonth = data.nowmonth;	
-							}
 							
 							Root.studentMonth = 0;//data.nowmonth;
 
@@ -1314,6 +1312,24 @@ angular.module('dy.controllers.indexnav',[
 				Root.allScore = 0;
 			}
 
+			Root.checkMonths = function(def,end,term){
+				if(end === 1){
+					if(def !== 1){
+						return false;
+					}else{
+						return true;
+					}
+
+				}else{
+					if(def >= end){
+						return false;
+					}else{
+						return true;
+					}
+				}
+				return false;
+			}
+
 			//退出登录
 			Root.quitLogin = function(){
 
@@ -1349,7 +1365,7 @@ angular.module('dy.controllers.student',[
 			function(Root,Scope,Location,Util,Mgrade,Student,CMD_SET_QUOTA){
 			console.log('load studentcontroller');
 			var url = Location.absUrl();
-			$.cookie('test-month',null);
+			//$.cookie('test-month',null);
 
 			//console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
 			if(url.indexOf('student.html') > 0 && Util.cookie.get('role') !== 'student'){
@@ -1415,7 +1431,7 @@ angular.module('dy.controllers.student',[
 				if(Root.getMode() === 'record'){
 					month = Root.defMonth;
 				}
-
+				console.log(month);
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);
@@ -1425,7 +1441,7 @@ angular.module('dy.controllers.student',[
 				var param = {
 					term : Root.Term._id,
 					student : Root.nowStudent._id,
-					month : month-1>0?month-1:0
+					month : month
 				}
 				Student.getScore(param);
 				Root.$emit('status.student.change',true);
@@ -1488,14 +1504,14 @@ angular.module('dy.controllers.student',[
 			});		
 
 			Root.$on('status.month.change',function(){
-				if(Root.nowStudent._id){
+				if(Root.nowStudent && Root.nowStudent._id){
 					var month = Root.nowMonth;
 
 					if(!Root.nowStudent.score[month]){
 						var param = {
 							term : Root.Term._id,
 							student : Root.nowStudent._id,
-							month : month-1>0?month-1:0
+							month : month
 						}
 						Student.getScore(param);
 						Root.$emit('status.student.change',true);	
@@ -1700,6 +1716,7 @@ angular.module('dy.controllers.quota',[
 
 			//给学生打分
 			Scope.saveStudentQuota = function(){
+				console.log(Root.defMonth);
 				//不能对整个学期打分
 				if(!Root.defMonth){
 					return;

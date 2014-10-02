@@ -107,9 +107,9 @@ angular.module('dy.services.student', [
 							Root.myInfo.hadscore = data.hadscore;
 
 							if($.cookie('test-month')){
-								console.log(123);
-								Root.myInfo.nowMonth = $.cookie('test-month');
+								Root.myInfo.nowMonth = 0;//$.cookie('test-month');
 								Root.myInfo.defMonth = $.cookie('test-month');
+								Root.defMonth = $.cookie('test-month');
 							}else{
 
 							Root.myInfo.nowMonth = data.nowmonth;
@@ -128,12 +128,6 @@ angular.module('dy.services.student', [
 							Root.myInfo.totalScore = total;
 							Root.myInfo.max = {};
 							Root.myInfo.pre = total/Root.myInfo.allscore*100 || 0;
-
-							if($.cookie('test-month')){
-								Root.nowMonth = $.cookie('test-month');
-							}else{
-								Root.nowMonth = data.nowmonth;	
-							}
 							
 							Root.studentMonth = 0;//data.nowmonth;
 

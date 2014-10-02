@@ -35,7 +35,7 @@
 				<span class="myterm">{{myInfo.term.name}} </span>
 	 			<ul class="nav grade-dom grade-list">
 	 				<li ng-class="{active:studentMonth === 0}" ng-click="selectStudentMonth(0)">本学期</li>
-	 				<li ng-repeat="item in myInfo.term.months" ng-click="selectStudentMonth(item.s)" ng-class="{active:studentMonth === item.s,disabled:(defMonth <= item.s && defMonth > 2)}">{{item.s}}月</li>
+	 				<li ng-repeat="item in myInfo.term.months" ng-click="selectStudentMonth(item.s)" ng-class="{active:studentMonth === item.s,disabled:checkMonths(defMonth,item.e,myInfo.term.months)}">{{item.s}}月</li>
 	 			</ul>				
 			</span>
 			<span ng-class="{hide:getMode() === 'my' || !getMode()}">
