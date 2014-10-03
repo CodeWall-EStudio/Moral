@@ -133,7 +133,6 @@ angular.module('dy.services.quota', [
                     var ot = Root.myInfo.total[pd.month] || 0;
                     Root.myInfo.total[pd.month] = pd.total;
                     Root.myInfo.total[0] += pd.total - ot;
-                    console.log(Root.myInfo.total);
                     _.each(obj,function(item){
                         if(!Root.myInfo.score[pd.month]){
                             Root.myInfo.score[pd.month] = {};
@@ -171,7 +170,12 @@ angular.module('dy.services.quota', [
                 //老师
                 }else{
                     var ot = Root.studentMap[pd.student].total;
-                    Root.studentMap[pd.student].total = pd.total;
+                    //Root.studentMap[pd.student].total = pd.total;
+                    if(!Root.studentMap[pd.student].totals[pd.month]){
+                        Root.studentMap[pd.student].totals[pd.month] = pd.total;
+                    }else{
+                        Root.studentMap[pd.student].totals[pd.month] = pd.total;
+                    }
                     Root.studentMap[0] += pd.total - ot;
                     var num = 0;
                     _.each(obj.scores,function(item){
@@ -226,7 +230,14 @@ angular.module('dy.services.quota', [
                         }   
                         }catch(e){
                         }                     
-                    });                    
+                    });  
+                    var obj = _.findWhere(Root.studentList,{_id : pd.student});
+                    var nobj = {};
+                        $.extend(nobj,Root.studentMap[pd.student]);
+                        obj = nobj;
+                        //obj = Root.studentMap[pd.student];
+                    //console.log(Root.studentMap[pd.student],obj);
+
                 }
             }
 
@@ -242,7 +253,6 @@ angular.module('dy.services.quota', [
 					)
                     .success(function(data, status){
                         Root.$emit('msg.codeshow',data.code);
-                        console.log(param);
 
                     	if(data.code === 0){
                     		param._id = data.id;
@@ -250,7 +260,6 @@ angular.module('dy.services.quota', [
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                             //更新分数
-
                             updateStudentData(param);
                     	}
                         console.log('[quotaService] quota crate suc =', data);
@@ -304,7 +313,11 @@ angular.module('dy.services.quota', [
                 if(!obj.totals){
                     obj.totals = {};
                 }
-                obj.totals[Root.nowMonth] = item.total;
+                var month = Root.nowMonth;
+                if(Root.getMode() === 'record'){
+                    month = Root.defMonth -1;
+                }
+                obj.totals[month] = item.total;
             }
 
             function convertScore(data){
@@ -314,7 +327,6 @@ angular.module('dy.services.quota', [
                     });
                     Root.myInfo.max[Root.nowMonth] = max.total;
                 }else{
-                    console.log(data);
                    for(var i in data){
                         if(!Root.studentMap[data[i].student]){
                             delete data[i];

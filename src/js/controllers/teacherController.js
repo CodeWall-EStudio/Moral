@@ -48,6 +48,14 @@ angular.module('dy.controllers.teacher',[
 				return num;
 			}
 
+			Root.getStudentMonth = function(){
+				if(Root.getMode() === 'record'){
+					return Root.defMonth-1;
+				}else{
+					return Root.nowMonth;
+				}
+			}
+
 			Root.showNoList = function(type){
 				var list;
 				switch(type){
@@ -94,10 +102,14 @@ angular.module('dy.controllers.teacher',[
 
 			Root.$on('status.filter.student',function(){
 				var month = 0;
+				var mode = Root.getMode();
 				if(Root.nowMonth == 12){
 					month = 1;
 				}else if(Root.nowMonth){
 					month = Root.nowMonth;
+				}
+				if(mode === 'record'){
+					month = Root.defMonth-1;
 				}
 				var param = {
 					term : Root.Term._id,
@@ -107,7 +119,6 @@ angular.module('dy.controllers.teacher',[
 					Quota.getScores(param);
 					return;
 				}
-
 				Quota.getScores(param);
 			});
 

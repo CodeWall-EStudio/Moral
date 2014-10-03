@@ -73,9 +73,8 @@ angular.module('dy.controllers.student',[
 			Root.selectStudent = function(id){
 				var month = Root.nowMonth;
 				if(Root.getMode() === 'record'){
-					month = Root.defMonth;
+					month = Root.defMonth-1;
 				}
-				console.log(month);
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);

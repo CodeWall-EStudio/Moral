@@ -114,10 +114,10 @@
  						<td>{{item.grade}}年级</td>
  						<td>{{item.class}}班</td>
  						<td>
- 							<span ng-show="item.totals[nowMonth]">
-								{{item.totals[nowMonth]}}
+ 							<span ng-show="item.totals[getStudentMonth()]">
+								{{item.totals[getStudentMonth()]}}
  							</span>
- 							<span ng-show="!item.totals[nowMonth]">
+ 							<span ng-show="!item.totals[getStudentMonth()]">
  								未评分
  							</span>
  						</td>

@@ -509,7 +509,6 @@ angular.module('dy.services.student', [
 										Root.nowStudent.score[param.month] = Root.defScore;
 										Root.nowStudent.totals[param.month] = 0;
 										Root.nowStudent.nums[param.month] = 0;
-										console.log(Root.nowStudent);
 									//}
 									return;
 								}
@@ -525,7 +524,7 @@ angular.module('dy.services.student', [
 									Root.nowStudent.totals[param.month] = score.total;
 									Root.nowStudent.nums[param.month] = score.num;
 								}
-								Root.$emit('status.student.scoreload')
+								Root.$emit('status.student.scoreload');
 							}
 
 							console.log('获取学生评分成功!',data,Root.nowStudent);
@@ -903,7 +902,6 @@ angular.module('dy.services.quota', [
                     var ot = Root.myInfo.total[pd.month] || 0;
                     Root.myInfo.total[pd.month] = pd.total;
                     Root.myInfo.total[0] += pd.total - ot;
-                    console.log(Root.myInfo.total);
                     _.each(obj,function(item){
                         if(!Root.myInfo.score[pd.month]){
                             Root.myInfo.score[pd.month] = {};
@@ -941,7 +939,12 @@ angular.module('dy.services.quota', [
                 //老师
                 }else{
                     var ot = Root.studentMap[pd.student].total;
-                    Root.studentMap[pd.student].total = pd.total;
+                    //Root.studentMap[pd.student].total = pd.total;
+                    if(!Root.studentMap[pd.student].totals[pd.month]){
+                        Root.studentMap[pd.student].totals[pd.month] = pd.total;
+                    }else{
+                        Root.studentMap[pd.student].totals[pd.month] = pd.total;
+                    }
                     Root.studentMap[0] += pd.total - ot;
                     var num = 0;
                     _.each(obj.scores,function(item){
@@ -996,7 +999,14 @@ angular.module('dy.services.quota', [
                         }   
                         }catch(e){
                         }                     
-                    });                    
+                    });  
+                    var obj = _.findWhere(Root.studentList,{_id : pd.student});
+                    var nobj = {};
+                        $.extend(nobj,Root.studentMap[pd.student]);
+                        obj = nobj;
+                        //obj = Root.studentMap[pd.student];
+                    //console.log(Root.studentMap[pd.student],obj);
+
                 }
             }
 
@@ -1012,7 +1022,6 @@ angular.module('dy.services.quota', [
 					)
                     .success(function(data, status){
                         Root.$emit('msg.codeshow',data.code);
-                        console.log(param);
 
                     	if(data.code === 0){
                     		param._id = data.id;
@@ -1020,7 +1029,6 @@ angular.module('dy.services.quota', [
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                             //更新分数
-
                             updateStudentData(param);
                     	}
                         console.log('[quotaService] quota crate suc =', data);
@@ -1074,7 +1082,11 @@ angular.module('dy.services.quota', [
                 if(!obj.totals){
                     obj.totals = {};
                 }
-                obj.totals[Root.nowMonth] = item.total;
+                var month = Root.nowMonth;
+                if(Root.getMode() === 'record'){
+                    month = Root.defMonth -1;
+                }
+                obj.totals[month] = item.total;
             }
 
             function convertScore(data){
@@ -1084,7 +1096,6 @@ angular.module('dy.services.quota', [
                     });
                     Root.myInfo.max[Root.nowMonth] = max.total;
                 }else{
-                    console.log(data);
                    for(var i in data){
                         if(!Root.studentMap[data[i].student]){
                             delete data[i];
@@ -1297,7 +1308,8 @@ angular.module('dy.controllers.indexnav',[
 			}
 			//切换模块
 			Root.switchMode = function(mode){
-                if(mode !== Scope.getMode()){
+				var oldmode = Scope.getMode();
+                if(mode !== oldmode){
                     $location.search('mode', mode);
                     resetQuota();
                     Root.$emit('status.student.quotacheng');
@@ -1429,9 +1441,8 @@ angular.module('dy.controllers.student',[
 			Root.selectStudent = function(id){
 				var month = Root.nowMonth;
 				if(Root.getMode() === 'record'){
-					month = Root.defMonth;
+					month = Root.defMonth-1;
 				}
-				console.log(month);
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);
@@ -1758,7 +1769,6 @@ angular.module('dy.controllers.quota',[
 				sp = getStudentNewQuota(type);
 				param.scores = sp.list;
 				param.total = sp.total;
-				console.log(param);
 				// console.log(Root.nowStudent);
 				//return;
 				Quota.saveStudentQuota({
@@ -1798,9 +1808,12 @@ angular.module('dy.controllers.quota',[
 			}
 
 			Root.$on('status.student.scoreload',function(){
-
+				var month = Root.nowMonth;
+				if(Root.getMode() === 'record'){
+					month = Root.defMonth-1;
+				}
 				//Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
-				_.each(Root.nowStudent.score[Root.scoreMonth],function(item,idx){
+				_.each(Root.nowStudent.score[month],function(item,idx){
 					if(idx != 'undefined'){
 					Root.nowScore[idx] = item.teacher;
 					Scope.allScore -= (5-item.teacher);
@@ -1850,6 +1863,14 @@ angular.module('dy.controllers.quota',[
 				//学生
 				}else if(Root.getMode() === 'self'){
 					getOneScores('self');
+				}else if(Root.getMode() === 'record'){
+					if(!Root.myInfo._id){
+						Root.$emit('status.filter.student');
+					}
+				}else{
+					if(!Root.myInfo._id){
+						Root.$emit('status.filter.student');
+					}					
 				}
 			});
 
@@ -1865,7 +1886,6 @@ angular.module('dy.controllers.quota',[
 					class : Root.myInfo.class,
 					month : Root.studentMonth
 				}
-				console.log(Root.myInfo)
 				Quota.getScores(param);
 			});
 

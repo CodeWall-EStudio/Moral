@@ -20,7 +20,8 @@ angular.module('dy.controllers.indexnav',[
 			}
 			//切换模块
 			Root.switchMode = function(mode){
-                if(mode !== Scope.getMode()){
+				var oldmode = Scope.getMode();
+                if(mode !== oldmode){
                     $location.search('mode', mode);
                     resetQuota();
                     Root.$emit('status.student.quotacheng');

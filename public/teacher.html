@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1412252410857">
+  <link rel="stylesheet" href="css/main.css?t=1412262212157">
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -104,10 +104,10 @@
  						<td>{{item.grade}}年级</td>
  						<td>{{item.class}}班</td>
  						<td>
- 							<span ng-show="item.totals[nowMonth]">
-								{{item.totals[nowMonth]}}
+ 							<span ng-show="item.totals[getStudentMonth()]">
+								{{item.totals[getStudentMonth()]}}
  							</span>
- 							<span ng-show="!item.totals[nowMonth]">
+ 							<span ng-show="!item.totals[getStudentMonth()]">
  								未评分
  							</span>
  						</td>
@@ -264,7 +264,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/teacher.js?t=1412252410857"></script>
+	<script src="js/teacher.js?t=1412262212157"></script>
 
  </body>
  </html>

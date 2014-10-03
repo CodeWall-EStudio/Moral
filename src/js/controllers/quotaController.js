@@ -196,7 +196,6 @@ angular.module('dy.controllers.quota',[
 				sp = getStudentNewQuota(type);
 				param.scores = sp.list;
 				param.total = sp.total;
-				console.log(param);
 				// console.log(Root.nowStudent);
 				//return;
 				Quota.saveStudentQuota({
@@ -236,9 +235,12 @@ angular.module('dy.controllers.quota',[
 			}
 
 			Root.$on('status.student.scoreload',function(){
-
+				var month = Root.nowMonth;
+				if(Root.getMode() === 'record'){
+					month = Root.defMonth-1;
+				}
 				//Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
-				_.each(Root.nowStudent.score[Root.scoreMonth],function(item,idx){
+				_.each(Root.nowStudent.score[month],function(item,idx){
 					if(idx != 'undefined'){
 					Root.nowScore[idx] = item.teacher;
 					Scope.allScore -= (5-item.teacher);
@@ -288,6 +290,14 @@ angular.module('dy.controllers.quota',[
 				//学生
 				}else if(Root.getMode() === 'self'){
 					getOneScores('self');
+				}else if(Root.getMode() === 'record'){
+					if(!Root.myInfo._id){
+						Root.$emit('status.filter.student');
+					}
+				}else{
+					if(!Root.myInfo._id){
+						Root.$emit('status.filter.student');
+					}					
 				}
 			});
 
@@ -303,7 +313,6 @@ angular.module('dy.controllers.quota',[
 					class : Root.myInfo.class,
 					month : Root.studentMonth
 				}
-				console.log(Root.myInfo)
 				Quota.getScores(param);
 			});
 

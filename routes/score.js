@@ -54,8 +54,6 @@ module.exports = function score(method) {
                 conn2 = {grade: g, class: c};
             }
             conn2.term = t;
-            console.log(conn1);
-            console.log(conn2);
             var studentModel = db.getStudentModel();
             studentModel.find(conn2, function(err, students) {
                 if (err) {
@@ -72,8 +70,6 @@ module.exports = function score(method) {
                             totalObj[t_index] = 1;
                         }
                     }
-					console.log(sArr);
-					console.log(conn1);
                     scoreModel.find(conn1).where('student').in(sArr).exec(function(err, scores) {
                         if (err) {
                             console.error(err);
@@ -83,15 +79,30 @@ module.exports = function score(method) {
                             var countObj = new Object();
                             var index;
                             for(var i = 0; i < scores.length; i++) {
+
                                 if (m != '0') {
                                     sObj[scores[i].student] = scores[i];
                                 } else {
                                     if (sObj[scores[i].student]) {
-                                       sObj[scores[i].student].total += scores[i].total;
+                                        var tt = 0;
+                                        for(var n =0;n< scores[i].scores.length;n++){
+                                            var nit = scores[i].scores[n];
+                                            if(nit.indicator){
+                                                tt +=nit.self+nit.parent+nit.teacher;
+                                            }
+                                     
+                                        }
+                                       sObj[scores[i].student].total += tt;
+                                       /*
+                                        if(scores[i].student == '5400f8248f57d3f901733601'){
+                                                console.log(tt);
+                                                console.log(sObj[scores[i].student].total);
+                                                //console.log(scores[i].scores[m])
+                                        }
+                                        */
                                     } else {
                                         sObj[scores[i].student] = scores[i];
                                     }
-
                                 }
                                 index = 'c_' + scores[i].grade + '_' + scores[i].class;
                                 if (countObj[index]) {

@@ -216,7 +216,6 @@ angular.module('dy.services.student', [
 										Root.nowStudent.score[param.month] = Root.defScore;
 										Root.nowStudent.totals[param.month] = 0;
 										Root.nowStudent.nums[param.month] = 0;
-										console.log(Root.nowStudent);
 									//}
 									return;
 								}
@@ -232,7 +231,7 @@ angular.module('dy.services.student', [
 									Root.nowStudent.totals[param.month] = score.total;
 									Root.nowStudent.nums[param.month] = score.num;
 								}
-								Root.$emit('status.student.scoreload')
+								Root.$emit('status.student.scoreload');
 							}
 
 							console.log('获取学生评分成功!',data,Root.nowStudent);
