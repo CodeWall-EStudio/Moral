@@ -2255,7 +2255,11 @@ angular.module('dy.controllers.quota',[
 
 			//重置学生分数
 			Scope.resetStudentQuota = function(){
-				Scope.allScore = Root.quotaList.length *5;
+				if(Root.myInfo._id){
+					Scope.allScore = 0;
+				}else{
+					Scope.allScore = Root.quotaList.length *5;
+				}
 				for(var i in Root.quotaMap){
 					Root.quotaMap[i].now = 0;
 				}

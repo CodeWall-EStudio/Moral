@@ -65,7 +65,11 @@
  				</ul>
  				<div class="my-grade">
  					<p>{{myInfo.grade}}年级 {{myInfo.class}}班</p>
- 					<p>{{studentMonth}}月 最高得分 {{myInfo.max[nowMonth]}}</p>
+ 					<p>
+ 						<span ng-hide="studentMonth===0">
+ 						{{studentMonth}}月
+ 						</span>
+ 						<span ng-hide="studentMonth">本学期</span> 最高得分 {{myInfo.max[nowMonth]}}</p>
  				</div>
  			</div>
  			<!--自评说明-->
