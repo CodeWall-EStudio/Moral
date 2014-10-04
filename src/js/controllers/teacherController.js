@@ -87,7 +87,6 @@ angular.module('dy.controllers.teacher',[
 				if(Root.nowClass !== '所有'){
 					param.class = Root.nowClass;	
 				}		
-
 				Quota.getScores(param);
 			});
 
@@ -103,11 +102,11 @@ angular.module('dy.controllers.teacher',[
 			Root.$on('status.filter.student',function(){
 				var month = 0;
 				var mode = Root.getMode();
-				if(Root.nowMonth == 12){
-					month = 1;
-				}else if(Root.nowMonth){
+				// if(Root.nowMonth == 12){
+				// 	month = 1;
+				// }else if(Root.nowMonth){
 					month = Root.nowMonth;
-				}
+				//}
 				if(mode === 'record'){
 					month = Root.defMonth-1;
 				}
@@ -119,6 +118,7 @@ angular.module('dy.controllers.teacher',[
 					Quota.getScores(param);
 					return;
 				}
+				console.log(param);
 				Quota.getScores(param);
 			});
 

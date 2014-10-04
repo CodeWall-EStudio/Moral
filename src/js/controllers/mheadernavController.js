@@ -98,15 +98,15 @@ angular.module('dy.controllers.managehandernav',[
 			}
 
 			Root.checkMonths = function(def,end,term){
+				
 				if(end === 1){
-					if(def !== 1){
+					if(def === 1){
 						return false;
 					}else{
 						return true;
 					}
-
 				}else{
-					if(def >= end){
+					if(def >= end || def === 1){
 						return false;
 					}else{
 						return true;

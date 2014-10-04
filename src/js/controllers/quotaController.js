@@ -101,10 +101,13 @@ angular.module('dy.controllers.quota',[
 				var list = [];
 				var total = 0;
 				var score;
+				
 				if(Root.nowStudent && Root.nowStudent._id){
-					score = Root.nowStudent.score[Root.defMonth-1] || {};
+					var month = Root.defMonth;
+					score = Root.nowStudent.score[month===1?12:month-1] || {};
 				}else{
-					score = Root.myInfo.score[Root.myInfo.defMonth-1];
+					var month = Root.myInfo.defMonth;
+					score = Root.myInfo.score[month===1?12:month-1];
 				}
 				_.each(Root.nowScore,function(item,idx){
 					if(idx!=='total'){
@@ -198,7 +201,6 @@ angular.module('dy.controllers.quota',[
 				param.scores = sp.list;
 				param.total = sp.total;
 				// console.log(Root.nowStudent);
-				//return;
 				Quota.saveStudentQuota({
 					score : JSON.stringify(param)
 				});
@@ -275,8 +277,9 @@ angular.module('dy.controllers.quota',[
 
 			function getOneScores(type){
 				var total = 0;	
-				if(Root.myInfo.score[Root.myInfo.defMonth-1]){
-					_.each(Root.myInfo.score[Root.myInfo.defMonth-1],function(item,idx){
+				var month = Root.myInfo.defMonth===1?12:Root.myInfo.defMonth-1;
+				if(Root.myInfo.score[month]){
+					_.each(Root.myInfo.score[month],function(item,idx){
 						Root.nowScore[idx] = item[type];
 						total += item[type];
 					});
@@ -284,8 +287,7 @@ angular.module('dy.controllers.quota',[
 					Root.nowScore = {};
 				}
 				Scope.allScore = total;
-
-			}
+			}	
 
 
 			Root.$on('status.student.quotacheng',function(){
