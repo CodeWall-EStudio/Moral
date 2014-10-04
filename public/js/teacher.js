@@ -1768,7 +1768,7 @@ angular.module('dy.controllers.student',[
 			Root.selectStudent = function(id){
 				var month = Root.nowMonth;
 				if(Root.getMode() === 'record'){
-					month = Root.defMonth-1;
+					month = Root.defMonth==1?12:Root.defMonth-1;
 				}
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
