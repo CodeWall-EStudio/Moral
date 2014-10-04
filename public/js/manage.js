@@ -1624,15 +1624,15 @@ angular.module('dy.controllers.managehandernav',[
 			}
 
 			Root.checkMonths = function(def,end,term){
+				
 				if(end === 1){
-					if(def !== 1){
+					if(def === 1){
 						return false;
 					}else{
 						return true;
 					}
-
 				}else{
-					if(def >= end){
+					if(def >= end || def === 1){
 						return false;
 					}else{
 						return true;
@@ -1990,7 +1990,6 @@ angular.module('dy.controllers.teacher',[
 				if(Root.nowClass !== '所有'){
 					param.class = Root.nowClass;	
 				}		
-
 				Quota.getScores(param);
 			});
 
@@ -2006,11 +2005,11 @@ angular.module('dy.controllers.teacher',[
 			Root.$on('status.filter.student',function(){
 				var month = 0;
 				var mode = Root.getMode();
-				if(Root.nowMonth == 12){
-					month = 1;
-				}else if(Root.nowMonth){
+				// if(Root.nowMonth == 12){
+				// 	month = 1;
+				// }else if(Root.nowMonth){
 					month = Root.nowMonth;
-				}
+				//}
 				if(mode === 'record'){
 					month = Root.defMonth-1;
 				}
@@ -2022,6 +2021,7 @@ angular.module('dy.controllers.teacher',[
 					Quota.getScores(param);
 					return;
 				}
+				console.log(param);
 				Quota.getScores(param);
 			});
 
@@ -2154,10 +2154,13 @@ angular.module('dy.controllers.quota',[
 				var list = [];
 				var total = 0;
 				var score;
+				
 				if(Root.nowStudent && Root.nowStudent._id){
-					score = Root.nowStudent.score[Root.defMonth-1] || {};
+					var month = Root.defMonth;
+					score = Root.nowStudent.score[month===1?12:month-1] || {};
 				}else{
-					score = Root.myInfo.score[Root.myInfo.defMonth-1];
+					var month = Root.myInfo.defMonth;
+					score = Root.myInfo.score[month===1?12:month-1];
 				}
 				_.each(Root.nowScore,function(item,idx){
 					if(idx!=='total'){
@@ -2251,7 +2254,6 @@ angular.module('dy.controllers.quota',[
 				param.scores = sp.list;
 				param.total = sp.total;
 				// console.log(Root.nowStudent);
-				//return;
 				Quota.saveStudentQuota({
 					score : JSON.stringify(param)
 				});
@@ -2328,8 +2330,9 @@ angular.module('dy.controllers.quota',[
 
 			function getOneScores(type){
 				var total = 0;	
-				if(Root.myInfo.score[Root.myInfo.defMonth-1]){
-					_.each(Root.myInfo.score[Root.myInfo.defMonth-1],function(item,idx){
+				var month = Root.myInfo.defMonth===1?12:Root.myInfo.defMonth-1;
+				if(Root.myInfo.score[month]){
+					_.each(Root.myInfo.score[month],function(item,idx){
 						Root.nowScore[idx] = item[type];
 						total += item[type];
 					});
@@ -2337,8 +2340,7 @@ angular.module('dy.controllers.quota',[
 					Root.nowScore = {};
 				}
 				Scope.allScore = total;
-
-			}
+			}	
 
 
 			Root.$on('status.student.quotacheng',function(){
