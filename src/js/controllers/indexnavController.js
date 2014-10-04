@@ -20,7 +20,8 @@ angular.module('dy.controllers.indexnav',[
 			}
 			//切换模块
 			Root.switchMode = function(mode){
-                if(mode !== Scope.getMode()){
+				var oldmode = Scope.getMode();
+                if(mode !== oldmode){
                     $location.search('mode', mode);
                     resetQuota();
                     Root.$emit('status.student.quotacheng');
@@ -28,10 +29,29 @@ angular.module('dy.controllers.indexnav',[
 			}	
 
 			function resetQuota(){
+				Root.nowStudent = null;
 				_.each(Root.quotaList,function(item){
 					delete item.now;
 				});
 				Root.allScore = 0;
+			}
+
+			Root.checkMonths = function(def,end,term){
+				if(end === 1){
+					if(def !== 1){
+						return false;
+					}else{
+						return true;
+					}
+
+				}else{
+					if(def >= end){
+						return false;
+					}else{
+						return true;
+					}
+				}
+				return false;
 			}
 
 			//退出登录

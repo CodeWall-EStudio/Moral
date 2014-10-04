@@ -74,7 +74,7 @@ jQuery.cookie = function(name, value, options) {
   var Cookie = jQuery.cookie;
         $("#setMonth").click(function(){
           var val = parseInt($("#TestMonth").val());
-          if(val > 0 && val < 12){
+          if(val > 0 && val <= 12){
             $.cookie('test-month',val);
           }
         });

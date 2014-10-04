@@ -9,6 +9,7 @@ angular.module('dy.controllers.student',[
 			function(Root,Scope,Location,Util,Mgrade,Student,CMD_SET_QUOTA){
 			console.log('load studentcontroller');
 			var url = Location.absUrl();
+			//$.cookie('test-month',null);
 
 			//console.log('skey',Util.cookie.get('skey'),Util.cookie.get('role'));
 			if(url.indexOf('student.html') > 0 && Util.cookie.get('role') !== 'student'){
@@ -74,11 +75,10 @@ angular.module('dy.controllers.student',[
 				if(Root.getMode() === 'record'){
 					month = Root.defMonth-1;
 				}
-
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
 				$.extend(Root.nowStudent,st);
-				Root.nowStudent.total = {};
+				Root.nowStudent.totals = {};
 				Root.nowStudent.score = {};
 				Root.nowStudent.nums = {};
 				var param = {
@@ -145,6 +145,23 @@ angular.module('dy.controllers.student',[
 			Root.$on(CMD_SET_QUOTA,function(e,d){
 				//console.log(d.id,d.num);
 			});		
+
+			Root.$on('status.month.change',function(){
+				if(Root.nowStudent && Root.nowStudent._id){
+					var month = Root.nowMonth;
+
+					if(!Root.nowStudent.score[month]){
+						var param = {
+							term : Root.Term._id,
+							student : Root.nowStudent._id,
+							month : month
+						}
+						Student.getScore(param);
+						Root.$emit('status.student.change',true);	
+					}
+				
+				}
+			});			
 
 			Root.$on('status.quota.load',function(e,d){
 				if(!$.isEmptyObject(Root.myInfo)){

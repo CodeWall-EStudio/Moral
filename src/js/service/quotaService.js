@@ -130,27 +130,114 @@ angular.module('dy.services.quota', [
                 var obj = pd.scores;
                 //学生
                 if(Root.myInfo._id){
-                    Root.myInfo.total = pd.total;
+                    var ot = Root.myInfo.total[pd.month] || 0;
+                    Root.myInfo.total[pd.month] = pd.total;
+                    Root.myInfo.total[0] += pd.total - ot;
                     _.each(obj,function(item){
-                        Root.myInfo.score[item.indicator] = {
+                        if(!Root.myInfo.score[pd.month]){
+                            Root.myInfo.score[pd.month] = {};
+                        }
+                        if(!Root.myInfo.score[pd.month][item.indicator]){
+                            Root.myInfo.score[pd.month][item.indicator] = {
+                                self : 0,
+                                parent : 0,
+                                teacher : 0
+                            }
+                        }
+                        var os = Root.myInfo.score[pd.month][item.indicator].self || 0,
+                            op = Root.myInfo.score[pd.month][item.indicator].parent || 0,
+                            ott = Root.myInfo.score[pd.month][item.indicator].teacher || 0;
+                        Root.myInfo.score[pd.month][item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
                             parent : item.parent
                         }
+                        if(!Root.myInfo.score[0][item.indicator]){
+                            Root.myInfo.score[0][item.indicator] = {
+                                self : item.self,
+                                parent : item.parent,
+                                teacher : item.teacher
+                            };
+
+                        }else{
+                            Root.myInfo.score[0][item.indicator].self += item.self - os;
+                            Root.myInfo.score[0][item.indicator].parent += item.parent - op;
+                            Root.myInfo.score[0][item.indicator].teacher += item.teacher - ott;                            
+                        }
                     });
+                                        //console.log(Root.myInfo);
+
                 //老师
                 }else{
-
-                    Root.studentMap[pd.student].total = pd.total;
+                    var ot = Root.studentMap[pd.student].total;
+                    //Root.studentMap[pd.student].total = pd.total;
+                    if(!Root.studentMap[pd.student].totals[pd.month]){
+                        Root.studentMap[pd.student].totals[pd.month] = pd.total;
+                    }else{
+                        Root.studentMap[pd.student].totals[pd.month] = pd.total;
+                    }
+                    Root.studentMap[0] += pd.total - ot;
                     var num = 0;
                     _.each(obj.scores,function(item){
                         num++;
-                        Root.studentMap[pd.student].score[item.indicator] = {
+                        if(!Root.studentMap[pd.student].score[pd.month]){
+                            Root.studentMap[pd.student].score[pd.month] = {};
+                        }
+                        if(!Root.studentMap[pd.student].score[pd.month][item.indicator]){
+                            Root.studentMap[pd.student].score[pd.month][item.indicator] = {
+                                self : 0,
+                                parent : 0,
+                                teacher : 0
+                            }
+                        }
+                        var os = Root.studentMap[pd.student].score[pd.month][item.indicator].self || 0,
+                            op = Root.studentMap[pd.student].score[pd.month][item.indicator].parent || 0,
+                            ott = Root.studentMap[pd.student].score[pd.month][item.indicator].teacher || 0;
+
+
+                        Root.studentMap[pd.student].score[pd.month][item.indicator] = {
                             self : item.self,
                             teacher : item.teacher,
                             parent : item.parent
                         }
-                    });                    
+                        if(!Root.studentMap[pd.student].score[0]){
+                            Root.studentMap[pd.student].score[0] = {};
+                        }
+                        if(!Root.studentMap[pd.student][0][item.indicator]){
+                            Root.studentMap[pd.student][0][item.indicator] = {
+                                self : item.self,
+                                parent : item.parent,
+                                teacher : item.teacher
+                            };
+
+                        }else{
+                            Root.studentMap[pd.student].score[0][item.indicator].self += item.self - os;
+                            Root.studentMap[pd.student].score[0][item.indicator].parent += item.parent - op;
+                            Root.studentMap[pd.student].score[0][item.indicator].teacher += item.teacher - ott;
+                        }
+
+                        try{
+                            if(!Root.nowStudent.score){
+                                Root.nowStudent.score = {};
+                            }
+                            if(!Root.nowStudent.score[pd.month]){
+                                Root.nowStudent.score[pd.month] = {};
+                            }     
+                        Root.nowStudent.score[pd.month][item.indicator] = {
+                            self : item.self,
+                            teacher : item.teacher,
+                            parent : item.parent
+                        }   
+                        }catch(e){
+                        }                     
+                    });  
+                    var obj = _.findWhere(Root.studentList,{_id : pd.student});
+                    var nobj = {};
+                        $.extend(nobj,Root.studentMap[pd.student]);
+                        obj = nobj;
+                        //obj = Root.studentMap[pd.student];
+                    //console.log(Root.studentMap[pd.student],obj);
+
                 }
             }
 
@@ -166,13 +253,13 @@ angular.module('dy.services.quota', [
 					)
                     .success(function(data, status){
                         Root.$emit('msg.codeshow',data.code);
+
                     	if(data.code === 0){
                     		param._id = data.id;
                     		//Root.quotaList[data.id] = param;
                     		Root.nowQuota = {};
                     		//Root.quotaList.push(param.term);
                             //更新分数
-
                             updateStudentData(param);
                     	}
                         console.log('[quotaService] quota crate suc =', data);
@@ -226,7 +313,11 @@ angular.module('dy.services.quota', [
                 if(!obj.totals){
                     obj.totals = {};
                 }
-                obj.totals[Root.nowMonth] = item.total;
+                var month = Root.nowMonth;
+                if(Root.getMode() === 'record'){
+                    month = Root.defMonth -1;
+                }
+                obj.totals[month] = item.total;
             }
 
             function convertScore(data){

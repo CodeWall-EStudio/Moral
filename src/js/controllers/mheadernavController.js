@@ -80,6 +80,7 @@ angular.module('dy.controllers.managehandernav',[
 					return;
 				}
 				Root.nowMonth = month;
+				Root.$emit('status.month.change');
 				Root.$emit('status.filter.student');
 			};
 
@@ -94,8 +95,44 @@ angular.module('dy.controllers.managehandernav',[
 			}	
 
 			function changeScore(){
-			}		
+			}
 
+			Root.checkMonths = function(def,end,term){
+				if(end === 1){
+					if(def !== 1){
+						return false;
+					}else{
+						return true;
+					}
+
+				}else{
+					if(def >= end){
+						return false;
+					}else{
+						return true;
+					}
+				}
+				return false;
+			}
+
+
+			Scope.checkMonthDisabled = function(month,months){
+				var flag = false;
+				for(var i in months){
+					var item = months[i];
+					if(item.s < 2){
+						if(month >2){
+							flag = true;
+						}
+					}else{
+						if(month >item.s){
+							flag = true;
+						}
+					}
+				}
+				console.log(flag);
+				return flag;
+			}
 			//搜索
 			Scope.startSearch = function(e,d){
 				Student.searchStudent(Scope.searchKeyWord);

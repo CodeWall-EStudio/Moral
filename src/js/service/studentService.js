@@ -41,6 +41,9 @@ angular.module('dy.services.student', [
 							sList = data.student;
 							Root.studentMap = {};
 							_.each(data.student,function(item){
+								if(!item.totals){
+									item.totals = {};
+								}
 								Root.studentMap[item._id] = item;
 							});
 							window.localStorage.setItem('student',JSON.stringify(sList));
@@ -102,8 +105,17 @@ angular.module('dy.services.student', [
 							Root.myInfo.score = data.score || [];
 							Root.myInfo.total = data.total || 0;
 							Root.myInfo.hadscore = data.hadscore;
+
+							if($.cookie('test-month')){
+								Root.myInfo.nowMonth = 0;//$.cookie('test-month');
+								Root.myInfo.defMonth = $.cookie('test-month');
+								Root.defMonth = $.cookie('test-month');
+							}else{
+
 							Root.myInfo.nowMonth = data.nowmonth;
 							Root.myInfo.defMonth = data.nowmonth;
+							Root.defMonth = data.nowmonth;
+							}
 
 							Root.myInfo.term = data.term;
 							Root.myInfo.quota = data.quota;
@@ -116,14 +128,8 @@ angular.module('dy.services.student', [
 							Root.myInfo.totalScore = total;
 							Root.myInfo.max = {};
 							Root.myInfo.pre = total/Root.myInfo.allscore*100 || 0;
-
-							if($.cookie('test-month')){
-								Root.nowMonth = $.cookie('test-month');
-							}else{
-								Root.nowMonth = data.nowmonth;	
-							}
 							
-							Root.studentMonth = data.nowmonth;
+							Root.studentMonth = 0;//data.nowmonth;
 
 							Root.nowDay = data.day;
 							if(data.term && checkMonth(data.nowmonth,data.term.months) && data.day <= data.term.day){
@@ -204,20 +210,28 @@ angular.module('dy.services.student', [
 								if(data.score.length === 0){
 
 									//if(!Root.nowStudent.score){
+									if(!Root.nowStudent.totals){
+										Root.nowStudent.totals = {};
+									}	
 										Root.nowStudent.score[param.month] = Root.defScore;
-										Root.nowStudent.total[param.month] = 0;
+										Root.nowStudent.totals[param.month] = 0;
 										Root.nowStudent.nums[param.month] = 0;
 									//}
 									return;
 								}
 								var score = convertOneScore(data.score[0]);
 								if(Root.nowStudent._id === data.score[0].student){
+
+									if(!Root.nowStudent.totals){
+										Root.nowStudent.totals = {};
+									}	
+
 									//Root.nowStudent.scorelist[Root.nowMonth] = score;
 									Root.nowStudent.score[param.month] = score.list;
-									Root.nowStudent.total[param.month] = score.total;
+									Root.nowStudent.totals[param.month] = score.total;
 									Root.nowStudent.nums[param.month] = score.num;
 								}
-								Root.$emit('status.student.scoreload')
+								Root.$emit('status.student.scoreload');
 							}
 
 							console.log('获取学生评分成功!',data,Root.nowStudent);

@@ -198,36 +198,49 @@ module.exports = function auth(method, role) {
 
             } else if (method === 'post') {
                 var sess = req.session;
+                var termModel = db.getTermModel();
+
+                termModel.findOne({status:1},function(err,term){
+                    if(err){
+                        res.redirect(hostUrl + '/student/login#error=1');
+                        return;
+                    }
+
+                    var id = term._id;
+
+                    studentModel.find({name: req.body.name,term:id}, function (err, studentEntity) {
+                        if (err) {
+                            console.error(err);
+                        }
+                        
+                        if (studentEntity) {
+                            for(var i in studentEntity){
+                                var sitem = studentEntity[i];
+                                console.log('student info',sitem);
+                                if (req.body.number == sitem.eid) {
+                                    sess.user = sitem;
+                                    //本地测试用。。。发布的时候可以去掉。。。
+                                    sess.student = sitem;
+                                    //
+                                    res.cookie('sid',sess.user._id,60000);
+                                    //console.log(studentEntity);
+                                    res.cookie('role', role, 60000);
+                                    res.redirect(hostUrl + '/' + role+'.html');
+                                    return;
+                                } else {
+                                }
+                            }
+                            res.redirect(hostUrl + '/student/login#error=1');
+                            return;                        
+                        } else {
+                            res.redirect(hostUrl + '/student/login#error=1');
+                        }
+                    });
+                });
+                return;
                 //console.log('sess',sess);
                 //console.log(req.body);
-                studentModel.find({name: req.body.name}, function (err, studentEntity) {
-                    if (err) {
-                        console.error(err);
-                    }
-                    
-                    if (studentEntity) {
-                        for(var i in studentEntity){
-                            var sitem = studentEntity[i];
-                            console.log('student info',sitem);
-                            if (req.body.number == sitem.eid) {
-                                sess.user = sitem;
-                                //本地测试用。。。发布的时候可以去掉。。。
-                                sess.student = sitem;
-                                //
-                                res.cookie('sid',sess.user._id,60000);
-                                //console.log(studentEntity);
-                                res.cookie('role', role, 60000);
-                                res.redirect(hostUrl + '/' + role+'.html');
-                                return;
-                            } else {
-                            }
-                        }
-                        res.redirect(hostUrl + '/student/login#error=1');
-                        return;                        
-                    } else {
-                        res.redirect(hostUrl + '/student/login#error=1');
-                    }
-                });
+
             } else {
                 var sess = req.session;
                 if (!sess.user) {
