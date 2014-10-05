@@ -156,10 +156,9 @@
  								</span> 								
  							</li>
  						</ul>
-
  						<ul >
  							<li>未参评学生数量: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:scoreStatus.self == 0}" ng-click="showNoList('self')">查看名单</a></li>
- 							<li>未参评家长数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.perent == 0}" ng-click="showNoList('parent')">查看名单</a></li>
+ 							<li>未参评家长数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.parent == 0}" ng-click="showNoList('parent')">查看名单</a></li>
  							<li ng-class="{hide:Teacher.auth<3}">未参评教师数量: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.teacher == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
  						</ul>
  					</dd>
@@ -221,10 +220,10 @@
  						{{item.desc}}
  					</dd>
  					<dd class="score-result">
- 						<ul class="write-score teacher-score-list">
+ 						<ul class="write-score">
  							<li>
  								打分
- 								{{nowScore[item.id]?nowScore[item.id]:5}}
+ 								{{nowScore[item.id]?nowScore[item.id]:0}}
  								<div class="num{{nowScore[item.id]}}">
  									<i ng-click="setStudentQuota(item.id,1,nowScore[item.id]?nowScore[item.id]:5)"></i>
  									<i ng-click="setStudentQuota(item.id,2,nowScore[item.id]?nowScore[item.id]:5)"></i>

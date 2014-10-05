@@ -209,13 +209,48 @@ angular.module('dy.controllers.quota',[
 			//重置学生分数
 			Scope.resetStudentQuota = function(){
 				if(Root.myInfo._id){
+					var month = Root.getDefMonth(Root.myInfo.defMonth);
 					Scope.allScore = 0;
+					var type = Root.getMode();
+					_.each(Root.myInfo.score[month],function(item,idx){
+						if(idx != 'undefined'){
+							Root.nowScore[idx] = item[type];
+							Scope.allScore += item[type];
+						}else{
+						} 
+					});					
 				}else{
-					Scope.allScore = Root.quotaList.length *5;
+					var month = Root.getDefMonth(Root.defMonth);
+					Scope.allScore = 0;
+					//Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
+					_.each(Root.nowStudent.score[month],function(item,idx){
+						if(idx != 'undefined'){
+							Root.nowScore[idx] = item.teacher;
+							Scope.allScore += item.teacher;
+						}else{
+						} 
+					});					
 				}
-				for(var i in Root.quotaMap){
-					Root.quotaMap[i].now = 0;
-				}
+				// /Scope.allScore = 0;
+				// if(Root.myInfo._id){
+				// 	Scope.allScore = 0;
+				// }else{
+				// 	Scope.allScore = Root.quotaList.length *5;
+				// }
+				// console.log(Root.quotaMap);
+				// for(var i in Root.quotaMap){
+				// 	Root.quotaMap[i].now = 0;
+				// }
+
+				// Scope.allScore = 0;
+				// //Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
+				// _.each(Root.nowStudent.score[month],function(item,idx){
+				// 	if(idx != 'undefined'){
+				// 		Root.nowScore[idx] = item.teacher;
+				// 		Scope.allScore += item.teacher;
+				// 	}else{
+				// 	} 
+				// });				
 			}
 
 			//打分.这里记录id和分数
@@ -241,16 +276,18 @@ angular.module('dy.controllers.quota',[
 
 			}
 
+			//学生成绩加载成功
 			Root.$on('status.student.scoreload',function(){
 				var month = Root.nowMonth;
 				if(Root.getMode() === 'record'){
-					month = Root.defMonth-1;
+					month = Root.getDefMonth(Root.defMonth);
 				}
+				Scope.allScore = 0;
 				//Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
 				_.each(Root.nowStudent.score[month],function(item,idx){
 					if(idx != 'undefined'){
-					Root.nowScore[idx] = item.teacher;
-					Scope.allScore -= (5-item.teacher);
+						Root.nowScore[idx] = item.teacher;
+						Scope.allScore += item.teacher;
 					}else{
 					} 
 				});
@@ -266,11 +303,12 @@ angular.module('dy.controllers.quota',[
 			//学生变动
 			Root.$on('status.student.change',function(){
 				Root.nowScore = {
-					total : Root.quotaList.length * 5
+					//total : Root.quotaList.length * 5
+					total : 0
 				};
-				Scope.allScore = Root.quotaList.length *5;
+				Scope.allScore = 0;//Root.quotaList.length *5;
 				_.each(Root.quotaList,function(item){
-					Root.nowScore[item._id] = 5;
+					Root.nowScore[item._id] = 0;//5;
 				});
 				Scope.resetStudentQuota();
 			});

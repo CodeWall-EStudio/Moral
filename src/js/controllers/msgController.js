@@ -23,6 +23,12 @@ angular.module('dy.controllers.msg',[])
 			1050 : '时间交叉了!'			
 		}
 
+
+		//计算默认的月份
+		Root.getDefMonth = function(month){
+			return month === 1?12:month-1;
+		}		
+
 		Root.$on('msg.codeshow',function(e,code){
 			var obj = {
 				'message' : msg[code]

@@ -50,7 +50,7 @@ angular.module('dy.controllers.teacher',[
 
 			Root.getStudentMonth = function(){
 				if(Root.getMode() === 'record'){
-					return Root.defMonth-1;
+					return Root.getDefMonth(Root.defMonth);
 				}else{
 					return Root.nowMonth;
 				}
@@ -81,12 +81,12 @@ angular.module('dy.controllers.teacher',[
 					term : Root.Term._id,
 					month : Root.nowMonth
 				}
-				if(Root.nowGrade !== '所有'){
+				if(Root.nowGrade !== '所有' && Root.nowGrade){
 					param.grade = Root.nowGrade;
 				}
-				if(Root.nowClass !== '所有'){
+				if(Root.nowClass !== '所有' && Root.nowClass){
 					param.class = Root.nowClass;	
-				}		
+				}
 				Quota.getScores(param);
 			});
 
@@ -102,13 +102,9 @@ angular.module('dy.controllers.teacher',[
 			Root.$on('status.filter.student',function(){
 				var month = 0;
 				var mode = Root.getMode();
-				// if(Root.nowMonth == 12){
-				// 	month = 1;
-				// }else if(Root.nowMonth){
 					month = Root.nowMonth;
-				//}
 				if(mode === 'record'){
-					month = Root.defMonth-1;
+					month = Root.getDefMonth(Root.defMonth);
 				}
 				var param = {
 					term : Root.Term._id,
@@ -118,7 +114,6 @@ angular.module('dy.controllers.teacher',[
 					Quota.getScores(param);
 					return;
 				}
-				console.log(param);
 				Quota.getScores(param);
 			});
 

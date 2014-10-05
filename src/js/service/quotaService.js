@@ -307,15 +307,18 @@ angular.module('dy.services.quota', [
                 });
                 Root.quotaList = sort;
             }
-
+            //更新学生总分
             function updateStudentScore(item){
                 var obj = _.findWhere(Root.studentList,{_id : item.student});
+                if(!obj){
+                    return;
+                }
                 if(!obj.totals){
                     obj.totals = {};
                 }
                 var month = Root.nowMonth;
                 if(Root.getMode() === 'record'){
-                    month = Root.defMonth -1;
+                    month = Root.getDefMonth(Root.defMonth);
                 }
                 obj.totals[month] = item.total;
             }
@@ -403,6 +406,9 @@ angular.module('dy.services.quota', [
                 var th = 0,
                     mh = 0,
                     ph = 0;
+                Root.hadTeacher = [];
+                Root.hadSelf = [];
+                Root.hadParent = [];
                 _.each(Root.studentScoreList,function(item){
                     var l = item.scores.length;
                     _.each(item.scores,function(obj){
@@ -417,11 +423,9 @@ angular.module('dy.services.quota', [
                         }                        
                     });
                 });
-
                 Root.hadTeacher = _.uniq(Root.hadTeacher);
                 Root.hadParent = _.uniq(Root.hadParent);
                 Root.hadSelf = _.uniq(Root.hadSelf);
-
                 Root.scoreStatus.self = Root.studentList.length - Root.hadSelf.length;
                 Root.scoreStatus.parent = Root.studentList.length -  Root.hadParent.length;
                 Root.scoreStatus.teacher = Root.studentList.length - Root.hadTeacher.length;

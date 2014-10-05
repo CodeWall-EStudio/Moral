@@ -359,23 +359,10 @@ angular.module('dy.services.student', [
 				}
 
 				if(!gid && !cid){
-					//$.extend(list,sList);
 					Root.studentList = [];
-					// if(Root.Teacher.authority===3){
-					// 	var sort = {};
-					// 	$.extend(sort,Root.studentMap);
-					// 	_.sortBy(sort,function(item){
-					// 		if(order){
-					// 			return -item[type];
-					// 		}else{
-					// 			return +item[type];
-					// 		}
-					// 	});						
-					// }
 					_.each(Root.studentMap,function(item){
 						Root.studentList.push(item);
 					});
-					//Root.studentList = sList;
 					return;
 				}else{
 					_.each(sList,function(item){

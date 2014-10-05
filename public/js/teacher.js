@@ -652,23 +652,10 @@ angular.module('dy.services.student', [
 				}
 
 				if(!gid && !cid){
-					//$.extend(list,sList);
 					Root.studentList = [];
-					// if(Root.Teacher.authority===3){
-					// 	var sort = {};
-					// 	$.extend(sort,Root.studentMap);
-					// 	_.sortBy(sort,function(item){
-					// 		if(order){
-					// 			return -item[type];
-					// 		}else{
-					// 			return +item[type];
-					// 		}
-					// 	});						
-					// }
 					_.each(Root.studentMap,function(item){
 						Root.studentList.push(item);
 					});
-					//Root.studentList = sList;
 					return;
 				}else{
 					_.each(sList,function(item){
@@ -1231,15 +1218,18 @@ angular.module('dy.services.quota', [
                 });
                 Root.quotaList = sort;
             }
-
+            //更新学生总分
             function updateStudentScore(item){
                 var obj = _.findWhere(Root.studentList,{_id : item.student});
+                if(!obj){
+                    return;
+                }
                 if(!obj.totals){
                     obj.totals = {};
                 }
                 var month = Root.nowMonth;
                 if(Root.getMode() === 'record'){
-                    month = Root.defMonth -1;
+                    month = Root.getDefMonth(Root.defMonth);
                 }
                 obj.totals[month] = item.total;
             }
@@ -1327,6 +1317,9 @@ angular.module('dy.services.quota', [
                 var th = 0,
                     mh = 0,
                     ph = 0;
+                Root.hadTeacher = [];
+                Root.hadSelf = [];
+                Root.hadParent = [];
                 _.each(Root.studentScoreList,function(item){
                     var l = item.scores.length;
                     _.each(item.scores,function(obj){
@@ -1341,11 +1334,9 @@ angular.module('dy.services.quota', [
                         }                        
                     });
                 });
-
                 Root.hadTeacher = _.uniq(Root.hadTeacher);
                 Root.hadParent = _.uniq(Root.hadParent);
                 Root.hadSelf = _.uniq(Root.hadSelf);
-
                 Root.scoreStatus.self = Root.studentList.length - Root.hadSelf.length;
                 Root.scoreStatus.parent = Root.studentList.length -  Root.hadParent.length;
                 Root.scoreStatus.teacher = Root.studentList.length - Root.hadTeacher.length;
@@ -1388,6 +1379,12 @@ angular.module('dy.controllers.msg',[])
 			1043 : '用户不存在!',
 			1050 : '时间交叉了!'			
 		}
+
+
+		//计算默认的月份
+		Root.getDefMonth = function(month){
+			return month === 1?12:month-1;
+		}		
 
 		Root.$on('msg.codeshow',function(e,code){
 			var obj = {
@@ -1598,7 +1595,7 @@ angular.module('dy.controllers.managehandernav',[
 			}
 
 			Scope.selectMonths = function(month){
-				if(month >= Root.defMonth && !(Root.defMonth < 2 && month > 9)){
+				if(month >= Root.defMonth && !(Root.defMonth < 2 && month >= 9)){
 					return;
 				}
 				Root.nowMonth = month;
@@ -1767,7 +1764,7 @@ angular.module('dy.controllers.student',[
 			Root.selectStudent = function(id){
 				var month = Root.nowMonth;
 				if(Root.getMode() === 'record'){
-					month = Root.defMonth==1?12:Root.defMonth-1;
+					month = Root.getDefMonth(Root.defMonth);
 				}
 				Root.nowStudent = {};
 				var st = Root.studentMap[id];
@@ -1949,7 +1946,7 @@ angular.module('dy.controllers.teacher',[
 
 			Root.getStudentMonth = function(){
 				if(Root.getMode() === 'record'){
-					return Root.defMonth-1;
+					return Root.getDefMonth(Root.defMonth);
 				}else{
 					return Root.nowMonth;
 				}
@@ -1980,12 +1977,12 @@ angular.module('dy.controllers.teacher',[
 					term : Root.Term._id,
 					month : Root.nowMonth
 				}
-				if(Root.nowGrade !== '所有'){
+				if(Root.nowGrade !== '所有' && Root.nowGrade){
 					param.grade = Root.nowGrade;
 				}
-				if(Root.nowClass !== '所有'){
+				if(Root.nowClass !== '所有' && Root.nowClass){
 					param.class = Root.nowClass;	
-				}		
+				}
 				Quota.getScores(param);
 			});
 
@@ -2001,13 +1998,9 @@ angular.module('dy.controllers.teacher',[
 			Root.$on('status.filter.student',function(){
 				var month = 0;
 				var mode = Root.getMode();
-				// if(Root.nowMonth == 12){
-				// 	month = 1;
-				// }else if(Root.nowMonth){
 					month = Root.nowMonth;
-				//}
 				if(mode === 'record'){
-					month = Root.defMonth-1;
+					month = Root.getDefMonth(Root.defMonth);
 				}
 				var param = {
 					term : Root.Term._id,
@@ -2017,7 +2010,6 @@ angular.module('dy.controllers.teacher',[
 					Quota.getScores(param);
 					return;
 				}
-				console.log(param);
 				Quota.getScores(param);
 			});
 
@@ -2258,13 +2250,48 @@ angular.module('dy.controllers.quota',[
 			//重置学生分数
 			Scope.resetStudentQuota = function(){
 				if(Root.myInfo._id){
+					var month = Root.getDefMonth(Root.myInfo.defMonth);
 					Scope.allScore = 0;
+					var type = Root.getMode();
+					_.each(Root.myInfo.score[month],function(item,idx){
+						if(idx != 'undefined'){
+							Root.nowScore[idx] = item[type];
+							Scope.allScore += item[type];
+						}else{
+						} 
+					});					
 				}else{
-					Scope.allScore = Root.quotaList.length *5;
+					var month = Root.getDefMonth(Root.defMonth);
+					Scope.allScore = 0;
+					//Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
+					_.each(Root.nowStudent.score[month],function(item,idx){
+						if(idx != 'undefined'){
+							Root.nowScore[idx] = item.teacher;
+							Scope.allScore += item.teacher;
+						}else{
+						} 
+					});					
 				}
-				for(var i in Root.quotaMap){
-					Root.quotaMap[i].now = 0;
-				}
+				// /Scope.allScore = 0;
+				// if(Root.myInfo._id){
+				// 	Scope.allScore = 0;
+				// }else{
+				// 	Scope.allScore = Root.quotaList.length *5;
+				// }
+				// console.log(Root.quotaMap);
+				// for(var i in Root.quotaMap){
+				// 	Root.quotaMap[i].now = 0;
+				// }
+
+				// Scope.allScore = 0;
+				// //Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
+				// _.each(Root.nowStudent.score[month],function(item,idx){
+				// 	if(idx != 'undefined'){
+				// 		Root.nowScore[idx] = item.teacher;
+				// 		Scope.allScore += item.teacher;
+				// 	}else{
+				// 	} 
+				// });				
 			}
 
 			//打分.这里记录id和分数
@@ -2290,16 +2317,18 @@ angular.module('dy.controllers.quota',[
 
 			}
 
+			//学生成绩加载成功
 			Root.$on('status.student.scoreload',function(){
 				var month = Root.nowMonth;
 				if(Root.getMode() === 'record'){
-					month = Root.defMonth-1;
+					month = Root.getDefMonth(Root.defMonth);
 				}
+				Scope.allScore = 0;
 				//Scope.allScore = Root.nowStudent.total[Root.scoreMonth];
 				_.each(Root.nowStudent.score[month],function(item,idx){
 					if(idx != 'undefined'){
-					Root.nowScore[idx] = item.teacher;
-					Scope.allScore -= (5-item.teacher);
+						Root.nowScore[idx] = item.teacher;
+						Scope.allScore += item.teacher;
 					}else{
 					} 
 				});
@@ -2315,11 +2344,12 @@ angular.module('dy.controllers.quota',[
 			//学生变动
 			Root.$on('status.student.change',function(){
 				Root.nowScore = {
-					total : Root.quotaList.length * 5
+					//total : Root.quotaList.length * 5
+					total : 0
 				};
-				Scope.allScore = Root.quotaList.length *5;
+				Scope.allScore = 0;//Root.quotaList.length *5;
 				_.each(Root.quotaList,function(item){
-					Root.nowScore[item._id] = 5;
+					Root.nowScore[item._id] = 0;//5;
 				});
 				Scope.resetStudentQuota();
 			});
