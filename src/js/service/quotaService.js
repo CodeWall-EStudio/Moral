@@ -348,7 +348,7 @@ angular.module('dy.services.quota', [
                     Root.maxStudent = max;
                     Root.minStudent = min;   
 
-                    if(Root.Teacher.authority === 3){
+                    if(Root.Teacher.auth >= 2){
                         Root.studentList = _.sortBy(Root.studentList,function(item){
                             if(item.totals && item.totals[Root.nowMonth]){
                                 return -item.totals[Root.nowMonth];

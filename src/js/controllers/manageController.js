@@ -16,7 +16,6 @@ angular.module('dy.controllers.manage',[
 			}
 
 			Root.setAuth = function(id,auth){
-				console.log(id,auth);
 				var param = {
 					id : id,
 					authority : auth

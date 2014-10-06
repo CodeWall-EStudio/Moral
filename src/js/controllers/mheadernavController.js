@@ -159,7 +159,7 @@ angular.module('dy.controllers.managehandernav',[
 				if(Root.nowMonth){
 					obj.month = Root.month;
 				}
-				if(Root.Teacher.auth===3){
+				if(Root.Teacher.auth>=2){
 					Student.getScore(obj);
 				}
 			});

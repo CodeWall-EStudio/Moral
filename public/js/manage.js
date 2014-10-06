@@ -1259,7 +1259,7 @@ angular.module('dy.services.quota', [
                     Root.maxStudent = max;
                     Root.minStudent = min;   
 
-                    if(Root.Teacher.authority === 3){
+                    if(Root.Teacher.auth >= 2){
                         Root.studentList = _.sortBy(Root.studentList,function(item){
                             if(item.totals && item.totals[Root.nowMonth]){
                                 return -item.totals[Root.nowMonth];
@@ -1456,7 +1456,6 @@ angular.module('dy.controllers.manage',[
 			}
 
 			Root.setAuth = function(id,auth){
-				console.log(id,auth);
 				var param = {
 					id : id,
 					authority : auth
@@ -1682,7 +1681,7 @@ angular.module('dy.controllers.managehandernav',[
 				if(Root.nowMonth){
 					obj.month = Root.month;
 				}
-				if(Root.Teacher.auth===3){
+				if(Root.Teacher.auth>=2){
 					Student.getScore(obj);
 				}
 			});
@@ -2010,7 +2009,7 @@ angular.module('dy.controllers.teacher',[
 					term : Root.Term._id,
 					month : month//Root.nowMonth==12?1:Root.nowMonth-1
 				}				
-				if(Root.Teacher.auth === 3){
+				if(Root.Teacher.auth >= 2){
 					Quota.getScores(param);
 					return;
 				}
@@ -2019,7 +2018,7 @@ angular.module('dy.controllers.teacher',[
 
 			//学期已经 加载 
 			Root.$on('status.term.load.teacher',function(){
-				if(Root.Teacher.auth===3){
+				if(Root.Teacher.auth>=2){
 					var param = {
 						term : Root.Term._id
 					}

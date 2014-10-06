@@ -5,7 +5,7 @@
   <meta name="author" content="Xzone" />
   <meta http-equiv = "X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>德育系统-老师</title>
-  <link rel="stylesheet" href="css/main.css?t=1412492625705">
+  <link rel="stylesheet" href="css/main.css?t=1412561913136">
  </head>
 <body ng-controller="teacherController">
  	<div class="header-blue" ng-controller="indexnavController">
@@ -15,7 +15,7 @@
  		</ul>
  		<div class="userinfo">
  			<span>{{Teacher.name}}</span>
- 			<a href="/manage.html" ng-hide="{{Teacher.deptType === 1}}">管理</a>
+ 			<a href="/manage.html" ng-hide="Teacher.auth !== 3">管理</a>
  			<a href="/teacher/logout">退出</a>
  		</div>
  	</div>
@@ -26,7 +26,7 @@
 		 			<div class="grade-dom dropdown" >
 		 				{{Term.name}}
 		 			</div>
-		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority === 3">
+		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority >= 2">
 						<a class="dropdown-toggle" data-toggle="dropdown">{{nowGrade}}年级{{nowClass}}班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a ng-click="changeGradeClass(0,0)">所有班级</a></li>
@@ -59,13 +59,13 @@
 		 				</li>
 		 			</ul>
 	 			</div> 		
-	 			<div class="grade-zone" ng-hide="getMode() === 'result' || !getMode()"  ng-hide="Teacher.authority === 3">
+	 			<div class="grade-zone" ng-hide="getMode() === 'result' || !getMode()"  ng-hide="Teacher.authority >= 2">
 		 			<div class="grade-dom dropdown" >
 		 				{{Term.name}}
 
 		 				{{defMonth==1?12:defMonth-1}}月德育评价 {{studentTerm?'开放评价中':'关闭'}} （{{defMonth}}月1日 至 {{Term.day}}日）  今天：{{nowDate | date:'MM月dd日'}}
 		 			</div>	 			
-		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority === 3">
+		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority >= 2">
 						<a class="dropdown-toggle" data-toggle="dropdown">所有班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 
@@ -162,7 +162,7 @@
 	 							<span ng-hide="!nowMonth">
 	 							{{nowMonth}}月
 	 							</span>
-	 							<span ng-hide="nowMonth">本学期</span> 总分: {{nowStudent.totals[nowMonth]}} <span ng-hide="Teacher.authority !== 3">全校排名 :{{nowStudent.nos[nowMonth]}} </span></div>
+	 							<span ng-hide="nowMonth">本学期</span> 总分: {{nowStudent.totals[nowMonth]}} <span ng-hide="Teacher.authority === 2">全校排名 :{{nowStudent.nos[nowMonth]}} </span></div>
 	 						<button class="btn btn-default" ng-click="returnStudentList()">返回概要</button>
 	 					</dt>
 	 					{{nowStudnet}}
@@ -263,7 +263,7 @@
 
  	<script src="js/lib/jslib.js"></script>
 
-	<script src="js/teacher.js?t=1412492625705"></script>
+	<script src="js/teacher.js?t=1412561913136"></script>
 
  </body>
  </html>
