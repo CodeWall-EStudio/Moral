@@ -45,7 +45,7 @@
 		 					</li>
 						</ul>
 		 			</div>		 			
-		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority < 3">
+		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority < 2">
 						<a class="dropdown-toggle" data-toggle="dropdown">{{nowGrade}}年级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a  ng-click="changeGrade(0)">所有年级</a></li>
@@ -54,7 +54,7 @@
 		 					</li>
 						</ul>
 		 			</div>
-		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority < 3">
+		 			<div class="grade-dom dropdown" ng-hide="Teacher.authority < 2">
 						<a class="dropdown-toggle" data-toggle="dropdown">{{nowClass}}班级<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a ng-click="changeClass(0)">所有班级</a></li>
