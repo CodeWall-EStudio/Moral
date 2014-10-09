@@ -172,7 +172,7 @@
 	 							<span ng-hide="!nowMonth">
 	 							{{nowMonth}}月
 	 							</span>
-	 							<span ng-hide="nowMonth">本学期</span> 总分: {{nowStudent.totals[nowMonth]}} <span ng-hide="Teacher.authority === 2">全校排名 :{{nowStudent.nos[nowMonth]}} </span></div>
+	 							<span ng-hide="nowMonth">本学期</span> 总分: {{nowStudent.totals[nowMonth]}} <span ng-hide="Teacher.authority !== 2">排名 :{{nowStudent.nos[nowMonth]}} </span></div>
 	 						<button class="btn btn-default" ng-click="returnStudentList()">返回概要</button>
 	 					</dt>
 	 					{{nowStudnet}}
