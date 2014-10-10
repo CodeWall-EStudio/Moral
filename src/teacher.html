@@ -156,7 +156,7 @@
  								</span> 								
  							</li>
  						</ul>
- 						<ul >
+ 						<ul ng-hide="nowMonth===0">
  							<li>未参评学生数量: {{scoreStatus.self}} <a href="javascript:void(0);" ng-class="{hide:scoreStatus.self == 0}" ng-click="showNoList('self')">查看名单</a></li>
  							<li>未参评家长数量: {{scoreStatus.parent}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.parent == 0}" ng-click="showNoList('parent')">查看名单</a></li>
  							<li ng-class="{hide:Teacher.auth<3}">未参评教师数量: {{scoreStatus.teacher}} <a  href="javascript:void(0);" ng-class="{hide:scoreStatus.teacher == 0}" ng-click="showNoList('teacher')">查看名单</a></li>
