@@ -444,3 +444,8 @@ button.close{
 	height:124px;
 	margin:0 auto;	
 }
+.content-student-report{
+	position:absolute;
+	left:0;
+	width:100%;
+}

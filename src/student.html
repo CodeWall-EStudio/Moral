@@ -74,7 +74,7 @@
  			</div>
  			<!--自评说明-->
  			{{studentTrem}}
- 			<div class="content-assessment-info" ng-class="{hide:getMode() === 'my' || !getMode()}">
+ 			<div class="content-assessment-info" ng-class="{hide:true}">
  				<dl>
  					<dt>学生自评打分方法说明:</dt>
  					<dd>
@@ -116,7 +116,7 @@
  					</dd>
  				</dl>
  			</div>			
-			<div class="content-info" ng-controller="quotaController">
+			<div class="content-info content-student-report" ng-controller="quotaController">
  				<dl class="content-summary" ng-class="{hide:getMode() !== 'my' && getMode()}">
  					<dt>
  						<div class="title">{{myInfo.user.name}}  
