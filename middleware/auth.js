@@ -151,12 +151,13 @@ module.exports = function auth(method, role) {
 														id = raw.upserted;
 													}
 													res.cookie('role', role, 60000);
-													var reUrl = hostUrl + '/' + role;
-													if (req.param('action')) {
-														reUrl += '/' + req.param('action');
-													} else {
-														reUrl += '.html';
-													}
+                                                    var reUrl = hostUrl;
+													//var reUrl = hostUrl + '/' + role;
+													// if (req.param('action')) {
+													// 	reUrl += '/' + req.param('action');
+													// } else {
+													// 	reUrl += '.html';
+													// }
 													res.redirect(reUrl);
 												});
 											}
